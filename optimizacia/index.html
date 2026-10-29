@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Оптимизация телефона и ПК · Nagibatorz</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0c;
+    --card:rgba(255,255,255,.045);
+    --card2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.1);
+    --orange:#ff7a18;
+    --orange2:#ffb347;
+    --text:#edeff2;
+    --muted:#9aa0aa;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
+      radial-gradient(700px 420px at 96% 6%, rgba(255,69,0,.12), transparent 60%),
+      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
+    pointer-events:none;z-index:0;
+  }
+  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
+
+  /* Баннер */
+  .hero{
+    padding:48px 0 34px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    margin-bottom:34px;
+  }
+  .hero .tag{
+    display:inline-block;
+    font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
+    color:var(--orange2);
+    border:1px solid rgba(255,122,24,.35);
+    background:rgba(255,122,24,.08);
+    border-radius:100px;
+    padding:6px 16px;margin-bottom:20px;
+  }
+  .hero h1{
+    font-size:clamp(28px,7.5vw,48px);
+    line-height:1.12;
+    font-weight:900;
+    letter-spacing:-.5px;
+    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
+  }
+  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+
+  /* Заметка сверху */
+  .note{
+    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
+    border:1px solid rgba(255,122,24,.28);
+    border-radius:16px;
+    padding:16px 18px;
+    font-size:14.5px;
+    margin-bottom:26px;
+    color:#f3e3d6;
+  }
+  .note b{color:var(--orange2)}
+
+  /* Поиск */
+  .searchbox{margin-bottom:26px}
+  .searchbox input{
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 18px;
+    color:var(--text);
+    font-size:15.5px;
+    outline:none;
+    transition:.2s;
+    backdrop-filter:blur(10px);
+  }
+  .searchbox input:focus{border-color:rgba(255,122,24,.55);background:var(--card2)}
+  .searchbox input::placeholder{color:#6d737d}
+
+  /* Оглавление */
+  .toc{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:8px;
+    margin-bottom:38px;
+    backdrop-filter:blur(12px);
+  }
+  .toc-title{
+    font-size:12px;letter-spacing:1.8px;text-transform:uppercase;
+    color:var(--muted);padding:12px 16px 8px;font-weight:700;
+  }
+  .toc a{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 16px;
+    border-radius:12px;
+    color:var(--text);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:600;
+    transition:.15s;
+  }
+  .toc a:hover{background:rgba(255,122,24,.1);color:#fff}
+  .toc a .ico{
+    width:26px;height:26px;flex:0 0 26px;
+    display:grid;place-items:center;
+    border-radius:8px;
+    background:rgba(255,122,24,.15);
+    font-size:13px;
+  }
+
+  /* Секции */
+  .part{
+    margin:52px 0 24px;
+    font-size:clamp(22px,5.5vw,30px);
+    font-weight:900;
+    letter-spacing:-.3px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+    scroll-margin-top:18px;
+  }
+  .part span{
+    background:linear-gradient(90deg,var(--orange2),var(--orange));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  .step{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px 20px 22px;
+    margin-bottom:14px;
+    backdrop-filter:blur(10px);
+    scroll-margin-top:18px;
+  }
+  .step h3{
+    font-size:17.5px;
+    font-weight:800;
+    margin-bottom:12px;
+    display:flex;gap:11px;align-items:flex-start;
+    letter-spacing:-.2px;
+  }
+  .num{
+    flex:0 0 28px;height:28px;
+    display:grid;place-items:center;
+    border-radius:9px;
+    background:linear-gradient(150deg,var(--orange),#d95a00);
+    color:#fff;font-size:13.5px;font-weight:900;
+    box-shadow:0 4px 14px rgba(255,122,24,.35);
+  }
+  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
+  .step p:last-child{margin-bottom:0}
+  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
+  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
+  .step li::marker{color:var(--orange)}
+
+  /* Клавиши и пути */
+  kbd{
+    display:inline-block;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.18);
+    border-bottom-width:2px;
+    border-radius:6px;
+    padding:1px 7px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13px;
+    color:#fff;
+    white-space:nowrap;
+  }
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13px;
+    background:rgba(255,122,24,.12);
+    color:var(--orange2);
+    padding:2px 7px;border-radius:6px;
+    word-break:break-all;
+  }
+  .path{
+    display:block;
+    background:rgba(0,0,0,.4);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:11px 14px;
+    margin:10px 0;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.5px;
+    color:#ffcf9a;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+
+  /* Предупреждение */
+  .warn{
+    background:rgba(255,60,60,.09);
+    border:1px solid rgba(255,80,80,.32);
+    border-left:3px solid #ff4d4d;
+    border-radius:12px;
+    padding:13px 16px;
+    margin:14px 0 0;
+    font-size:14px;
+    color:#ffc9c9;
+  }
+  .warn b{color:#ff8f8f}
+
+  .tip{
+    background:rgba(70,200,120,.08);
+    border:1px solid rgba(70,200,120,.25);
+    border-left:3px solid #37c97a;
+    border-radius:12px;
+    padding:13px 16px;
+    margin:14px 0 0;
+    font-size:14px;
+    color:#c3f0d8;
+  }
+
+  /* Таблица */
+  .tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
+  .tbl th{
+    text-align:left;padding:10px 12px;
+    color:var(--muted);font-size:12px;
+    text-transform:uppercase;letter-spacing:1.2px;
+    border-bottom:1px solid var(--line);
+  }
+  .tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td:first-child{font-weight:600;color:#fff}
+
+  /* Бонус */
+  .bonus{
+    margin-top:56px;
+    background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
+    border:1px solid rgba(255,122,24,.35);
+    border-radius:22px;
+    padding:28px 24px;
+    text-align:center;
+    scroll-margin-top:18px;
+  }
+  .bonus h2{
+    font-size:24px;font-weight:900;margin-bottom:10px;
+    background:linear-gradient(90deg,#fff,var(--orange2));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
+  .btn{
+    display:inline-block;
+    background:linear-gradient(150deg,var(--orange),#d95a00);
+    color:#fff;text-decoration:none;
+    font-weight:800;font-size:15.5px;
+    padding:15px 34px;border-radius:14px;
+    box-shadow:0 10px 30px rgba(255,122,24,.35);
+    transition:.18s;
+  }
+  .btn:active{transform:scale(.97)}
+
+  /* Футер */
+  footer{
+    margin-top:54px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+    text-align:center;
+    color:var(--muted);
+    font-size:13.5px;
+  }
+  footer b{color:var(--text)}
+
+  /* Наверх */
+  .top{
+    position:fixed;
+    right:16px;bottom:18px;
+    width:46px;height:46px;
+    border-radius:50%;
+    background:rgba(255,122,24,.9);
+    color:#fff;border:none;
+    font-size:19px;
+    display:grid;place-items:center;
+    box-shadow:0 8px 24px rgba(255,122,24,.4);
+    cursor:pointer;
+    opacity:0;pointer-events:none;
+    transition:.25s;
+    z-index:50;
+  }
+  .top.show{opacity:1;pointer-events:auto}
+
+  /* Скрытие при поиске */
+  .hide{display:none!important}
+
+  @media(max-width:430px){
+    .wrap{padding:0 14px 84px}
+    .hero{padding:34px 0 26px}
+    .step{padding:17px 15px 19px;border-radius:16px}
+    .step h3{font-size:16.5px}
+    .step p,.step li{font-size:14.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="tag">Nagibatorz · гайд</div>
+    <h1>Оптимизация телефона и&nbsp;ПК</h1>
+    <p>Пошаговые настройки, которые реально поднимают FPS и убирают лаги</p>
+  </div>
+
+  <div class="note">
+    <b>Как пользоваться:</b> проходи шаги по порядку. Делать всё не обязательно — даже половина пунктов даёт заметный результат. Где стоит <b>⚠️</b> — шаг можно пропустить, если не уверен.
+  </div>
+
+  <div class="searchbox">
+    <input type="text" id="q" placeholder="Поиск по гайду — например «реестр» или «NVIDIA»" autocomplete="off">
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Содержание</div>
+    <a href="#t1"><span class="ico">📱</span> Force 4x MSAA</a>
+    <a href="#t2"><span class="ico">🧹</span> Освобождаем место</a>
+    <a href="#t3"><span class="ico">🎮</span> Игровой режим</a>
+    <a href="#t4"><span class="ico">⚡</span> Общие настройки телефона</a>
+    <a href="#t5"><span class="ico">🖥️</span> Аппаратное ускорение GPU</a>
+    <a href="#t6"><span class="ico">🛠️</span> Программы для буста</a>
+    <a href="#t7"><span class="ico">📶</span> Снижаем пинг</a>
+    <a href="#t8"><span class="ico">📵</span> Про разгон процессора</a>
+    <a href="#p1"><span class="ico">💻</span> Игровой режим Windows</a>
+    <a href="#p2"><span class="ico">🟩</span> Панель NVIDIA</a>
+    <a href="#p3"><span class="ico">⚠️</span> Настройки реестра</a>
+    <a href="#p4"><span class="ico">🔧</span> Совместимость игры</a>
+    <a href="#p5"><span class="ico">⚡</span> NVIDIA Reflex</a>
+    <a href="#p6"><span class="ico">⏱️</span> Таймер событий</a>
+    <a href="#p7"><span class="ico">🎨</span> Визуальные эффекты</a>
+    <a href="#p8"><span class="ico">🚫</span> Xbox DVR</a>
+    <a href="#p9"><span class="ico">⚙️</span> Службы</a>
+    <a href="#p10"><span class="ico">🔋</span> План электропитания</a>
+    <a href="#p11"><span class="ico">🧽</span> Чистка системы</a>
+    <a href="#p12"><span class="ico">🔊</span> Настройки звука</a>
+    <a href="#p13"><span class="ico">🎮</span> Steam</a>
+    <a href="#p14"><span class="ico">📦</span> Драйверы</a>
+    <a href="#p15"><span class="ico">💾</span> Файл подкачки</a>
+    <a href="#p16"><span class="ico">🔌</span> Лишние устройства</a>
+  </div>
+
+  <h2 class="part"><span>Часть 1 — Телефон</span></h2>
+
+  <div class="step" id="t1">
+    <h3><span class="num">1</span> Включаем Force 4x MSAA</h3>
+    <p>Это сглаживание в 4 раза. Телефон начинает рисовать картинку качественнее, а в играх — плавнее.</p>
+    <div class="warn">⚠️ <b>Функция заметно жрёт батарею.</b> Включай, если играешь от розетки или не переживаешь за заряд.</div>
+    <p style="margin-top:14px"><b>Как включить:</b></p>
+    <ol>
+      <li>Настройки → <b>О телефоне</b></li>
+      <li>Найди <b>«Номер сборки»</b> и тапни по нему <b>7 раз</b></li>
+      <li>Появится сообщение «Вы стали разработчиком»</li>
+      <li>Назад в Настройки → <b>Система</b> → <b>Для разработчиков</b></li>
+      <li>Найди <b>Force 4x MSAA</b> и включи</li>
+    </ol>
+    <p style="margin-top:12px">Работает не на всех телефонах. Если пункта нет — значит твой процессор его не поддерживает. На iPhone аналог в настройках, но там всё ограничено системой.</p>
+  </div>
+
+  <div class="step" id="t2">
+    <h3><span class="num">2</span> Освобождаем место</h3>
+    <p>Чем больше мусора — тем медленнее телефон. Старые фото, видео, недокачанные приложения, файлы от удалённых игр — всё это тормозит систему.</p>
+    <p><b>Как почистить:</b></p>
+    <ol>
+      <li>Настройки → <b>Память</b> (или «Хранилище»)</li>
+      <li>Нажми <b>«Освободить место»</b></li>
+      <li>Отметь то, что не нужно, и удали</li>
+    </ol>
+    <p>Дополнительно зайди в Галерею и удали скриншоты, дубли фото и старые видео.</p>
+  </div>
+
+  <div class="step" id="t3">
+    <h3><span class="num">3</span> Игровой режим</h3>
+    <p>Почти на всех современных телефонах он уже встроенный — скачивать ничего не нужно.</p>
+    <table class="tbl">
+      <tr><th>Бренд</th><th>Название</th></tr>
+      <tr><td>Samsung</td><td>Game Booster</td></tr>
+      <tr><td>Xiaomi / Redmi</td><td>Game Turbo</td></tr>
+      <tr><td>iPhone</td><td>Игровой режим в настройках</td></tr>
+      <tr><td>Другие Android</td><td>«Игровой режим» в шторке</td></tr>
+    </table>
+    <p style="margin-top:12px">Он отключает уведомления, освобождает память и не даёт системе тормозить игру.</p>
+  </div>
+
+  <div class="step" id="t4">
+    <h3><span class="num">4</span> Общие настройки — что реально помогает</h3>
+    <ul>
+      <li><b>Обнови прошивку.</b> Настройки → О телефоне → Обновление системы. Обновления часто содержат оптимизацию.</li>
+      <li><b>Удали лишние приложения.</b> Всё, чем не пользуешься месяц, занимает память и работает в фоне.</li>
+      <li><b>Отключи GPS и синхронизацию</b> в играх — они тянут ресурсы даже когда не нужны.</li>
+      <li><b>Убери виджеты с рабочего стола.</b> Красиво, но жрёт оперативку при разблокировке.</li>
+      <li><b>Перезагружай телефон раз в пару дней.</b> Просто, но работает.</li>
+    </ul>
+  </div>
+
+  <div class="step" id="t5">
+    <h3><span class="num">5</span> Аппаратное ускорение GPU</h3>
+    <p>Заходим туда же — в <b>Для разработчиков</b> (см. шаг 1) → находим <b>«Принудительная обработка GPU»</b> → включаем.</p>
+    <p>Это перекидывает часть работы на видеопроцессор, освобождая основной.</p>
+  </div>
+
+  <div class="step" id="t6">
+    <h3><span class="num">6</span> Программы для буста</h3>
+    <table class="tbl">
+      <tr><th>Программа</th><th>Что делает</th></tr>
+      <tr><td>Root Booster</td><td>Чистка мусора, кэша, настройка частоты CPU</td></tr>
+      <tr><td>GLTools</td><td>Настройки конкретных игр: сглаживание, разрешение, шейдеры</td></tr>
+      <tr><td>GFX Tools</td><td>Настройки графики для PUBG и подобных</td></tr>
+      <tr><td>Game Booster</td><td>Фирменная утилита Samsung</td></tr>
+    </table>
+    <div class="warn">⚠️ В GLTools меняй <b>только один параметр за раз</b> и проверяй результат. Иначе не поймёшь, что помогло, а что сломало картинку.</div>
+  </div>
+
+  <div class="step" id="t7">
+    <h3><span class="num">7</span> Снижаем пинг</h3>
+    <ul>
+      <li>Закрой всё в фоне: браузеры, мессенджеры, облачные диски</li>
+      <li>Отключи автообновления на время игры — они забивают канал</li>
+      <li>Попроси домашних не качать торренты, пока играешь</li>
+      <li>Перезагрузи роутер — выдерни из розетки на минуту</li>
+      <li>Поставь роутер повыше и на открытое место, не в шкаф</li>
+      <li>Играй по кабелю или встань ближе к роутеру</li>
+      <li>Проверь, крепко ли вставлены провода в роутер</li>
+    </ul>
+    <p style="margin-top:12px">Если ничего не помогло — проблема на стороне провайдера. Звони им.</p>
+  </div>
+
+  <div class="step" id="t8">
+    <h3><span class="num">8</span> Про разгон процессора</h3>
+    <p>В интернете советуют «разогнать» телефон через Root. <b>Мы этого не рекомендуем.</b></p>
+    <p>Разгон требует рут-прав, кастомного ядра и программы вроде Franco Kernel Manager. Телефон после этого греется, батарея садится в разы быстрее, а при ошибке превращается в кирпич. Прирост того не стоит.</p>
+    <div class="tip">Лучше пройди шаги 1–7 — этого хватит в большинстве случаев.</div>
+  </div>
+
+  <h2 class="part"><span>Часть 2 — ПК</span></h2>
+
+  <div class="step" id="p1">
+    <h3><span class="num">1</span> Игровой режим Windows</h3>
+    <p>Параметры → <b>Игры</b> → <b>Режим игры</b> → <b>выключить</b> ползунок.</p>
+    <p>Параметры → <b>Игры</b> → <b>Настройки графики</b> → поставить <b>«Планирование графического процессора с аппаратным ускорением»</b>.</p>
+    <p>Звучит странно, но выключенный «Игровой режим» часто даёт больше FPS, чем включённый.</p>
+  </div>
+
+  <div class="step" id="p2">
+    <h3><span class="num">2</span> Панель NVIDIA</h3>
+    <p>ПКМ по рабочему столу → <b>Панель управления NVIDIA</b> → <b>Регулировка размера и положения рабочего стола</b>:</p>
+    <ul>
+      <li>Режим масштабирования → <b>«Во весь экран»</b></li>
+      <li>Выполнять масштабирование на → <b>«ГП»</b></li>
+      <li>Галочка <b>«Замещение режима масштабирования, заданного для игр и программ»</b></li>
+    </ul>
+  </div>
+
+  <div class="step" id="p3">
+    <h3><span class="num">3</span> Настройки реестра</h3>
+    <div class="warn">⚠️ <b>Сначала создай точку восстановления!</b> Пуск → «Восстановление» → «Создать точку восстановления». Если не уверен — пропусти этот шаг, он даёт небольшой прирост.</div>
+    <p style="margin-top:14px"><b>Пункт 1:</b></p>
+    <ol>
+      <li><kbd>Win</kbd> + <kbd>R</kbd> → впиши <code>regedit</code> → ОК</li>
+      <li>Перейди по пути:</li>
+    </ol>
+    <div class="path">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power</div>
+    <ol start="3">
+      <li>Создай параметр <b>DWORD (32 бита)</b> с названием <code>CoalescingTimerInterval</code></li>
+    </ol>
+    <p style="margin-top:14px"><b>Пункт 2:</b></p>
+    <ol>
+      <li><kbd>Win</kbd> + <kbd>R</kbd> → <code>regedit</code></li>
+      <li>Путь:</li>
+    </ol>
+    <div class="path">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu</div>
+    <ol start="3">
+      <li>Параметр <b>Start</b> → двойной клик → поменяй значение с <code>2</code> на <code>4</code></li>
+    </ol>
+  </div>
+
+  <div class="step" id="p4">
+    <h3><span class="num">4</span> Совместимость игры</h3>
+    <p>ПКМ по ярлыку игры → <b>Свойства</b> → <b>Совместимость</b>:</p>
+    <ul>
+      <li>Галочка <b>«Отключить оптимизацию во весь экран»</b></li>
+      <li><b>«Изменить параметры высокого DPI»</b> → галочка <b>«Переопределить режим масштабирования»</b> → ОК</li>
+    </ul>
+    <p>То же самое проделай с <code>.exe</code> файлом игры в папке <code>Binaries → Win64</code>.</p>
+  </div>
+
+  <div class="step" id="p5">
+    <h3><span class="num">5</span> NVIDIA Reflex</h3>
+    <p>В настройках игры → <b>Видео</b> → <b>Общие</b> → пункт <b>NVIDIA Reflex Low Latency</b> → <b>«Вкл. + Boost»</b>.</p>
+    <p>Если у тебя Radeon — ищи <b>Radeon Anti-Lag</b> в драйвере.</p>
+  </div>
+
+  <div class="step" id="p6">
+    <h3><span class="num">6</span> Таймер событий</h3>
+    <p>ПКМ по Пуску → <b>Диспетчер устройств</b> → <b>Системные устройства</b> → найди <b>«Высокоточный таймер событий»</b> → ПКМ → <b>Отключить устройство</b>.</p>
+    <div class="tip">Если после этого система начала странно себя вести — включи обратно, шаг необязательный.</div>
+  </div>
+
+  <div class="step" id="p7">
+    <h3><span class="num">7</span> Визуальные эффекты</h3>
+    <p>ПКМ по <b>«Этот компьютер»</b> → Свойства → <b>Дополнительные параметры системы</b> → вкладка <b>«Дополнительно»</b> → в блоке «Быстродействие» нажми <b>«Параметры»</b> → <b>«Обеспечить наилучшее быстродействие»</b>.</p>
+    <p>Потом верни две галочки:</p>
+    <ul>
+      <li>«Отображение прозрачного прямоугольного выделения»</li>
+      <li>«Сглаживание неровностей экранных шрифтов»</li>
+    </ul>
+  </div>
+
+  <div class="step" id="p8">
+    <h3><span class="num">8</span> Отключаем Xbox DVR</h3>
+    <p>Параметры → <b>Игры</b> → <b>Xbox Game Bar</b> → выключить.</p>
+    <p>Он сильно ест FPS и вызывает инпут-лаг.</p>
+  </div>
+
+  <div class="step" id="p9">
+    <h3><span class="num">9</span> Службы</h3>
+    <div class="warn">⚠️ Отключай только то, в чём разбираешься. Античиты и драйверы не трогай.</div>
+    <p style="margin-top:14px">Есть утилита <b>Easy Service Optimizer</b>. Выбери пресет <b>extreme</b> → вкладка <b>Service</b> → <b>Check All</b> → <b>File → Apply Services</b> → перезагрузка.</p>
+    <p><b>Без программ:</b> <kbd>Win</kbd> + <kbd>R</kbd> → <code>msconfig</code> → вкладка <b>«Службы»</b> → галочка <b>«Не отображать службы Microsoft»</b> → снять галочки с того, чем не пользуешься.</p>
+  </div>
+
+  <div class="step" id="p10">
+    <h3><span class="num">10</span> План электропитания</h3>
+    <p>Пуск → <b>Панель управления</b> → <b>Электропитание</b> → выбери <b>«Высокая производительность»</b>.</p>
+    <p>Многие этот пункт игнорируют зря — он реально влияет.</p>
+  </div>
+
+  <div class="step" id="p11">
+    <h3><span class="num">11</span> Чистка системы</h3>
+    <p><b>CCleaner</b> — если Windows стоит давно, там накопился мусор. Почисти реестр и удали ненужные программы во вкладке <b>Tools</b>.</p>
+  </div>
+
+  <div class="step" id="p12">
+    <h3><span class="num">12</span> Настройки звука</h3>
+    <p>ПКМ по значку динамика → <b>Устройства воспроизведения</b> → выбери своё → <b>Свойства</b> → вкладка <b>«Дополнительно»</b>:</p>
+    <ul>
+      <li>Формат: <b>16 бит, 44100 Гц</b></li>
+      <li>Вкладка с «улучшайзерами» → <b>«Отключить всё»</b></li>
+    </ul>
+    <p>То же самое для микрофона.</p>
+  </div>
+
+  <div class="step" id="p13">
+    <h3><span class="num">13</span> Steam</h3>
+    <p>Настройки Steam → <b>Interface</b> → снять галочку <b>Enable DirectWrite</b>.</p>
+    <p>Отключи все трансляции и оверлеи — оставь минимум.</p>
+  </div>
+
+  <div class="step" id="p14">
+    <h3><span class="num">14</span> Драйверы</h3>
+    <p>Всегда ставь <b>последние версии драйверов</b> — особенно на видеокарту.</p>
+    <div class="tip">Один из самых важных пунктов для FPS. Не пропускай.</div>
+  </div>
+
+  <div class="step" id="p15">
+    <h3><span class="num">15</span> Файл подкачки</h3>
+    <p>ПКМ по <b>«Этот компьютер»</b> → Свойства → <b>Дополнительные параметры системы</b> → <b>Быстродействие → Параметры</b> → вкладка <b>«Дополнительно»</b> → <b>«Изменить»</b>:</p>
+    <ul>
+      <li>Поставь на системный диск <b>8192 МБ (8 ГБ)</b></li>
+      <li>Даже если 32+ ГБ ОЗУ — файл подкачки должен быть, минимум 2–4 ГБ</li>
+    </ul>
+  </div>
+
+  <div class="step" id="p16">
+    <h3><span class="num">16</span> Лишние устройства</h3>
+    <p>Диспетчер устройств → например <b>«Звуковые, игровые и видеоустройства»</b> → найди неиспользуемое (скажем, <code>Nvidia High Definition Audio</code>, если играешь в наушниках) → ПКМ → <b>Отключить</b>.</p>
+    <div class="warn">⚠️ Делай только если понимаешь, что отключаешь.</div>
+  </div>
+
+  <div class="bonus" id="bonus">
+    <h2>🎁 Твой подарок</h2>
+    <p>Пакет из 100 гайдов по играм: раскладки, фарм, промокоды, настройки под конкретные игры.</p>
+    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">Забрать бонус</a>
+  </div>
+
+  <footer>
+    <b>Nagibatorz</b> · Playerok<br>
+    Не заработало или появилась ошибка — напиши в чат, помогу откатить.
+  </footer>
+
+</div>
+
+<button class="top" id="toTop" aria-label="Наверх">↑</button>
+
+<script>
+  // Кнопка наверх
+  var btn = document.getElementById('toTop');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 500) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+  btn.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // Поиск
+  var q = document.getElementById('q');
+  q.addEventListener('input', function(){
+    var v = this.value.trim().toLowerCase();
+    var items = document.querySelectorAll('.step');
+    if (!v) {
+      items.forEach(function(el){ el.classList.remove('hide'); });
+      document.querySelector('.toc').style.display = '';
+      document.querySelectorAll('.part').forEach(function(el){ el.style.display = ''; });
+      return;
+    }
+    document.querySelector('.toc').style.display = 'none';
+    items.forEach(function(el){
+      if (el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
+      else el.classList.add('hide');
+    });
+    // Скрываем пустые заголовки частей
+    document.querySelectorAll('.part').forEach(function(part){
+      var next = part.nextElementSibling, has = false;
+      while (next && !next.classList.contains('part')) {
+        if (next.classList.contains('step') && !next.classList.contains('hide')) has = true;
+        if (next.classList.contains('bonus')) break;
+        next = next.nextElementSibling;
+      }
+      part.style.display = has ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
