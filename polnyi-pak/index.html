@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Полный пак Standoff 2 — прицел, чувствительность, графика</title>
+<meta name="description" content="Прицел и его цвет, 3 набора чувствительности, раскладки на 2, 3 и 4 пальца, настройки графики для слабых телефонов. Пошаговая инструкция по установке.">
+<style>
+:root{
+  --bg:#0b0b12;--bg2:#11111c;--panel:#161623;--panel2:#1d1d2e;
+  --line:#2a2a3f;--txt:#ececf5;--muted:#9a9ab0;--accent:#ff8a00;--accent2:#ffb347;
+  --green:#38c97b;--red:#ff4d5e;--blue:#4aa8ff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(900px 500px at 80% -10%, rgba(255,138,0,.10), transparent 60%),
+    radial-gradient(700px 400px at 0% 10%, rgba(74,168,255,.06), transparent 60%),
+    var(--bg);
+  color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+  padding:0 0 60px;
+}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px}
+.hero{padding:46px 0 30px;border-bottom:1px solid var(--line)}
+.tag{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);border:1px solid rgba(255,138,0,.4);background:rgba(255,138,0,.08);
+  padding:6px 12px;border-radius:100px;margin-bottom:18px;
+}
+h1{
+  font-size:clamp(28px,7vw,44px);line-height:1.1;font-weight:900;letter-spacing:-.02em;margin-bottom:14px;
+  background:linear-gradient(180deg,#fff,#c9c9dd);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+h1 .hl{background:linear-gradient(180deg,var(--accent2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:17px;max-width:600px}
+.lead b{color:var(--txt)}
+h2{
+  font-size:23px;font-weight:800;letter-spacing:-.01em;margin:46px 0 8px;
+  display:flex;align-items:center;gap:10px;scroll-margin-top:20px;
+}
+h2 .n{
+  display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;
+  background:linear-gradient(180deg,var(--accent2),var(--accent));color:#1a1200;
+  border-radius:9px;font-size:15px;font-weight:900;
+}
+h3{font-size:17px;font-weight:700;margin:22px 0 8px}
+p{color:#c9c9dc;margin:10px 0}
+ul,ol{margin:12px 0 12px 22px;color:#c9c9dc}
+li{margin:7px 0}
+b,strong{color:#fff}
+.note{
+  border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:16px 18px;margin:18px 0;
+  font-size:15px;color:#d3d3e4;
+}
+.note.ok{border-color:rgba(56,201,123,.35);background:rgba(56,201,123,.07)}
+.note.warn{border-color:rgba(255,77,94,.35);background:rgba(255,77,94,.07)}
+.note.tip{border-color:rgba(74,168,255,.32);background:rgba(74,168,255,.07)}
+.note .t{display:block;font-weight:800;color:#fff;margin-bottom:6px}
+.note.warn .t{color:#ff8b96}
+.note.ok .t{color:#6fe0a0}
+.note.tip .t{color:#8cc7ff}
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
+  border-radius:16px;padding:18px 18px 16px;margin:14px 0;
+}
+.card .h{font-weight:800;font-size:16px;color:#fff;margin-bottom:6px}
+.card .d{color:var(--muted);font-size:14px}
+.btn{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:linear-gradient(180deg,rgba(255,138,0,.16),rgba(255,138,0,.07));
+  border:1px solid rgba(255,138,0,.45);color:#fff;text-decoration:none;
+  border-radius:14px;padding:15px 18px;margin:12px 0;font-weight:700;font-size:15px;
+}
+.btn span.arr{color:var(--accent);font-size:20px;line-height:1}
+.btn:active{transform:translateY(1px)}
+.step{
+  display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(42,42,63,.7);
+}
+.step:last-child{border-bottom:0}
+.step .num{
+  flex:0 0 26px;width:26px;height:26px;border-radius:8px;background:rgba(255,138,0,.14);
+  border:1px solid rgba(255,138,0,.4);color:var(--accent);font-weight:900;font-size:13px;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.step .body{flex:1}
+.step .body b{display:block;margin-bottom:3px}
+.step .body span{color:var(--muted);font-size:14.5px}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--accent);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+td:first-child{color:#fff;font-weight:600;width:44%}
+td:last-child{color:var(--muted)}
+footer{
+  margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:13px;text-align:center;
+}
+footer b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="tag">Standoff 2 · полный набор</div>
+    <h1>Полный пак: <span class="hl">прицел · сенса · графика</span></h1>
+    <p class="lead">Всё для настройки игры в одном месте: <b>прицел и его цвет</b>, три набора чувствительности, раскладки на <b>2, 3 и 4 пальца</b> и настройки графики, которые вытягивают даже слабый телефон.</p>
+  </header>
+
+  <div class="note">
+    <span class="t">Как пользоваться страницей</span>
+    Ставь по порядку: раскладка → чувствительность → прицел → графика. Это не прихоть — раскладка меняет положение рук, и только после неё сенса настраивается «под себя». Если перепутать порядок, придётся начинать заново.
+  </div>
+
+  <h2 id="s1"><span class="n">1</span>Что внутри пака</h2>
+  <p>Два архива на Google Drive. Открываются прямо с телефона в браузере, скачивать на компьютер не нужно.</p>
+
+  <a class="btn" href="https://drive.google.com/drive/folders/1T_mSU8YBBBfemBXdE57IdEgAB9zq_gEI?usp=sharing" target="_blank" rel="noopener">
+    🎯 Прицел · чувствительность · раскладки <span class="arr">→</span>
+  </a>
+  <a class="btn" href="https://drive.google.com/drive/folders/15way3bn0KPyCF8nHo3J2ImEcc3ySlhpM?usp=sharing" target="_blank" rel="noopener">
+    💻 Настройки графики <span class="arr">→</span>
+  </a>
+
+  <ul>
+    <li><b>Прицел</b> и его цвет — готовая форма с настройками</li>
+    <li><b>3 набора чувствительности</b> — от спокойной до агрессивной игры</li>
+    <li><b>Раскладки на 2, 3 и 4 пальца</b> — фото экрана с расстановкой кнопок</li>
+    <li><b>Графика</b> — скриншоты настроек под разную мощность телефона</li>
+  </ul>
+
+  <div class="note tip">
+    <span class="t">Скачай сразу оба архива</span>
+    Потом не придётся искать вторую ссылку в переписке. Файлы небольшие, места почти не займут.
+  </div>
+
+  <h2 id="s2"><span class="n">2</span>Порядок установки</h2>
+  <p>Четыре шага, каждый занимает 5–10 минут. Не пытайся сделать всё за один заход — настройки не должны конфликтовать между собой.</p>
+
+  <div class="step"><div class="num">1</div><div class="body"><b>Раскладка</b><span>Самая долгая привычка. Пока руки не привыкнут, остальное настраивать бессмысленно.</span></div></div>
+  <div class="step"><div class="num">2</div><div class="body"><b>Чувствительность</b><span>Подбирается под твою руку и экран. Делай это уже с новой раскладкой.</span></div></div>
+  <div class="step"><div class="num">3</div><div class="body"><b>Прицел</b><span>Ставится последним из «боевых» настроек — он даёт мгновенный визуальный результат и может отвлечь от главного.</span></div></div>
+  <div class="step"><div class="num">4</div><div class="body"><b>Графика</b><span>В самом конце. Сначала комфорт управления, потом картинка.</span></div></div>
+
+  <h2 id="s3"><span class="n">3</span>Раскладки на 2, 3 и 4 пальца</h2>
+  <p>В папке лежат <b>фотографии экрана</b> с готовой расстановкой кнопок. Готового файла, который вставится одной кнопкой, не существует: игра не импортирует чужую раскладку, а экраны у всех разные — одна расстановка на другом телефоне съедет.</p>
+
+  <h3>Какую выбрать</h3>
+  <table>
+    <tr><th>Раскладка</th><th>Кому подходит</th></tr>
+    <tr><td>2 пальца</td><td>Только начинаешь. Проще всего, но стрелять и целиться одновременно неудобно.</td></tr>
+    <tr><td>3 пальца</td><td>Оптимальный старт для тех, кто уже играл: стрельба отдельным пальцем, обзор не прерывается.</td></tr>
+    <tr><td>4 пальца</td><td>Если хочешь прыжок и присед без отпускания обзора. Привыкание дольше, потолок выше.</td></tr>
+  </table>
+
+  <h3>Как перенести на свой телефон</h3>
+  <div class="step"><div class="num">1</div><div class="body"><b>Сфотографируй свою текущую раскладку</b><span>Настройки → Управление → Настроить. Это страховка, если захочешь вернуть как было.</span></div></div>
+  <div class="step"><div class="num">2</div><div class="body"><b>Открой фото на втором устройстве</b><span>Второй телефон, планшет или ПК — так образец перед глазами, а игра под рукой.</span></div></div>
+  <div class="step"><div class="num">3</div><div class="body"><b>Запусти игру и открой редактор</b><span>Настройки → Управление → «Настроить».</span></div></div>
+  <div class="step"><div class="num">4</div><div class="body"><b>Выбери режим</b><span>Классический и TPP — вид от третьего лица.</span></div></div>
+  <div class="step"><div class="num">5</div><div class="body"><b>Переключись на «Схему 2»</b><span>Твоя старая раскладка останется в «Схеме 1» нетронутой.</span></div></div>
+  <div class="step"><div class="num">6</div><div class="body"><b>Расставь кнопки по образцу</b><span>Сначала главные: джойстик, обзор, огонь, прицел. Потом прыжок, присед, оружие, аптечка.</span></div></div>
+  <div class="step"><div class="num">7</div><div class="body"><b>Подгони под руку</b><span>Главным кнопкам 80–100% размера, второстепенным 60–70%. Прозрачность 60–80%.</span></div></div>
+  <div class="step"><div class="num">8</div><div class="body"><b>Сохрани и сфотографируй результат</b><span>Жёлтая кнопка «Сохранить» справа сверху.</span></div></div>
+
+  <div class="note warn">
+    <span class="t">Не нажимай «Сброс»</span>
+    Эта кнопка стирает все кнопки и возвращает стандарт. Если что-то пошло не так — просто выйди без сохранения, раскладка останется прежней.
+  </div>
+
+  <div class="note tip">
+    <span class="t">Совет</span>
+    В игре есть кнопка «Скопировать» — ей можно перенести готовую раскладку из TPP в FPP, чтобы не расставлять дважды.
+  </div>
+
+  <h2 id="s4"><span class="n">4</span>Чувствительность — 3 набора</h2>
+  <p>В архиве три готовых набора: спокойный, средний и агрессивный. Они отличаются скоростью разворота и резкостью прицеливания.</p>
+
+  <div class="card"><div class="h">С чего начать</div><div class="d">Всегда со среднего набора. Низкий сделает разворот вязким, высокий — прицел будет «улетать» мимо головы.</div></div>
+
+  <h3>Тест на 180 градусов</h3>
+  <ol>
+    <li>Зайди в тренировку, встань в центре.</li>
+    <li>Проведи большим пальцем по обзору одним движением — попробуй развернуться ровно назад.</li>
+    <li>Не докручивается — добавь 5–10% к сенсе обзора.</li>
+    <li>Перекручивает — убери столько же.</li>
+    <li>Повтори три раза. Должно получаться без отрыва пальца.</li>
+  </ol>
+
+  <div class="note">
+    <span class="t">Готовые наборы — это ориентир</span>
+    У каждого своя рука, длина пальцев и размер экрана, поэтому идеала «из коробки» не бывает. Набор — стартовая точка, дальше подгоняй под себя.
+  </div>
+
+  <h2 id="s5"><span class="n">5</span>Прицел и его цвет</h2>
+  <p>Открой настройки прицела в игре и поставь значения из архива: форма, толщина, цвет.</p>
+  <ul>
+    <li><b>Цвет подбирай под карту.</b> На светлых участках лучше виден красный и тёмный с обводкой, на тёмных — зелёный и жёлтый.</li>
+    <li><b>Толщина.</b> Тонкий удобнее на дистанции, толстый — в ближнем бою и на бегу.</li>
+    <li><b>Не делай прицел ярче, чем нужно.</b> Слишком заметный закрывает голову цели.</li>
+  </ul>
+
+  <div class="note ok">
+    <span class="t">Почему прицел — последним</span>
+    Новый прицел сразу бросается в глаза, и кажется, что «стало лучше». На самом деле результат даёт раскладка и сенса, а прицел — это удобство. Поставишь его первым — будешь путать эффект.
+  </div>
+
+  <h2 id="s6"><span class="n">6</span>Графика</h2>
+  <p>Открой вторую папку — там скриншоты настроек. Выбери вариант под свой телефон.</p>
+
+  <h3>Если телефон слабый</h3>
+  <ul>
+    <li>Тени — выключить</li>
+    <li>Сглаживание — выключить</li>
+    <li>Качество текстур — низкое или среднее</li>
+    <li>Эффекты и облака — минимум</li>
+    <li>FPS — стабильные 60, а не «максимум с просадками»</li>
+  </ul>
+
+  <div class="note warn">
+    <span class="t">Не гонись за «Ультра»</span>
+    Просадки кадров вредят стрельбе сильнее, чем помогает красивая картинка. Ровные 60 FPS всегда лучше, чем 90 с рывками.
+  </div>
+
+  <h2 id="s7"><span class="n">7</span>Если что-то не получается</h2>
+  <table>
+    <tr><th>Проблема</th><th>Решение</th></tr>
+    <tr><td>Не нашёл чувствительность</td><td>Настройки → Чувствительность. Иногда пункт спрятан в «Настройках боя»</td></tr>
+    <tr><td>Раскладка не совпала</td><td>Расставь кнопки вручную по фото — экраны у всех разные</td></tr>
+    <tr><td>Прицел не появился</td><td>Включи свой прицел в настройках, проверь, не выбран ли стандартный</td></tr>
+    <tr><td>FPS падает</td><td>Снизь графику по скриншоту, отключи тени и сглаживание</td></tr>
+    <tr><td>Палец соскальзывает</td><td>Протри экран, сними чехол, уменьши прозрачность и размер кнопок</td></tr>
+    <tr><td>«Раньше стрелял лучше»</td><td>Так и должно быть в первые дни. Дай настройкам 3–5 матчей</td></tr>
+    <tr><td>Файлы не открываются</td><td>Напиши в чат — пришлю доступ заново</td></tr>
+  </table>
+
+  <h2 id="s8"><span class="n">8</span>Важно знать</h2>
+  <ul>
+    <li><b>Это не читы.</b> Здесь только настройки самой игры — за них не банят.</li>
+    <li><b>Меняй по одному пункту.</b> Поставил всё сразу — не поймёшь, что именно помогло.</li>
+    <li><b>Дай время.</b> Первые 3–5 матчей будет непривычно и даже хуже. Это нормально.</li>
+    <li><b>Тренировка важнее настроек.</b> Ни одна сенса не заменит час в тренировочном режиме.</li>
+    <li><b>Ссылки на Google Drive.</b> Если папка не открывается — сразу пиши в чат, вышлю доступ заново.</li>
+  </ul>
+
+  <div class="note ok">
+    <span class="t">Начни с малого</span>
+    Возьми только раскладку на 3 пальца и среднюю сенсу. Поиграй три матча. Когда станет удобно — добавляй прицел и графику.
+  </div>
+
+  <footer>
+    Полный пак <b>Standoff 2</b> · актуально на момент покупки<br>
+    Настройки меняются с обновлениями игры — если пункт не совпал, напиши в чат
+  </footer>
+
+</div>
+</body>
+</html>
