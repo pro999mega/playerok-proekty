@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Смена голоса в реальном времени · Nagibatorz</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0c;
+    --card:rgba(255,255,255,.045);
+    --card2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.1);
+    --orange:#ff7a18;
+    --orange2:#ffb347;
+    --text:#edeff2;
+    --muted:#9aa0aa;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
+      radial-gradient(700px 420px at 96% 6%, rgba(255,69,0,.12), transparent 60%),
+      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
+    pointer-events:none;z-index:0;
+  }
+  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
+
+  .hero{
+    padding:48px 0 34px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    margin-bottom:34px;
+  }
+  .hero .tag{
+    display:inline-block;
+    font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
+    color:var(--orange2);
+    border:1px solid rgba(255,122,24,.35);
+    background:rgba(255,122,24,.08);
+    border-radius:100px;
+    padding:6px 16px;margin-bottom:20px;
+  }
+  .hero h1{
+    font-size:clamp(26px,7vw,46px);
+    line-height:1.12;
+    font-weight:900;
+    letter-spacing:-.5px;
+    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
+  }
+  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+
+  .note{
+    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
+    border:1px solid rgba(255,122,24,.28);
+    border-radius:16px;
+    padding:16px 18px;
+    font-size:14.5px;
+    margin-bottom:26px;
+    color:#f3e3d6;
+  }
+  .note b{color:var(--orange2)}
+
+  .searchbox{margin-bottom:26px}
+  .searchbox input{
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 18px;
+    color:var(--text);
+    font-size:15.5px;
+    outline:none;
+    transition:.2s;
+    backdrop-filter:blur(10px);
+  }
+  .searchbox input:focus{border-color:rgba(255,122,24,.55);background:var(--card2)}
+  .searchbox input::placeholder{color:#6d737d}
+
+  .toc{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:8px;
+    margin-bottom:38px;
+    backdrop-filter:blur(12px);
+  }
+  .toc-title{
+    font-size:12px;letter-spacing:1.8px;text-transform:uppercase;
+    color:var(--muted);padding:12px 16px 8px;font-weight:700;
+  }
+  .toc a{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 16px;
+    border-radius:12px;
+    color:var(--text);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:600;
+    transition:.15s;
+  }
+  .toc a:hover{background:rgba(255,122,24,.1);color:#fff}
+  .toc a .ico{
+    width:26px;height:26px;flex:0 0 26px;
+    display:grid;place-items:center;
+    border-radius:8px;
+    background:rgba(255,122,24,.15);
+    font-size:13px;
+  }
+
+  .part{
+    margin:52px 0 24px;
+    font-size:clamp(22px,5.5vw,30px);
+    font-weight:900;
+    letter-spacing:-.3px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+    scroll-margin-top:18px;
+  }
+  .part span{
+    background:linear-gradient(90deg,var(--orange2),var(--orange));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  .step{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px 20px 22px;
+    margin-bottom:14px;
+    backdrop-filter:blur(10px);
+    scroll-margin-top:18px;
+  }
+  .step h3{
+    font-size:17.5px;
+    font-weight:800;
+    margin-bottom:12px;
+    display:flex;gap:11px;align-items:flex-start;
+    letter-spacing:-.2px;
+  }
+  .num{
+    flex:0 0 28px;height:28px;
+    display:grid;place-items:center;
+    border-radius:9px;
+    background:linear-gradient(150deg,var(--orange),#d95a00);
+    color:#fff;font-size:13.5px;font-weight:900;
+    box-shadow:0 4px 14px rgba(255,122,24,.35);
+  }
+  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
+  .step p:last-child{margin-bottom:0}
+  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
+  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
+  .step li::marker{color:var(--orange)}
+
+  kbd{
+    display:inline-block;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.18);
+    border-bottom-width:2px;
+    border-radius:6px;
+    padding:1px 7px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13px;
+    color:#fff;
+    white-space:nowrap;
+  }
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13px;
+    background:rgba(255,122,24,.12);
+    color:var(--orange2);
+    padding:2px 7px;border-radius:6px;
+    word-break:break-all;
+  }
+  .path{
+    display:block;
+    background:rgba(0,0,0,.4);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:11px 14px;
+    margin:10px 0;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.5px;
+    color:#ffcf9a;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+
+  .warn{
+    background:rgba(255,60,60,.09);
+    border:1px solid rgba(255,80,80,.32);
+    border-left:3px solid #ff4d4d;
+    border-radius:12px;
+    padding:13px 16px;
+    margin:14px 0 0;
+    font-size:14px;
+    color:#ffc9c9;
+  }
+  .warn b{color:#ff8f8f}
+
+  .tip{
+    background:rgba(70,200,120,.08);
+    border:1px solid rgba(70,200,120,.25);
+    border-left:3px solid #37c97a;
+    border-radius:12px;
+    padding:13px 16px;
+    margin:14px 0 0;
+    font-size:14px;
+    color:#c3f0d8;
+  }
+
+  .tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
+  .tbl th{
+    text-align:left;padding:10px 12px;
+    color:var(--muted);font-size:12px;
+    text-transform:uppercase;letter-spacing:1.2px;
+    border-bottom:1px solid var(--line);
+  }
+  .tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td:first-child{font-weight:600;color:#fff}
+
+  .vid{
+    display:flex;align-items:center;gap:12px;
+    background:linear-gradient(135deg,rgba(255,122,24,.16),rgba(255,122,24,.05));
+    border:1px solid rgba(255,122,24,.35);
+    border-radius:14px;
+    padding:14px 18px;
+    margin-top:14px;
+    color:#fff;
+    text-decoration:none;
+    font-weight:800;
+    font-size:15px;
+    transition:.18s;
+  }
+  .vid:active{transform:scale(.98)}
+  .vid .play{
+    width:34px;height:34px;flex:0 0 34px;
+    display:grid;place-items:center;
+    border-radius:50%;
+    background:linear-gradient(150deg,var(--orange),#d95a00);
+    box-shadow:0 4px 16px rgba(255,122,24,.4);
+    font-size:13px;
+  }
+  .vid small{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px}
+
+  .bonus{
+    margin-top:56px;
+    background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
+    border:1px solid rgba(255,122,24,.35);
+    border-radius:22px;
+    padding:28px 24px;
+    text-align:center;
+    scroll-margin-top:18px;
+  }
+  .bonus h2{
+    font-size:24px;font-weight:900;margin-bottom:10px;
+    background:linear-gradient(90deg,#fff,var(--orange2));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
+  .btn{
+    display:inline-block;
+    background:linear-gradient(150deg,var(--orange),#d95a00);
+    color:#fff;text-decoration:none;
+    font-weight:800;font-size:15.5px;
+    padding:15px 34px;border-radius:14px;
+    box-shadow:0 10px 30px rgba(255,122,24,.35);
+    transition:.18s;
+  }
+  .btn:active{transform:scale(.97)}
+
+  footer{
+    margin-top:54px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+    text-align:center;
+    color:var(--muted);
+    font-size:13.5px;
+  }
+  footer b{color:var(--text)}
+
+  .top{
+    position:fixed;
+    right:16px;bottom:18px;
+    width:46px;height:46px;
+    border-radius:50%;
+    background:rgba(255,122,24,.9);
+    color:#fff;border:none;
+    font-size:19px;
+    display:grid;place-items:center;
+    box-shadow:0 8px 24px rgba(255,122,24,.4);
+    cursor:pointer;
+    opacity:0;pointer-events:none;
+    transition:.25s;
+    z-index:50;
+  }
+  .top.show{opacity:1;pointer-events:auto}
+
+  .hide{display:none!important}
+
+  @media(max-width:430px){
+    .wrap{padding:0 14px 84px}
+    .hero{padding:34px 0 26px}
+    .step{padding:17px 15px 19px;border-radius:16px}
+    .step h3{font-size:16.5px}
+    .step p,.step li{font-size:14.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="tag">Nagibatorz · гайд</div>
+    <h1>Смена голоса в&nbsp;реальном времени</h1>
+    <p>Инструкция под каждое устройство — повторяй за видео</p>
+  </div>
+
+  <div class="note">
+    <b>Спасибо за покупку!</b> Ниже — инструкции для разных устройств. Выбери свой раздел и просто повторяй за видео. Если что-то не получится — пиши в чат, помогу.
+  </div>
+
+  <div class="searchbox">
+    <input type="text" id="q" placeholder="Поиск по гайду — например «Samsung» или «iPhone»" autocomplete="off">
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Содержание</div>
+    <a href="#g1"><span class="ico">💻</span> Компьютер (простой вариант)</a>
+    <a href="#g2"><span class="ico">📱</span> Телефон — Samsung</a>
+    <a href="#g3"><span class="ico">📱</span> Телефон — iOS (iPhone)</a>
+    <a href="#g4"><span class="ico">📱</span> Телефон — Redmi</a>
+    <a href="#g5"><span class="ico">⚠️</span> Важно перед началом</a>
+  </div>
+
+  <h2 class="part"><span>Раздел 1 — Компьютер</span></h2>
+
+  <div class="step" id="g1">
+    <h3><span class="num">1</span> ПК — простой вариант</h3>
+    <p>Подходит для быстрой настройки без сложного софта. Функционал базовый, но всё работает.</p>
+    <a class="vid" href="https://drive.google.com/file/d/1luuiUNzE8cf1iFrWIcGP56jv8lWOuRN1/view?usp=sharing" target="_blank" rel="noopener">
+      <span class="play">▶</span>
+      <span>Видео-инструкция и материалы<small>Откроется в Google Drive</small></span>
+    </a>
+    <div class="tip">Начни с этого раздела, если нужен результат за пару минут — он самый быстрый.</div>
+  </div>
+
+  <h2 class="part"><span>Раздел 2 — Телефон</span></h2>
+
+  <div class="step" id="g2">
+    <h3><span class="num">2.1</span> Samsung</h3>
+    <p>Настройка через видео — никаких рут-прав не требуется.</p>
+    <a class="vid" href="https://drive.google.com/file/d/1WdgClY9cdmFMDFrookGqc99gJoWsE1F9/view?usp=sharing" target="_blank" rel="noopener">
+      <span class="play">▶</span>
+      <span>Видео-инструкция и материалы<small>Откроется в Google Drive</small></span>
+    </a>
+  </div>
+
+  <div class="step" id="g3">
+    <h3><span class="num">2.2</span> iOS (iPhone)</h3>
+    <div class="warn">⚠️ <b>Важно:</b> для iPhone настройка может требовать подключения к компьютеру или установки через AltStore. <b>Если не уверен — напиши в чат перед началом.</b></div>
+    <a class="vid" href="https://drive.google.com/file/d/1Y52O1qnnOp_jeJbqk09aC1wWilM9LS-W/view?usp=sharing" target="_blank" rel="noopener">
+      <span class="play">▶</span>
+      <span>Видео-инструкция и материалы<small>Откроется в Google Drive</small></span>
+    </a>
+    <div class="tip">Сначала посмотри видео целиком — на iPhone порядок действий важнее, чем на Android.</div>
+  </div>
+
+  <div class="step" id="g4">
+    <h3><span class="num">2.3</span> Redmi</h3>
+    <a class="vid" href="https://drive.google.com/file/d/1beAMnjSalltH39aAjRDK0bMx3hMh4tRp/view?usp=sharing" target="_blank" rel="noopener">
+      <span class="play">▶</span>
+      <span>Видео-инструкция и материалы<small>Откроется в Google Drive</small></span>
+    </a>
+    <div class="warn">⚠️ <b>Важный шаг:</b> найди на телефоне встроенное приложение <b>«Безопасность»</b> и следуй инструкции из видео. Без этого шага смена голоса может не заработать.</div>
+  </div>
+
+  <h2 class="part"><span>Важно</span></h2>
+
+  <div class="step" id="g5">
+    <h3><span class="num">!</span> Перед началом</h3>
+    <ul>
+      <li>Все ссылки открываются через Google Drive.</li>
+      <li>Если какая-то ссылка не работает — напиши в чат, я пришлю запасную.</li>
+      <li>Инструкции проверены на реальных устройствах.</li>
+      <li>Софт безопасен, root-права не нужны.</li>
+    </ul>
+    <table class="tbl">
+      <tr><th>Устройство</th><th>Что понадобится</th></tr>
+      <tr><td>Компьютер</td><td>Только браузер</td></tr>
+      <tr><td>Samsung</td><td>Телефон</td></tr>
+      <tr><td>iPhone</td><td>Возможно, ПК или AltStore</td></tr>
+      <tr><td>Redmi</td><td>Приложение «Безопасность»</td></tr>
+    </table>
+    <div class="tip">Если что-то пошло не так — просто напиши мне в чат Playerok. Разберёмся вместе.</div>
+  </div>
+
+  <div class="bonus" id="bonus">
+    <h2>🎁 Твой подарок</h2>
+    <p>Пакет из 100 гайдов по играм: раскладки, фарм, промокоды, настройки под конкретные игры.</p>
+    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing" target="_blank" rel="noopener">Забрать бонус</a>
+  </div>
+
+  <footer>
+    <b>Nagibatorz</b> · Playerok<br>
+    Спасибо, что выбрал мой товар! Не получилось с первого раза — напиши в чат.
+  </footer>
+
+</div>
+
+<button class="top" id="toTop" aria-label="Наверх">↑</button>
+
+<script>
+  var btn = document.getElementById('toTop');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 500) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+  btn.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  var q = document.getElementById('q');
+  q.addEventListener('input', function(){
+    var v = this.value.trim().toLowerCase();
+    var items = document.querySelectorAll('.step');
+    if (!v) {
+      items.forEach(function(el){ el.classList.remove('hide'); });
+      document.querySelector('.toc').style.display = '';
+      document.querySelectorAll('.part').forEach(function(el){ el.style.display = ''; });
+      return;
+    }
+    document.querySelector('.toc').style.display = 'none';
+    items.forEach(function(el){
+      if (el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
+      else el.classList.add('hide');
+    });
+    document.querySelectorAll('.part').forEach(function(part){
+      var next = part.nextElementSibling, has = false;
+      while (next && !next.classList.contains('part')) {
+        if (next.classList.contains('step') && !next.classList.contains('hide')) has = true;
+        if (next.classList.contains('bonus')) break;
+        next = next.nextElementSibling;
+      }
+      part.style.display = has ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
