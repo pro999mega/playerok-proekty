@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Снятие спамблока в Telegram · Nagibatorz</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0c;--card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.07);
+    --line:rgba(255,255,255,.1);--orange:#ff7a18;--orange2:#ffb347;
+    --green:#37c97a;--text:#edeff2;--muted:#9aa0aa;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--text);line-height:1.65;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
+      radial-gradient(700px 420px at 96% 6%, rgba(55,201,122,.12), transparent 60%),
+      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
+  }
+  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
+  .hero{padding:48px 0 34px;text-align:center;border-bottom:1px solid var(--line);margin-bottom:34px}
+  .hero .tag{
+    display:inline-block;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
+    color:var(--orange2);border:1px solid rgba(255,122,24,.35);background:rgba(255,122,24,.08);
+    border-radius:100px;padding:6px 16px;margin-bottom:20px;
+  }
+  .hero h1{
+    font-size:clamp(28px,7.5vw,48px);line-height:1.12;font-weight:900;letter-spacing:-.5px;
+    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
+  }
+  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+  .note{
+    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
+    border:1px solid rgba(255,122,24,.28);border-radius:16px;padding:16px 18px;
+    font-size:14.5px;margin-bottom:26px;color:#f3e3d6;
+  }
+  .note b{color:var(--orange2)}
+  .step{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:20px 20px 22px;margin-bottom:14px;backdrop-filter:blur(10px);scroll-margin-top:18px;
+  }
+  .step h3{
+    font-size:17.5px;font-weight:800;margin-bottom:12px;display:flex;gap:11px;
+    align-items:flex-start;letter-spacing:-.2px;
+  }
+  .num{
+    flex:0 0 28px;height:28px;display:grid;place-items:center;border-radius:9px;
+    background:linear-gradient(150deg,var(--orange),#d95a00);color:#fff;
+    font-size:13.5px;font-weight:900;box-shadow:0 4px 14px rgba(255,122,24,.35);
+  }
+  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
+  .step p:last-child{margin-bottom:0}
+  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
+  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
+  .step li::marker{color:var(--orange)}
+  kbd{
+    display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    border-bottom-width:2px;border-radius:6px;padding:1px 7px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#fff;white-space:nowrap;
+  }
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+    background:rgba(255,122,24,.12);color:var(--orange2);padding:2px 7px;border-radius:6px;
+  }
+  .copyblock{
+    background:rgba(0,0,0,.45);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.8px;line-height:1.7;color:#ffcf9a;white-space:pre-wrap;
+  }
+  .warn{
+    background:rgba(255,60,60,.09);border:1px solid rgba(255,80,80,.32);
+    border-left:3px solid #ff4d4d;border-radius:12px;padding:13px 16px;margin:14px 0 0;
+    font-size:14px;color:#ffc9c9;
+  }
+  .warn b{color:#ff8f8f}
+  .tip{
+    background:rgba(70,200,120,.08);border:1px solid rgba(70,200,120,.25);
+    border-left:3px solid var(--green);border-radius:12px;padding:13px 16px;margin:14px 0 0;
+    font-size:14px;color:#c3f0d8;
+  }
+  .tip b{color:#8ef0bb}
+  .bonus{
+    margin-top:56px;background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
+    border:1px solid rgba(255,122,24,.35);border-radius:22px;padding:28px 24px;
+    text-align:center;scroll-margin-top:18px;
+  }
+  .bonus h2{
+    font-size:24px;font-weight:900;margin-bottom:10px;
+    background:linear-gradient(90deg,#fff,var(--orange2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
+  .btn{
+    display:inline-block;background:linear-gradient(150deg,var(--orange),#d95a00);
+    color:#fff;text-decoration:none;font-weight:800;font-size:15.5px;
+    padding:15px 34px;border-radius:14px;box-shadow:0 10px 30px rgba(255,122,24,.35);
+    transition:.18s;
+  }
+  .btn:active{transform:scale(.97)}
+  footer{
+    margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
+    text-align:center;color:var(--muted);font-size:13.5px;
+  }
+  footer b{color:var(--text)}
+  .top{
+    position:fixed;right:16px;bottom:18px;width:46px;height:46px;border-radius:50%;
+    background:rgba(255,122,24,.9);color:#fff;border:none;font-size:19px;
+    display:grid;place-items:center;box-shadow:0 8px 24px rgba(255,122,24,.4);
+    cursor:pointer;opacity:0;pointer-events:none;transition:.25s;z-index:50;
+  }
+  .top.show{opacity:1;pointer-events:auto}
+  @media(max-width:430px){
+    .wrap{padding:0 14px 84px}
+    .hero{padding:34px 0 26px}
+    .step{padding:17px 15px 19px;border-radius:16px}
+    .step h3{font-size:16.5px}
+    .step p,.step li{font-size:14.5px}
+    .copyblock{font-size:12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="tag">Nagibatorz · гайд</div>
+    <h1>Снятие спамблока<br>в Telegram</h1>
+    <p>Пошаговая инструкция через официального бота @spambot</p>
+  </div>
+
+  <div class="note">
+    <b>Проверено на себе:</b> этот способ снял ограничение с реального аккаунта. Но решение всегда принимает Telegram — инструкция повышает шанс, а не гарантирует результат. Проходи шаги по порядку, ничего не пропускай.
+  </div>
+
+  <div class="step">
+    <h3><span class="num">1</span> Запускаем официального бота</h3>
+    <p>Открой Telegram → в поиске введи <code>@spambot</code> → нажми <b>Start</b>, чтобы начать диалог.</p>
+    <div class="tip">Убедись, что открылся именно <b>@spambot</b> с галочкой или статусом официального бота. Похожие имена — подделки.</div>
+  </div>
+
+  <div class="step">
+    <h3><span class="num">2</span> Проверяем, есть ли ограничения</h3>
+    <p>Бот сразу покажет текущий статус аккаунта. Вариантов два:</p>
+    <ul>
+      <li>«Ваш аккаунт ограничен…» — блок есть, продолжаем</li>
+      <li>«Ваш аккаунт свободен от ограничений» — всё чисто, инструкция не нужна</li>
+    </ul>
+    <p><b>Если блок есть — идём дальше.</b></p>
+  </div>
+
+  <div class="step">
+    <h3><span class="num">3</span> Проходим опрос внутри бота</h3>
+    <p>Отвечай строго в таком порядке:</p>
+    <ol>
+      <li><b>This is a mistake</b> — «Это ошибка»</li>
+      <li><b>Yes</b> — «Да»</li>
+      <li><b>No, nothing like this happened</b> — «Нет, ничего подобного не было»</li>
+    </ol>
+    <p>После этого бот предложит отправить пояснение.</p>
+  </div>
+
+  <div class="step">
+    <h3><span class="num">4</span> Отправляем обращение</h3>
+    <p>Скопируй этот текст целиком и отправь боту:</p>
+    <div class="copyblock">Hello Telegram Support!
+
+My account seems to be restricted by mistake. I haven't been active in public groups or sent mass messages recently. Please review my account and remove any restrictions if possible. Thank you!</div>
+    <p>Текст вежливый, без ошибок и короткий — именно такое обращение читают до конца и рассматривают по существу.</p>
+  </div>
+
+  <div class="step">
+    <h3><span class="num">5</span> Ждём обновления статуса</h3>
+    <p>Обычно ответ приходит в течение <b>24 часов</b>. Через сутки снова напиши <code>/start</code> боту <code>@spambot</code> и проверь статус.</p>
+    <div class="tip"><b>Статус «Ваш аккаунт свободен от каких-либо ограничений»</b> — готово, спамблок снят.</div>
+  </div>
+
+  <div class="step">
+    <h3><span class="num">6</span> Если ограничения остались</h3>
+    <p>Это не значит, что способ не сработал. Telegram иногда снимает ограничения только через несколько недель.</p>
+    <ul>
+      <li>Повторить обращение можно через <b>1–3 месяца</b>, не раньше</li>
+      <li>Частые обращения снижают шанс на положительный ответ</li>
+      <li>До повторной попытки не отправляй массовые сообщения, не вступай в сотни групп, не используй рекламу и спам</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3><span class="num">!</span> Что важно понимать</h3>
+    <p><b>1. Решение принимает Telegram.</b> Ни одна инструкция не гарантирует 100% снятие — но правильный запрос сильно повышает шанс.</p>
+    <p><b>2. Причину блокировки не сообщают.</b> Даже если ты уверен, что «ничего не делал», ограничение могло прилететь за:</p>
+    <ul>
+      <li>частые одинаковые сообщения</li>
+      <li>подозрительные ссылки</li>
+      <li>массовые приглашения</li>
+      <li>пересылки и подозрительную активность</li>
+    </ul>
+    <p><b>3. Не спамь в поддержку.</b> Многократные попытки ухудшают доверие к аккаунту.</p>
+    <p><b>4. После снятия не нарушай правила.</b> Иначе блок вернётся, и иногда уже навсегда.</p>
+    <div class="warn">⚠️ <b>Не покупай «разбан» у третьих лиц и не вводи данные аккаунта на сторонних сайтах.</b> Официальный путь один — бот <code>@spambot</code> внутри самого Telegram.</div>
+  </div>
+
+  <div class="bonus">
+    <h2>🎁 Подарок к покупке</h2>
+    <p>В чате Playerok тебя ждёт набор дополнительных материалов.</p>
+    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Забрать подарок</a>
+  </div>
+
+  <footer>
+    Гайд <b>Nagibatorz</b> · инструкция по снятию ограничений Telegram<br>
+    Telegram самостоятельно принимает решение по каждому аккаунту
+  </footer>
+
+</div>
+
+<button class="top" id="top" aria-label="Наверх">↑</button>
+<script>
+  var topBtn = document.getElementById('top');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 500) topBtn.classList.add('show');
+    else topBtn.classList.remove('show');
+  });
+  topBtn.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
