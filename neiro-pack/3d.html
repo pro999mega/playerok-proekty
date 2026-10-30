@@ -1,228 +1,285 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Нейро-пак — все ИИ в одном окне | 3D-гайд</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нейро-пак — 3D гайд</title>
 <style>
 :root{
-  --acc:#FF8A2B; --acc2:#FFC46B; --ink:#F4F1EC; --mut:#9A958E;
-  --card:rgba(255,255,255,.055); --line:rgba(255,255,255,.11);
+  --bg:#0a0806;
+  --txt:#f4efe7;
+  --muted:#a89c8c;
+  --accent:#ff8a2b;
+  --accent2:#ffc46b;
+  --card:rgba(255,246,235,.055);
+  --line:rgba(255,214,170,.22);
+  --radius:22px;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  margin:0;padding:0 0 96px;
-  font:400 16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  color:var(--ink);background:#0A0807;overflow-x:hidden;
+  margin:0;
+  background:var(--bg);
+  color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.6;
+  font-size:16px;
+  overflow-x:hidden;
+  padding-bottom:90px;
 }
-body::before{
-  content:"";position:fixed;inset:-20% -20% 0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(60% 45% at 50% 100%,rgba(255,122,24,.30),transparent 70%),
-    radial-gradient(45% 30% at 82% 8%,rgba(255,180,90,.10),transparent 70%),
-    linear-gradient(#0A0807,#0A0807);
+/* ---- фон: перспективная сетка и свечение ---- */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg .glow{
+  position:absolute;left:50%;bottom:-30%;width:140vw;height:90vh;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(255,138,43,.35),transparent 65%);
+  filter:blur(40px);
+  animation:breathe 9s ease-in-out infinite;
 }
-.grid{
-  position:fixed;left:-40%;right:-40%;bottom:-10%;height:70vh;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(255,138,43,.28) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,138,43,.28) 1px,transparent 1px);
-  background-size:56px 56px;
-  transform:perspective(420px) rotateX(62deg);transform-origin:bottom center;
-  mask-image:linear-gradient(to top,#000 8%,transparent 72%);
-  -webkit-mask-image:linear-gradient(to top,#000 8%,transparent 72%);
-  opacity:.55;will-change:transform;
+@keyframes breathe{0%,100%{opacity:.55;transform:translateX(-50%) scale(1)}50%{opacity:.9;transform:translateX(-50%) scale(1.08)}}
+.bg .grid{
+  position:absolute;left:-50%;right:-50%;bottom:-10%;height:120vh;
+  background-image:
+    linear-gradient(rgba(255,170,90,.16) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,170,90,.16) 1px,transparent 1px);
+  background-size:64px 64px;
+  transform:perspective(520px) rotateX(66deg);
+  transform-origin:bottom center;
+  opacity:.5;
+  mask-image:linear-gradient(to top,#000 0%,transparent 70%);
+  -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 70%);
 }
-.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:rgba(255,255,255,.06)}
-.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width .1s linear}
-
-header{
-  position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
-  gap:10px;padding:12px 18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  background:rgba(10,8,7,.72);border-bottom:1px solid var(--line);
+.bg .spark{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent);opacity:.7}
+/* ---- прогресс чтения ---- */
+.prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:60;box-shadow:0 0 12px var(--accent)}
+/* ---- общее ---- */
+.wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:0 18px}
+header.top{
+  position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px 8px;max-width:760px;margin:0 auto;
 }
-.brand{font-weight:700;font-size:14px;letter-spacing:.02em}
-.brand span{color:var(--mut);font-weight:500}
+.brand{font-weight:700;letter-spacing:.02em;font-size:15px}
 .badge{
-  font:700 11px/1 system-ui;letter-spacing:.12em;text-transform:uppercase;
-  padding:8px 13px;border-radius:999px;color:var(--acc2);
-  border:1px solid rgba(255,138,43,.45);background:rgba(255,138,43,.10);
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;
+  background:rgba(255,138,43,.08);
 }
-main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 18px}
-
-.hero{padding:38px 0 6px;text-align:center}
-.kicker{font:800 11px/1 system-ui;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
-h1{
-  margin:0;font-size:clamp(36px,11vw,62px);line-height:.95;letter-spacing:-.02em;font-weight:900;
-  background:linear-gradient(180deg,#FFE2B4 0%,#FFB356 42%,#FF7A18 100%);
+.eyebrow{
+  font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);
+  margin:44px 0 10px;font-weight:700;
+}
+h1.hero-title{
+  font-size:clamp(44px,15vw,84px);
+  line-height:.95;margin:0;font-weight:900;letter-spacing:-.02em;
+  background:linear-gradient(180deg,#fff5e6 10%,#ffc46b 45%,#ff7a18 95%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 6px 0 rgba(120,50,0,.42)) drop-shadow(0 18px 34px rgba(255,122,24,.30));
-  animation:heroIn .9s cubic-bezier(.2,.8,.2,1) both;
+  text-shadow:0 18px 40px rgba(255,122,24,.35);
+  animation:riseIn .8s cubic-bezier(.2,.8,.2,1) both;
 }
-@keyframes heroIn{from{opacity:0;transform:translateY(26px) scale(.94)}to{opacity:1;transform:none}}
-.sub{margin:14px 0 0;font-size:clamp(17px,4.6vw,22px);font-weight:800;letter-spacing:.02em;animation:heroIn .9s .12s cubic-bezier(.2,.8,.2,1) both}
-.lead{margin:12px auto 0;max-width:44ch;color:var(--mut);font-size:15px;animation:heroIn .9s .22s cubic-bezier(.2,.8,.2,1) both}
-.lead b{color:var(--acc2)}
-
-/* 3D-телефон */
-.phone-wrap{perspective:1200px;display:grid;place-items:center;margin:26px 0 8px}
+.hero-sub{
+  font-size:clamp(17px,4.6vw,22px);font-weight:800;letter-spacing:.06em;
+  margin:14px 0 8px;animation:riseIn .8s .12s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-line{color:var(--muted);font-size:15px;margin:0 0 6px;animation:riseIn .8s .2s cubic-bezier(.2,.8,.2,1) both}
+.hero-line b{color:var(--accent2)}
+@keyframes riseIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+/* ---- 3D-телефон ---- */
+.phone-stage{perspective:1100px;margin:26px 0 8px;display:flex;justify-content:center}
 .phone{
-  position:relative;width:min(300px,74vw);aspect-ratio:9/19.5;padding:9px;border-radius:40px;
-  background:linear-gradient(160deg,#2A2A31,#111114 45%,#26262C);
-  box-shadow:0 30px 60px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.10) inset,
-             0 0 60px rgba(255,122,24,.20);
-  transform-style:preserve-3d;transition:transform .12s ease-out;
+  width:min(300px,78vw);aspect-ratio:9/18.6;border-radius:38px;
+  padding:9px;background:linear-gradient(160deg,#3a332c,#161310 40%,#2d2721);
+  box-shadow:0 40px 70px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.09),inset 0 0 0 1px rgba(255,255,255,.06);
+  transform:rotateY(-14deg) rotateX(7deg);
+  transition:transform .18s ease-out;
+  will-change:transform;
 }
-.phone::before{content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
-  width:86px;height:19px;border-radius:12px;background:#060606;z-index:4}
-.screen{position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;
-  background:linear-gradient(170deg,#131316,#0B0B0D)}
-.screen img{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:cover;object-position:top}
-.shot-ph{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;
-  padding:22px;font:600 12px/1.6 system-ui;color:#7C7770}
-.shot-ph code{display:block;margin-top:6px;color:var(--acc2);font-size:12px}
-
-/* секции */
-.sec{margin:40px 0 0;padding:22px 20px;border-radius:22px;
-  background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.028));
-  border:1px solid var(--line);box-shadow:0 22px 50px rgba(0,0,0,.45);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.sec h2{margin:0 0 10px;font-size:clamp(21px,5.6vw,27px);line-height:1.2;letter-spacing:-.01em}
-.sec h3{margin:22px 0 8px;font-size:17px;color:var(--acc2)}
-.sec p{margin:0 0 12px;color:#D9D4CD}
-.sec ul,.sec ol{margin:0 0 12px;padding-left:20px;color:#D9D4CD}
-.sec li{margin:6px 0}
-.sec code{background:rgba(255,138,43,.13);border:1px solid rgba(255,138,43,.28);
-  color:var(--acc2);padding:2px 7px;border-radius:7px;font-size:13px}
-
-.step-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
-.step-num{
-  flex:0 0 auto;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;
-  font:900 19px/1 system-ui;color:#1A0D02;
-  background:linear-gradient(160deg,#FFD9A3,#FF9A3C 55%,#E26A00);
-  box-shadow:0 8px 0 rgba(120,48,0,.55),0 14px 26px rgba(255,122,24,.35),
-             inset 0 1px 0 rgba(255,255,255,.6);
-  transform:translateZ(0);
+.phone .screen{
+  width:100%;height:100%;border-radius:30px;overflow:hidden;background:#111;
+  position:relative;box-shadow:inset 0 0 40px rgba(0,0,0,.8);
 }
-.step-head h2{margin:0}
-
-/* таблица */
-.tbl{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 10px;
-  border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-.tbl th{background:rgba(255,138,43,.14);color:var(--acc2);text-align:left;padding:10px 12px;font-size:13px}
-.tbl td{padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);color:#D9D4CD;vertical-align:top}
-.tbl tr:hover td{background:rgba(255,138,43,.06)}
-
-.warn{display:flex;gap:12px;padding:14px 16px;border-radius:16px;margin:14px 0;
-  background:rgba(255,138,43,.09);border:1px solid rgba(255,138,43,.32)}
-.warn b{color:var(--acc2)}
-
-/* карусель (scroll-snap, без наложений) */
-.carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
-  padding:6px 2px 16px;margin:0 -4px;scrollbar-width:none}
+.phone .screen img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.phone .notch{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  width:86px;height:20px;border-radius:999px;background:#0a0a0a;z-index:3;
+}
+.caption{font-size:12.5px;color:var(--muted);text-align:center;margin:8px 0 0}
+/* ---- содержание ---- */
+.toc{
+  margin:30px 0 10px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);backdrop-filter:blur(14px);padding:18px;
+}
+.toc h3{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.toc ol{margin:0;padding-left:20px}
+.toc li{margin:6px 0}
+.toc a{color:var(--txt);text-decoration:none;border-bottom:1px solid rgba(255,196,107,.25)}
+.toc a:hover{color:var(--accent2)}
+/* ---- карточки-шаги ---- */
+.step{
+  margin:22px 0;padding:20px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  box-shadow:0 24px 50px -30px rgba(0,0,0,.95);
+  position:relative;
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+.step h2{font-size:20px;margin:0 0 10px;line-height:1.25}
+.step p{margin:0 0 10px;color:#e6ddd1}
+.step p:last-child{margin-bottom:0}
+.num{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:42px;height:34px;padding:0 9px;margin-bottom:12px;
+  border-radius:10px;font-weight:900;font-size:15px;letter-spacing:.04em;
+  background:linear-gradient(180deg,#ffe3b8,#ff9c3d 55%,#c85f10);
+  color:#241200;text-shadow:0 1px 0 rgba(255,255,255,.45);
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.28),inset 0 2px 0 rgba(255,255,255,.6),0 10px 18px -8px rgba(255,138,43,.8);
+}
+.shot{
+  margin:14px 0 6px;border-radius:16px;overflow:hidden;border:1px solid var(--line);
+  background:#120f0c;box-shadow:0 20px 40px -26px #000;
+}
+.shot img{width:100%;display:block}
+.shot .cap{font-size:12px;color:var(--muted);padding:9px 12px;background:rgba(0,0,0,.35);border-top:1px solid rgba(255,255,255,.06)}
+.note{
+  border-left:3px solid var(--accent);padding:10px 14px;margin:14px 0 0;
+  background:rgba(255,138,43,.08);border-radius:0 12px 12px 0;font-size:14.5px;color:#ffdfbe;
+}
+/* ---- карусель ---- */
+.carousel{
+  display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 4px 14px;margin:0 -4px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
 .carousel::-webkit-scrollbar{display:none}
-.slide{flex:0 0 82%;scroll-snap-align:center;border-radius:20px;padding:18px;
-  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
-  border:1px solid var(--line);box-shadow:0 16px 34px rgba(0,0,0,.4)}
-.slide .tag{display:inline-block;font:800 10px/1 system-ui;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--acc);margin-bottom:10px}
-.slide h4{margin:0 0 8px;font-size:19px}
-.slide p{margin:0;font-size:14px;color:var(--mut)}
-.dots{display:flex;gap:8px;justify-content:center;margin-top:2px}
-.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:.25s}
-.dots i.on{background:var(--acc);width:20px;border-radius:4px}
-
-/* куб */
-.scene{height:280px;display:grid;place-items:center;perspective:900px;margin:10px 0 0;touch-action:pan-y}
-.cube{position:relative;width:150px;height:150px;transform-style:preserve-3d;
-  transform:rotateX(-18deg) rotateY(-24deg);will-change:transform}
-.face{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;
-  font:700 14px/1.3 system-ui;color:#2A1400;border-radius:14px;
-  background:linear-gradient(160deg,#FFD9A3,#FFAB52 60%,#F07E10);
-  border:1px solid rgba(255,255,255,.5);
-  box-shadow:inset 0 0 26px rgba(255,255,255,.35)}
-.f1{transform:translateZ(75px)}
-.f2{transform:rotateY(90deg) translateZ(75px)}
-.f3{transform:rotateY(180deg) translateZ(75px)}
-.f4{transform:rotateY(-90deg) translateZ(75px)}
-.f5{transform:rotateX(90deg) translateZ(75px)}
-.f6{transform:rotateX(-90deg) translateZ(75px)}
-.hint{text-align:center;font-size:13px;color:var(--mut);margin:8px 0 0}
-
-/* флип-карточки */
-.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-top:12px}
-.flip{height:186px;perspective:1000px;cursor:pointer}
-.flip-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
-  transition:transform .65s cubic-bezier(.3,.8,.3,1)}
-.flip.on .flip-in{transform:rotateY(180deg)}
-.side{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  border-radius:18px;padding:14px;display:flex;flex-direction:column;justify-content:center;
-  border:1px solid var(--line);box-shadow:0 14px 30px rgba(0,0,0,.45)}
-.side.front{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.035))}
-.side.back{transform:rotateY(180deg);
-  background:linear-gradient(160deg,rgba(255,138,43,.20),rgba(255,138,43,.07))}
-.side .name{font-weight:800;font-size:17px;margin-bottom:6px}
-.side .txt{font-size:13px;color:var(--mut);line-height:1.45}
-.side.back .txt{color:#F0DCC6}
-
-.cta{display:inline-block;margin-top:6px;padding:15px 26px;border-radius:16px;font-weight:800;
-  color:#190C00;text-decoration:none;background:linear-gradient(160deg,#FFD9A3,#FF9A3C 55%,#E97000);
-  box-shadow:0 10px 0 rgba(120,48,0,.5),0 18px 38px rgba(255,122,24,.38);
-  animation:pulse 2.6s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 10px 0 rgba(120,48,0,.5),0 18px 38px rgba(255,122,24,.30)}
-50%{box-shadow:0 10px 0 rgba(120,48,0,.5),0 18px 52px rgba(255,140,40,.55)}}
-footer{max-width:760px;margin:44px auto 0;padding:22px 18px;text-align:center;color:var(--mut);font-size:13px}
-
-/* кнопка эффектов — не перекрывает текст */
-.fx{position:fixed;right:14px;bottom:16px;z-index:55;border:1px solid var(--line);
-  background:rgba(20,16,14,.88);color:var(--acc2);font:700 12px/1 system-ui;
-  padding:11px 15px;border-radius:999px;backdrop-filter:blur(10px);cursor:pointer}
-.fx.off{color:var(--mut)}
-
-/* появление секций — только через JS-класс, базово всё видимо */
-.reveal-init{opacity:0;transform:translate3d(0,26px,0);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
-.reveal-init.reveal-in{opacity:1;transform:none}
-
-@media (max-width:400px){
-  .slide{flex-basis:88%}
-  .sec{padding:18px 15px;border-radius:18px}
-  .step-num{width:46px;height:46px;font-size:17px}
+.rcard{
+  flex:0 0 82%;scroll-snap-align:center;
+  border-radius:18px;padding:16px;border:1px solid var(--line);
+  background:linear-gradient(160deg,rgba(255,220,180,.1),rgba(255,255,255,.03));
+  box-shadow:0 18px 34px -24px #000;
 }
+.rcard h4{margin:0 0 4px;font-size:17px}
+.rcard .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.rcard p{margin:8px 0 0;font-size:14px;color:#ddd3c6}
+.dots{display:flex;gap:7px;justify-content:center;margin:4px 0 0}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:.25s}
+.dots i.on{background:var(--accent);width:20px;border-radius:999px}
+/* ---- куб ---- */
+.cube-stage{perspective:900px;display:flex;justify-content:center;padding:20px 0 10px}
+.cube{
+  width:132px;height:132px;position:relative;transform-style:preserve-3d;
+  transform:rotateX(-18deg) rotateY(-24deg);
+  transition:transform .1s linear;
+}
+.cube .side{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:12px;font-size:13px;font-weight:700;
+  border:1px solid rgba(255,196,107,.45);border-radius:14px;
+  background:linear-gradient(160deg,rgba(255,160,70,.22),rgba(20,15,10,.85));
+  box-shadow:inset 0 0 24px rgba(255,138,43,.28);
+}
+.cube .f{transform:translateZ(66px)}
+.cube .b{transform:rotateY(180deg) translateZ(66px)}
+.cube .r{transform:rotateY(90deg) translateZ(66px)}
+.cube .l{transform:rotateY(-90deg) translateZ(66px)}
+.cube .t{transform:rotateX(90deg) translateZ(66px)}
+.cube .bt{transform:rotateX(-90deg) translateZ(66px)}
+.hint{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 0 0}
+/* ---- флип-карточки ---- */
+.flips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.flip{perspective:800px;height:132px;cursor:pointer}
+.flip .in{
+  position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px;text-align:center;border:1px solid var(--line);
+  background:linear-gradient(160deg,rgba(255,220,180,.13),rgba(255,255,255,.03));
+}
+.flip .back{transform:rotateY(180deg);background:linear-gradient(160deg,rgba(255,138,43,.25),rgba(30,18,8,.95))}
+.flip .face b{font-size:15px}
+.flip .face span{font-size:11.5px;color:var(--muted);margin-top:4px}
+.flip .back span{color:#ffdfbe}
+/* ---- финал и подвал ---- */
+.final{
+  margin:34px 0 20px;padding:24px;border-radius:var(--radius);text-align:center;
+  border:1px solid var(--line);
+  background:radial-gradient(ellipse at top,rgba(255,138,43,.22),rgba(255,255,255,.03));
+}
+.final h2{margin:0 0 8px;font-size:22px}
+.final p{color:var(--muted);margin:0 0 16px;font-size:14.5px}
+.btn{
+  display:inline-block;padding:14px 26px;border-radius:999px;font-weight:800;text-decoration:none;
+  color:#231000;background:linear-gradient(180deg,#ffd79a,#ff9126);
+  box-shadow:0 14px 30px -12px rgba(255,138,43,.9),inset 0 -3px 0 rgba(0,0,0,.22);
+  transition:transform .18s ease;
+}
+.btn:active{transform:translateY(2px)}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:26px 0 10px}
+/* ---- плавающая кнопка эффектов ---- */
+.fx{
+  position:fixed;right:12px;bottom:16px;z-index:50;
+  width:52px;height:52px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(20,16,12,.9);color:var(--accent2);font-weight:900;font-size:12px;
+  backdrop-filter:blur(10px);cursor:pointer;
+  box-shadow:0 12px 26px -12px #000;
+}
+.fx:active{transform:scale(.94)}
+/* ---- отключение эффектов ---- */
+body.nofx .bg .glow,body.nofx .grid{animation:none!important}
+body.nofx .phone{transform:none!important}
+body.nofx .step,body.nofx .toc,body.nofx .final{transition:none!important}
+/* ---- появление ---- */
+.pre{opacity:0;transform:translateY(28px)}
+.in-view{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
 @media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .reveal-init{opacity:1!important;transform:none!important}
+  *{animation:none!important;transition:none!important}
+  .pre{opacity:1;transform:none}
+}
+@media (max-width:420px){
+  .flips{grid-template-columns:1fr 1fr}
+  .rcard{flex:0 0 88%}
 }
 </style>
 </head>
 <body>
-<div class="progress"><i id="bar"></i></div>
-<div class="grid" id="grid"></div>
 
-<header>
-  <div class="brand">Nagibatorz <span>· гайд</span></div>
+<div class="bg" aria-hidden="true">
+  <div class="glow"></div>
+  <div class="grid"></div>
+  <div class="spark" style="left:12%;top:22%"></div>
+  <div class="spark" style="left:78%;top:16%"></div>
+  <div class="spark" style="left:62%;top:48%"></div>
+  <div class="spark" style="left:26%;top:66%"></div>
+</div>
+
+<div class="prog" id="prog"></div>
+
+<header class="top">
+  <div class="brand">Nagibatorz · гайд</div>
   <div class="badge">Нейро-пак</div>
 </header>
 
-<main>
-  <section class="hero">
-    <div class="kicker">Инструкция</div>
-    <h1>НЕЙРО-ПАК</h1>
-    <p class="sub">Все ИИ в одном окне</p>
-    <p class="lead">GPT, Gemini, Grok, Claude и десятки других — <b>без подписок и оплат</b></p>
+<main class="wrap">
 
-    <div class="phone-wrap">
-      <div class="phone" id="phone">
-        <div class="screen">
-          <div class="shot-ph">Сюда встанет скриншот<code>img/hero.png</code></div>
-          <img src="img/hero.png" alt="Главный экран площадки" onerror="this.style.opacity=0">
-        </div>
+  <div class="eyebrow">Практический гайд</div>
+  <h1 class="hero-title">НЕЙРО-ПАК</h1>
+  <div class="hero-sub">ВСЕ ИИ В ОДНОМ ОКНЕ</div>
+  <p class="hero-line">GPT, Gemini, Grok, Claude и десятки других — <b>без подписок и оплат</b></p>
+
+  <div class="phone-stage">
+    <div class="phone" id="phone">
+      <div class="screen">
+        <div class="notch"></div>
+        <img src="img/Screenshot_20261031-004721.jpg" alt="Главный экран площадки Arena AI">
       </div>
     </div>
-    <p class="hint">Поверни телефон — экран наклонится</p>
-  </section>
+  </div>
+  <p class="caption">Так выглядит вход: поле запроса, переключатель режима и кнопка Max</p>
 
-  <section class="sec" id="toc">
-    <h2>Что внутри</h2>
+  <nav class="toc">
+    <h3>Содержание</h3>
     <ol>
       <li><a href="#s1">Открываем площадку</a></li>
       <li><a href="#s2">Direct — главный режим</a></li>
@@ -232,276 +289,232 @@ footer{max-width:760px;margin:44px auto 0;padding:22px 18px;text-align:center;co
       <li><a href="#s6">Ограничения площадки</a></li>
       <li><a href="#s7">Если что-то не работает</a></li>
     </ol>
+  </nav>
+
+  <section class="step" id="s1">
+    <div class="num">01</div>
+    <h2>Открываем площадку</h2>
+    <p>Площадка работает прямо в браузере телефона — ничего скачивать и устанавливать не нужно. Открой адрес в любом браузере, и перед тобой появится поле запроса.</p>
+    <p>Интерфейс на английском, но это не мешает: все основные кнопки — это иконки, а запросы можно писать по-русски, все модели понимают.</p>
+    <div class="note">Совет: добавь страницу на главный экран телефона — будет открываться в один тап, как обычное приложение.</div>
   </section>
 
-  <section class="sec" id="s1">
-    <div class="step-head"><div class="step-num">01</div><h2>Открываем площадку</h2></div>
-    <p>Зайди на сайт площадки с любого устройства — телефон, планшет, компьютер. Приложение ставить не нужно, всё работает в браузере.</p>
-    <p>Регистрация бесплатная: почта и пароль, либо вход через Google. После входа откроется главный экран с полем запроса и кнопкой выбора режима.</p>
-    <div class="warn"><div><b>Совет.</b> Сразу добавь страницу на главный экран телефона — так она открывается в один тап, как обычное приложение.</div></div>
-  </section>
-
-  <section class="sec" id="s2">
-    <div class="step-head"><div class="step-num">02</div><h2>Direct — главный режим</h2></div>
-    <p>У площадки несколько режимов работы. Для повседневных задач нужен <b>Direct</b>: чат с одной моделью, без сравнений и голосований.</p>
-    <ul>
-      <li><b>Direct</b> — обычный диалог с выбранной моделью. Девяносто процентов работы здесь.</li>
-      <li><b>Battle Mode</b> — две анонимные модели отвечают на один вопрос, выбираешь лучший ответ.</li>
-      <li><b>Side by Side</b> — сам выбираешь две модели и сравниваешь ответы рядом.</li>
-      <li><b>Agent Mode</b> — для сложных многошаговых задач, когда нужно что-то собрать или посчитать по шагам.</li>
-    </ul>
-    <p>Открывается кнопкой с иконкой сообщения слева от поля ввода.</p>
+  <section class="step" id="s2">
+    <div class="num">02</div>
+    <h2>Direct — главный режим</h2>
+    <p>Нажми на кнопку выбора режима рядом с полем ввода. Откроется список из четырёх пунктов, и почти всегда тебе нужен именно <b>Direct</b> — общение с одной моделью за раз.</p>
 
     <div class="shot">
-      <div class="shot-ph">Скриншот режимов<code>img/modes.png</code></div>
-      <img src="img/modes.png" alt="Меню режимов площадки" onerror="this.style.opacity=0">
+      <img src="img/Screenshot_20261031-004728.jpg" alt="Меню режимов: Battle Mode, Agent Mode, Side by Side, Direct">
+      <div class="cap">Четыре режима: Battle Mode, Agent Mode, Side by Side и Direct</div>
     </div>
 
     <div class="carousel" id="car">
-      <div class="slide"><span class="tag">Основной</span><h4>Direct</h4><p>Чат с одной моделью. Всё просто: задал вопрос — получил ответ. С этого начинают все.</p></div>
-      <div class="slide"><span class="tag">Выбор лучшего</span><h4>Battle Mode</h4><p>Две модели отвечают анонимно, ты выбираешь ответ получше. Заодно видишь, кто сильнее.</p></div>
-      <div class="slide"><span class="tag">Сравнение</span><h4>Side by Side</h4><p>Сам ставишь две модели рядом и смотришь, чем отличаются ответы на один вопрос.</p></div>
-      <div class="slide"><span class="tag">Сложные задачи</span><h4>Agent Mode</h4><p>Когда задача многошаговая: собрать, посчитать, проверить. Модель идёт по шагам.</p></div>
-      <div class="slide"><span class="tag">Автоматика</span><h4>Max</h4><p>Сам подбирает модель под запрос. Если не хочешь разбираться, кто где лучше.</p></div>
+      <div class="rcard"><div class="tag">Основной</div><h4>Direct</h4><p>Чат с одной выбранной моделью. Предсказуемо и понятно: ты знаешь, кто отвечает, и можешь продолжать диалог.</p></div>
+      <div class="rcard"><div class="tag">Слепой тест</div><h4>Battle Mode</h4><p>Две анонимные модели отвечают на один запрос. Сравниваешь ответы и выбираешь лучший — хороший способ найти свою модель.</p></div>
+      <div class="rcard"><div class="tag">Для сложного</div><h4>Agent Mode</h4><p>Модель сама разбивает большую задачу на шаги и выполняет их по очереди. Нужен для объёмных исследований.</p></div>
+      <div class="rcard"><div class="tag">Сравнение</div><h4>Side by Side</h4><p>Две выбранные тобой модели рядом. Удобно, когда важно посмотреть на задачу с двух сторон.</p></div>
     </div>
-    <div class="dots" id="dots"></div>
-    <p class="hint">Листай карточки вбок</p>
+    <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
   </section>
 
-  <section class="sec" id="s3">
-    <div class="step-head"><div class="step-num">03</div><h2>Кнопка Max</h2></div>
-    <p>В поле ввода есть кнопка с буквой M — это <b>Max</b>. Она включает автоматический выбор модели: площадка сама решает, какая модель лучше справится с твоим запросом.</p>
-    <p>Новичку проще всего работать именно с ней: не нужно знать названия моделей и понимать, чем <code>gpt-5.5-instant</code> отличается от <code>gemini-3-flash</code>.</p>
-    <div class="warn"><div><b>Когда снимать Max.</b> Если нужен конкретный стиль ответа или ты уже знаешь, что с этой задачей лучше справляется определённая модель — выбери её вручную.</div></div>
+  <section class="step" id="s3">
+    <div class="num">03</div>
+    <h2>Кнопка Max</h2>
+    <p>Рядом с полем ввода есть маленькая кнопка с буквой <b>M</b>. Это роутер: он сам выбирает модель под твой запрос — на простой вопрос ответит быстрая, на сложный подключит ту, что сильнее.</p>
+    <p>Если не хочешь разбираться в настройках и просто нужен нормальный ответ — оставляй Max и не трогай. В большинстве случаев этого достаточно.</p>
+    <div class="note">Max удобен для вопросов «объясни», «перепиши», «придумай». Для точных задач с длинным текстом лучше выбрать модель вручную.</div>
   </section>
 
-  <section class="sec" id="s4">
-    <div class="step-head"><div class="step-num">04</div><h2>Выбор модели под задачу</h2></div>
-    <p>Нажми на кнопку модели рядом с полем ввода — откроется список. Там есть поиск и фильтры: текст, код, картинки, поиск в интернете.</p>
+  <section class="step" id="s4">
+    <div class="num">04</div>
+    <h2>Выбор модели под задачу</h2>
+    <p>Нажми на кнопку модели — откроется список с поиском. В нём десятки названий, и это нормально: выбирать каждый раз новую не нужно.</p>
 
     <div class="shot">
-      <div class="shot-ph">Скриншот списка моделей<code>img/models.png</code></div>
-      <img src="img/models.png" alt="Список доступных моделей" onerror="this.style.opacity=0">
+      <img src="img/Screenshot_20261031-004735.jpg" alt="Список моделей с поиском, Max, gpt, gemini, grok">
+      <div class="cap">Список моделей: вверху Max, ниже конкретные модели и поиск</div>
     </div>
 
-    <table class="tbl">
-      <tr><th>Задача</th><th>На что смотреть</th></tr>
-      <tr><td>Тексты, письма, описания</td><td>GPT, Claude, Gemini</td></tr>
-      <tr><td>Код и скрипты</td><td>Модели с пометкой кода в фильтре</td></tr>
-      <tr><td>Картинки</td><td>Фильтр изображений</td></tr>
-      <tr><td>Свежие данные из сети</td><td>Модели с доступом в интернет</td></tr>
-      <tr><td>Не хочу выбирать</td><td>Max — решит сам</td></tr>
-    </table>
+    <p>Ориентируйся так: <b>Max</b> — универсал, <b>gpt</b> — тексты и объяснения, <b>gemini</b> — быстрые ответы и картинки, <b>grok</b> — свежие события и разбор данных. Пользуйся поиском по названию, если нужно найти конкретную.</p>
 
-    <p>Коснись карточки, чтобы увидеть, для чего модель лучше:</p>
     <div class="flips" id="flips">
-      <div class="flip"><div class="flip-in">
-        <div class="side front"><div class="name">GPT</div><div class="txt">Универсал</div></div>
-        <div class="side back"><div class="name">GPT</div><div class="txt">Тексты, объяснения, код. Хорош, когда нужен ровный ответ без сюрпризов.</div></div>
+      <div class="flip"><div class="in">
+        <div class="face"><b>Max</b><span>нажми, чтобы узнать</span></div>
+        <div class="face back"><b>Универсал</b><span>Сам подбирает модель под запрос</span></div>
       </div></div>
-      <div class="flip"><div class="flip-in">
-        <div class="side front"><div class="name">Gemini</div><div class="txt">Быстрый</div></div>
-        <div class="side back"><div class="name">Gemini</div><div class="txt">Скорость и работа с изображениями. Удобно, когда нужно быстро и по мелочи.</div></div>
+      <div class="flip"><div class="in">
+        <div class="face"><b>GPT</b><span>нажми, чтобы узнать</span></div>
+        <div class="face back"><b>Тексты</b><span>Объяснения, статьи, переписывание</span></div>
       </div></div>
-      <div class="flip"><div class="flip-in">
-        <div class="side front"><div class="name">Grok</div><div class="txt">С характером</div></div>
-        <div class="side back"><div class="name">Grok</div><div class="txt">Живой язык, свежие события. Хорош для идей и разбора острых тем.</div></div>
+      <div class="flip"><div class="in">
+        <div class="face"><b>Gemini</b><span>нажми, чтобы узнать</span></div>
+        <div class="face back"><b>Скорость</b><span>Быстрые ответы и работа с картинками</span></div>
       </div></div>
-      <div class="flip"><div class="flip-in">
-        <div class="side front"><div class="name">Claude</div><div class="txt">Аккуратный</div></div>
-        <div class="side back"><div class="name">Claude</div><div class="txt">Длинные тексты и работа с документами. Мало воды, много смысла.</div></div>
+      <div class="flip"><div class="in">
+        <div class="face"><b>Grok</b><span>нажми, чтобы узнать</span></div>
+        <div class="face back"><b>Свежесть</b><span>Актуальные события и разбор данных</span></div>
       </div></div>
     </div>
   </section>
 
-  <section class="sec" id="s5">
-    <div class="step-head"><div class="step-num">05</div><h2>Что можно делать каждый день</h2></div>
-    <ul>
-      <li><b>Тексты и описания товаров</b> — заголовки, характеристики, ответы покупателям.</li>
-      <li><b>Учёба</b> — объяснить тему простыми словами, проверить конспект, разобрать задачу.</li>
-      <li><b>Код и скрипты</b> — написать, найти ошибку, переписать под себя.</li>
-      <li><b>Переводы</b> — с сохранением стиля, а не дословно.</li>
-      <li><b>Идеи и планы</b> — списки дел, поездки, раскладка бюджета.</li>
-      <li><b>Проверка своих текстов</b> — орфография, тон, лишние слова.</li>
-    </ul>
+  <section class="step" id="s5">
+    <div class="num">05</div>
+    <h2>Что можно делать каждый день</h2>
+    <p>Одна площадка закрывает почти все бытовые задачи. Покрути куб — на каждой грани то, что реально экономит время.</p>
 
-    <h3>Шесть граней одного доступа</h3>
-    <p class="hint">Крути куб пальцем</p>
-    <div class="scene" id="scene">
+    <div class="cube-stage">
       <div class="cube" id="cube">
-        <div class="face f1">Тексты</div>
-        <div class="face f2">Учёба</div>
-        <div class="face f3">Код</div>
-        <div class="face f4">Переводы</div>
-        <div class="face f5">Идеи</div>
-        <div class="face f6">Проверка</div>
+        <div class="side f">Тексты<br>и описания</div>
+        <div class="side b">Учёба<br>простыми словами</div>
+        <div class="side r">Код<br>и скрипты</div>
+        <div class="side l">Переводы<br>со стилем</div>
+        <div class="side t">Идеи<br>и планы</div>
+        <div class="side bt">Проверка<br>своих текстов</div>
       </div>
     </div>
+    <p class="hint">Вращай пальцем в любую сторону</p>
+
+    <p>Лучше всего модели справляются с тем, что ты сам хорошо понимаешь: чем точнее описал задачу, тем полезнее ответ. Не бывает «правильного» запроса — есть понятный.</p>
   </section>
 
-  <section class="sec" id="s6">
-    <div class="step-head"><div class="step-num">06</div><h2>Ограничения площадки</h2></div>
-    <p>Честно о том, к чему нужно быть готовым:</p>
-    <ul>
-      <li><b>Это не подписка ChatGPT Plus.</b> Ты получаешь доступ к моделям через площадку-агрегатор, а не личный аккаунт OpenAI.</li>
-      <li>Отдельные модели могут быть недоступны или заменены другими — список меняется.</li>
-      <li>Иногда бывают очереди: ответ приходит не мгновенно, а через несколько секунд.</li>
-      <li>Сложные задачи лучше дробить на части — ответ будет точнее.</li>
-    </ul>
-    <div class="warn"><div><b>Важно.</b> Личные данные, пароли и документы в запросы лучше не вставлять — это открытая площадка.</div></div>
+  <section class="step" id="s6">
+    <div class="num">06</div>
+    <h2>Ограничения площадки</h2>
+    <p>Есть лимиты на количество сообщений — они меняются и зависят от загрузки сервиса. Если лимит закончился, площадка сама предложит подождать или переключит модель.</p>
+    <p>Модели иногда ошибаются, особенно в цифрах, датах и именах. Всё, что важно, проверяй отдельно — это нормальная практика при работе с любым ИИ.</p>
+    <div class="note">Площадка не хранит твои данные вечно: не отправляй туда пароли, номера карт и документы. Для обычных задач это не нужно.</div>
   </section>
 
-  <section class="sec" id="s7">
-    <div class="step-head"><div class="step-num">07</div><h2>Если что-то не работает</h2></div>
-    <ol>
-      <li><b>Не открывается сайт.</b> Проверь интернет и обнови страницу. Иногда нужен VPN — провайдеры блокируют часть сервисов.</li>
-      <li><b>Не пускает в аккаунт.</b> Проверь правильность почты и пароля, попробуй вход через Google.</li>
-      <li><b>Модель не отвечает.</b> Переключись на другую модель или включи Max — часто одна модель перегружена, а соседняя работает.</li>
-      <li><b>Ответ непонятный.</b> Переформулируй запрос короче и конкретнее, добавь пример того, что хочешь получить.</li>
-      <li><b>Ничего не помогло.</b> Напиши продавцу в чат Playerok — разберёмся вместе.</li>
-    </ol>
+  <section class="step" id="s7">
+    <div class="num">07</div>
+    <h2>Если что-то не работает</h2>
+    <p>Ответ не приходит или страница висит — обнови страницу и попробуй снова. Чаще всего это перегрузка, а не ошибка с твоей стороны.</p>
+    <p>Модель пишет, что недоступна — переключись на другую в списке, обычно работает соседняя. Не видно кнопки — прокрути страницу вниз, интерфейс иногда прячет панель.</p>
+    <div class="note">Если не помогло ничего — напиши мне в чат на Playerok, разберём конкретный случай.</div>
   </section>
 
-  <section class="sec" style="text-align:center">
-    <h2>Готово. Начинай с простого</h2>
-    <p>Открой площадку, включи Max и задай первый вопрос — дальше разберёшься по ходу.</p>
-    <a class="cta" href="#">Открыть площадку</a>
-    <p class="hint" style="margin-top:14px">Оплата и поддержка — на Playerok</p>
+  <section class="final">
+    <h2>Готово — можно начинать</h2>
+    <p>Открой площадку, выбери Direct и напиши первый запрос</p>
+    <a class="btn" href="#" >Открыть площадку ↗</a>
   </section>
+
+  <footer>Nagibatorz · 2026 · гайд по нейро-паку</footer>
 </main>
 
-<footer>Nagibatorz · Playerok · 2026</footer>
-<button class="fx" id="fx">3D: вкл</button>
+<button class="fx" id="fx" type="button">3D</button>
 
 <script>
 (function(){
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var weak = (navigator.hardwareConcurrency || 8) < 4;
-  var fxOn = !reduce && !weak;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var weak = (navigator.hardwareConcurrency || 4) < 4;
+  var fxOn = !reduce && !weak && localStorage.getItem('np_fx') !== '0';
 
-  /* 1. безопасное появление: скрываем ТОЛЬКО ниже экрана, страховка таймером */
-  var blocks = [].slice.call(document.querySelectorAll('.sec'));
-  function showAll(){ blocks.forEach(function(b){ b.classList.remove('reveal-init'); b.classList.add('reveal-in'); }); }
-
-  if ('IntersectionObserver' in window && fxOn) {
-    var vh = window.innerHeight;
-    blocks.forEach(function(b){
-      if (b.getBoundingClientRect().top > vh * 0.9) b.classList.add('reveal-init');
-    });
-    var io = new IntersectionObserver(function(en){
-      en.forEach(function(e){
-        if (e.isIntersecting){ e.target.classList.add('reveal-in'); io.unobserve(e.target); }
-      });
-    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
-    blocks.forEach(function(b){ if (b.classList.contains('reveal-init')) io.observe(b); });
+  function applyFx(){
+    document.body.classList.toggle('nofx', !fxOn);
+    document.getElementById('fx').textContent = fxOn ? '3D' : '2D';
+    localStorage.setItem('np_fx', fxOn ? '1' : '0');
   }
-  setTimeout(showAll, 1500);
+  applyFx();
 
-  /* 2. прогресс чтения */
-  var bar = document.getElementById('bar');
-  function prog(){
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
-  }
+  document.getElementById('fx').addEventListener('click', function(){
+    fxOn = !fxOn; applyFx();
+  });
 
-  /* 3. параллакс сетки */
-  var grid = document.getElementById('grid'), ticking = false;
+  /* прогресс чтения */
+  var prog = document.getElementById('prog');
   function onScroll(){
-    if (!ticking){
-      ticking = true;
-      requestAnimationFrame(function(){
-        prog();
-        if (fxOn) grid.style.transform = 'perspective(420px) rotateX(62deg) translateY(' + (window.scrollY * 0.07) + 'px)';
-        ticking = false;
-      });
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    if (fxOn) {
+      var g = document.querySelector('.bg .grid');
+      if (g) g.style.transform = 'perspective(520px) rotateX(66deg) translate3d(0,' + (window.scrollY * -0.06) + 'px,0)';
     }
   }
   window.addEventListener('scroll', onScroll, {passive:true});
-  prog();
+  onScroll();
 
-  /* 4. наклон телефона за пальцем */
-  var phone = document.getElementById('phone');
-  if (phone && fxOn){
-    phone.addEventListener('pointermove', function(e){
-      var r = phone.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width - .5;
-      var y = (e.clientY - r.top) / r.height - .5;
-      phone.style.transform = 'rotateY(' + (x * 16) + 'deg) rotateX(' + (-y * 12) + 'deg)';
+  /* появление секций: скрываем только то, что ниже экрана */
+  var blocks = [].slice.call(document.querySelectorAll('.step, .toc, .final'));
+  var supportsIO = 'IntersectionObserver' in window;
+  if (fxOn && supportsIO) {
+    blocks.forEach(function(b){
+      var r = b.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.95) b.classList.add('pre');
     });
-    phone.addEventListener('pointerleave', function(){ phone.style.transform = ''; });
-    window.addEventListener('deviceorientation', function(e){
-      if (e.gamma == null) return;
-      var g = Math.max(-25, Math.min(25, e.gamma));
-      var b = Math.max(-25, Math.min(25, (e.beta || 0) - 45));
-      phone.style.transform = 'rotateY(' + (g * .55) + 'deg) rotateX(' + (-b * .35) + 'deg)';
-    });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12});
+    blocks.forEach(function(b){ io.observe(b); });
   }
+  /* страховка: через 1.5 с показываем всё */
+  setTimeout(function(){
+    blocks.forEach(function(b){ b.classList.remove('pre'); b.classList.add('in-view'); });
+  }, 1500);
 
-  /* 5. карусель: точки-индикаторы */
-  var car = document.getElementById('car'), dots = document.getElementById('dots');
-  if (car && dots){
-    var slides = [].slice.call(car.children);
-    slides.forEach(function(_, i){
-      var d = document.createElement('i');
-      if (!i) d.className = 'on';
-      dots.appendChild(d);
-    });
+  /* наклон телефона и карточек */
+  var phone = document.getElementById('phone');
+  function tilt(el, rx, ry){
+    if (!fxOn) return;
+    el.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+  }
+  document.addEventListener('mousemove', function(e){
+    if (!fxOn || !phone) return;
+    var x = (e.clientX / window.innerWidth - .5) * 2;
+    var y = (e.clientY / window.innerHeight - .5) * 2;
+    tilt(phone, -y * 9, -x * 14);
+  }, {passive:true});
+
+  window.addEventListener('deviceorientation', function(e){
+    if (!fxOn || !phone || e.gamma === null) return;
+    tilt(phone, Math.max(-10, Math.min(10, (e.beta - 45) * .35)), Math.max(-18, Math.min(18, e.gamma * .55)));
+  }, true);
+
+  /* карусель: точки */
+  var car = document.getElementById('car'), dots = document.getElementById('dots').children;
+  if (car) {
     car.addEventListener('scroll', function(){
-      var w = car.scrollWidth / slides.length;
-      var idx = Math.round(car.scrollLeft / w);
-      [].slice.call(dots.children).forEach(function(d, i){ d.className = i === idx ? 'on' : ''; });
+      var w = car.scrollWidth - car.clientWidth;
+      var p = w > 0 ? car.scrollLeft / w : 0;
+      var idx = Math.round(p * (dots.length - 1));
+      for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('on', i === idx);
     }, {passive:true});
   }
 
-  /* 6. куб: вращение пальцем + авто */
+  /* куб: вращение пальцем и мышью */
   var cube = document.getElementById('cube');
-  if (cube && fxOn){
-    var rx = -18, ry = -24, auto = true, sx = 0, sy = 0, drag = false;
-    cube.addEventListener('pointerdown', function(e){
-      drag = true; auto = false; sx = e.clientX; sy = e.clientY; cube.setPointerCapture(e.pointerId);
+  if (cube) {
+    var rx = -18, ry = -24, drag = false, sx = 0, sy = 0, brx = 0, bry = 0;
+    function setCube(){ cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)'; }
+    cube.parentElement.addEventListener('pointerdown', function(e){
+      drag = true; sx = e.clientX; sy = e.clientY; brx = rx; bry = ry;
     });
-    cube.addEventListener('pointermove', function(e){
+    window.addEventListener('pointermove', function(e){
       if (!drag) return;
-      ry += (e.clientX - sx) * .8;
-      rx -= (e.clientY - sy) * .8;
-      sx = e.clientX; sy = e.clientY;
-      cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+      ry = bry + (e.clientX - sx) * .5;
+      rx = brx - (e.clientY - sy) * .5;
+      setCube();
     });
-    cube.addEventListener('pointerup', function(){ drag = false; });
-    (function spin(){
-      if (auto){ ry += .25; cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)'; }
-      requestAnimationFrame(spin);
-    })();
+    window.addEventListener('pointerup', function(){ drag = false; });
+    if (fxOn) {
+      var t0 = Date.now();
+      setInterval(function(){
+        if (drag) return;
+        var t = (Date.now() - t0) / 1000;
+        ry = -24 + Math.sin(t * .5) * 12;
+        setCube();
+      }, 60);
+    }
   }
 
-  /* 7. флип-карточки */
-  [].slice.call(document.querySelectorAll('.flip')).forEach(function(f){
+  /* флип-карточки */
+  [].forEach.call(document.querySelectorAll('.flip'), function(f){
     f.addEventListener('click', function(){ f.classList.toggle('on'); });
-  });
-
-  /* 8. выключатель эффектов */
-  var fx = document.getElementById('fx');
-  if (!fxOn) { fx.textContent = '3D: выкл'; fx.className = 'fx off'; }
-  document.body.classList.toggle('no-fx', !fxOn);
-  fx.addEventListener('click', function(){
-    fxOn = !fxOn;
-    document.body.classList.toggle('no-fx', !fxOn);
-    fx.textContent = fxOn ? '3D: вкл' : '3D: выкл';
-    fx.className = fxOn ? 'fx' : 'fx off';
-    if (!fxOn){
-      grid.style.transform = '';
-      if (phone) phone.style.transform = '';
-    }
   });
 })();
 </script>
-<style>
-  .shot{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
-    background:linear-gradient(170deg,#15140F,#0C0B09);margin:14px 0;min-height:180px}
-  .shot img{position:relative;z-index:2;display:block;width:100%;height:auto}
-  .shot .shot-ph{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;
-    padding:20px;font:600 12px/1.6 system-ui;color:#7C7770;min-height:180px}
-  .shot-ph code{display:block;margin-top:6px;color:var(--acc2);font-size:12px}
-</style>
 </body>
 </html>
