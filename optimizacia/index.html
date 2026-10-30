@@ -442,86 +442,144 @@
   .tbl tr:last-child td{border-bottom:none}
   .tbl td:first-child{font-weight:600;color:#fff}
 
-  /* Промо магазина */
+  /* ---------- ПРОМО МАГАЗИНА (премиум) ---------- */
   .promo{
-    margin-top:56px;
     position:relative;
-    background:linear-gradient(140deg,rgba(255,122,24,.20),rgba(255,122,24,.04) 60%,rgba(255,255,255,.02));
-    border:1px solid rgba(255,168,80,.38);
-    border-radius:24px;
-    padding:30px 24px 28px;
+    margin-top:60px;
+    padding:1.5px;
+    border-radius:28px;
+    background:linear-gradient(150deg,rgba(255,205,140,.9),rgba(255,122,24,.45) 34%,rgba(255,255,255,.05) 58%,rgba(255,168,80,.6));
+    box-shadow:0 34px 80px rgba(0,0,0,.65),0 0 70px rgba(255,122,24,.22);
+  }
+  .promo-in{
+    position:relative;
+    border-radius:26.5px;
+    padding:26px 22px 24px;
     text-align:center;
     overflow:hidden;
-    box-shadow:0 26px 60px rgba(0,0,0,.5),0 0 50px rgba(255,122,24,.14);
+    background:
+      radial-gradient(130% 90% at 50% -12%,rgba(255,180,70,.24),transparent 58%),
+      linear-gradient(168deg,#1b130d,#0c0907 58%,#150e09);
   }
-  .promo::before{
-    content:"";
-    position:absolute;top:-60px;left:50%;transform:translateX(-50%);
-    width:280px;height:160px;border-radius:50%;
-    background:radial-gradient(circle,rgba(255,140,40,.30),transparent 70%);
-    filter:blur(10px);pointer-events:none;
+  .promo-in::before{
+    content:"";position:absolute;top:0;left:10%;right:10%;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,225,180,.95),transparent);
+  }
+  .promo-in::after{
+    content:"";position:absolute;top:-45%;left:-25%;width:55%;height:190%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.055),transparent);
+    transform:rotate(16deg);pointer-events:none;
+  }
+  .promo-top{
+    position:relative;z-index:2;
+    display:flex;align-items:center;gap:12px;
+    text-align:left;
+    padding-bottom:16px;margin-bottom:18px;
+    border-bottom:1px solid rgba(255,168,80,.16);
+  }
+  .ava{
+    position:relative;flex:0 0 48px;width:48px;height:48px;
+    border-radius:15px;display:grid;place-items:center;
+    font-size:20px;font-weight:900;color:#2a1405;
+    background:linear-gradient(150deg,#ffe0b0,#ffb347 45%,#ff7a18);
+    box-shadow:0 10px 22px rgba(255,122,24,.4),inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .ava::after{content:"";position:absolute;inset:-3px;border-radius:18px;border:1px solid rgba(255,190,120,.3)}
+  .promo-id{flex:1;min-width:0}
+  .promo-name{
+    font-size:16px;font-weight:900;letter-spacing:-.2px;
+    display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  }
+  .promo-name em{
+    font-style:normal;font-size:9.5px;letter-spacing:1.3px;font-weight:800;
+    color:#ffd7a4;border:1px solid rgba(255,168,80,.42);
+    background:rgba(255,122,24,.12);
+    padding:3px 8px;border-radius:100px;
+  }
+  .promo-sub{font-size:11.5px;color:#9c9186;letter-spacing:.4px;margin-top:3px}
+  .crown{
+    flex:0 0 auto;font-size:22px;line-height:1;
+    color:#ffcf8a;
+    filter:drop-shadow(0 0 12px rgba(255,168,60,.75));
   }
   .promo-k{
-    position:relative;
+    position:relative;z-index:2;
     display:inline-block;
-    font-size:11px;letter-spacing:2.6px;text-transform:uppercase;
-    color:var(--orange2);font-weight:800;
-    border:1px solid rgba(255,168,80,.35);
-    background:rgba(255,122,24,.10);
-    border-radius:100px;padding:5px 14px;margin-bottom:14px;
+    font-size:10.5px;letter-spacing:2.6px;text-transform:uppercase;
+    color:#ffd7a4;font-weight:800;
+    border:1px solid rgba(255,168,80,.28);
+    background:rgba(255,122,24,.08);
+    border-radius:100px;padding:5px 14px;margin-bottom:13px;
   }
   .promo h2{
-    position:relative;
-    font-size:clamp(22px,6vw,30px);font-weight:900;letter-spacing:-.4px;
-    background:linear-gradient(90deg,#fff,var(--orange2));
+    position:relative;z-index:2;
+    font-size:clamp(22px,6vw,31px);font-weight:900;letter-spacing:-.5px;line-height:1.15;
+    background:linear-gradient(92deg,#fff 8%,#ffe0b8 46%,var(--orange2) 78%,var(--orange) 100%);
     -webkit-background-clip:text;background-clip:text;
     -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 20px rgba(255,122,24,.3));
   }
-  .promo p{
-    position:relative;
-    color:#f0ddd0;font-size:14.5px;margin-top:10px;
+  .promo > .promo-in > p{
+    position:relative;z-index:2;
+    color:#e7d8cb;font-size:14.5px;margin-top:11px;
   }
   .promo-list{
-    position:relative;
-    display:grid;gap:8px;
-    margin:18px auto 22px;
-    max-width:400px;
+    position:relative;z-index:2;
+    display:grid;gap:9px;
+    margin:20px auto 22px;
+    max-width:410px;
     text-align:left;
   }
   .promo-list div{
-    display:flex;gap:10px;align-items:flex-start;
-    font-size:14px;color:#eadfd6;
-    background:rgba(0,0,0,.22);
+    display:flex;gap:11px;align-items:flex-start;
+    font-size:14px;color:#ecdfd4;
+    background:linear-gradient(120deg,rgba(255,122,24,.09),rgba(0,0,0,.28));
     border:1px solid rgba(255,168,80,.16);
-    border-radius:12px;
-    padding:10px 13px;
+    border-radius:13px;
+    padding:11px 14px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
   }
   .promo-list div::before{
     content:"";
-    flex:0 0 7px;height:7px;margin-top:7px;border-radius:50%;
-    background:linear-gradient(150deg,var(--orange2),var(--orange));
-    box-shadow:0 0 9px rgba(255,122,24,.8);
+    flex:0 0 8px;height:8px;margin-top:7px;border-radius:2px;
+    transform:rotate(45deg);
+    background:linear-gradient(150deg,#ffe0b0,var(--orange2),var(--orange));
+    box-shadow:0 0 10px rgba(255,122,24,.85);
   }
-  .btn{
-    position:relative;
-    display:inline-block;
-    background:linear-gradient(150deg,var(--orange2),var(--orange) 45%,#d95a00);
+  .promo .btn{
+    position:relative;z-index:2;
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(150deg,#ffd9a3,var(--orange2) 34%,var(--orange) 68%,#d95a00);
     color:#1a0d04;
     text-decoration:none;
-    font-weight:900;font-size:16px;
+    font-weight:900;font-size:16.5px;
     letter-spacing:.2px;
-    padding:16px 34px;border-radius:16px;
-    box-shadow:0 12px 32px rgba(255,122,24,.42),inset 0 1px 0 rgba(255,255,255,.5);
-    transition:.18s;
+    padding:17px 32px;border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 16px 38px rgba(255,122,24,.45),inset 0 1px 0 rgba(255,255,255,.65),inset 0 -2px 0 rgba(150,60,0,.35);
+    transition:transform .18s ease;
   }
-  .btn:hover{transform:translateY(-2px)}
-  .btn:active{transform:scale(.97)}
+  .promo .btn::after{
+    content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+    transform:skewX(-20deg);
+    animation:sheen 3.6s ease-in-out infinite;
+  }
+  @keyframes sheen{
+    0%,52%{left:-70%}
+    88%,100%{left:130%}
+  }
+  .promo .btn:active{transform:scale(.97)}
+  .promo .btn b{font-size:18px;line-height:1}
   .promo-note{
-    position:relative;
-    margin-top:14px;
-    font-size:11.5px;letter-spacing:1.4px;
-    color:#a89a8c;
+    position:relative;z-index:2;
+    margin-top:15px;
+    font-size:11px;letter-spacing:1.3px;
+    color:#9d8f83;
     font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media(prefers-reduced-motion:reduce){
+    .promo .btn::after{animation:none;display:none}
   }
 
   /* Футер */
@@ -587,6 +645,9 @@
     .metric .pair s{font-size:12px}
     .metric span{font-size:9px;letter-spacing:.8px}
     .ba{height:288px}
+    .promo{margin-top:48px;border-radius:24px}
+    .promo-in{padding:22px 16px 20px;border-radius:22.5px}
+    .promo .btn{padding:16px 26px;font-size:15.5px;width:100%;justify-content:center}
   }
   @media(prefers-reduced-motion:reduce){
     .phone,.metric,.ba{transition:none}
@@ -946,16 +1007,26 @@
   </div>
 
   <div class="promo">
-    <div class="promo-k">мой магазин</div>
-    <h2>Ещё больше полезного</h2>
-    <p>Гайды по Standoff 2, фарм, графика, прицелы и настройки — всё в одном месте.</p>
-    <div class="promo-list">
-      <div>Проверенные гайды и настройки под конкретные игры</div>
-      <div>Авто-выдача сразу после оплаты, 24/7</div>
-      <div>Отвечаю в чате, если что-то не заработало</div>
+    <div class="promo-in">
+      <div class="promo-top">
+        <div class="ava">N</div>
+        <div class="promo-id">
+          <div class="promo-name">Nagibatorz <em>ПРЕМИУМ</em></div>
+          <div class="promo-sub">магазин на Playerok</div>
+        </div>
+        <div class="crown">&#9819;</div>
+      </div>
+      <div class="promo-k">мой магазин</div>
+      <h2>Ещё больше полезного</h2>
+      <p>Гайды по Standoff 2, фарм, графика, прицелы и настройки — всё в одном месте.</p>
+      <div class="promo-list">
+        <div>Проверенные гайды и настройки под конкретные игры</div>
+        <div>Авто-выдача сразу после оплаты, 24/7</div>
+        <div>Отвечаю в чате, если что-то не заработало</div>
+      </div>
+      <a class="btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Перейти в магазин <b>→</b></a>
+      <div class="promo-note">playerok.com/profile/Nagibatorz</div>
     </div>
-    <a class="btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Перейти в магазин →</a>
-    <div class="promo-note">playerok.com/profile/Nagibatorz</div>
   </div>
 
   <footer>
