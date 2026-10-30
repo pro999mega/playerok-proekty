@@ -3,740 +3,828 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Нейро-пак 3D · гайд · Nagibatorz</title>
-<script>
-  /* Страховка: если основной скрипт не отработает за 1.5 с — показываем всё без анимаций */
-  document.documentElement.classList.add('js');
-  setTimeout(function(){ if(!window.__rv){ document.documentElement.classList.remove('js'); } }, 1500);
-</script>
+<title>Нейро-пак — гайд в 3D</title>
 <style>
-  :root{
-    --bg:#08070a;
-    --ink:#f4efe9;
-    --muted:#a99f95;
-    --o1:#ffb347;
-    --o2:#ff7a18;
-    --line:rgba(255,179,71,.22);
-    --glass:rgba(255,255,255,.045);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
-    background:var(--bg);color:var(--ink);line-height:1.6;
-    min-height:100vh;overflow-x:hidden;position:relative;
-    font-size:16px;
-  }
+:root{
+  --bg:#0a0a0c; --bg2:#121114; --ink:#f3ece2; --muted:#a9a29a;
+  --a1:#ffb347; --a2:#ff7a18; --glass:rgba(255,255,255,.055);
+  --line:rgba(255,255,255,.12); --r:22px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:16px; line-height:1.65; overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(60% 40% at 50% 108%, rgba(255,122,24,.30), transparent 70%),
+    radial-gradient(50% 35% at 12% -5%, rgba(255,179,71,.14), transparent 70%),
+    linear-gradient(180deg,#0a0a0c,#100e11 55%,#0a0a0c);
+}
+.grid-bg{
+  position:fixed; inset:-20% -20%; z-index:0; pointer-events:none; opacity:.30;
+  background-image:
+    linear-gradient(rgba(255,179,71,.20) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,179,71,.20) 1px, transparent 1px);
+  background-size:64px 64px;
+  transform:perspective(600px) rotateX(62deg) translateZ(-120px);
+  transform-origin:50% 0;
+  mask-image:linear-gradient(180deg, black 0%, transparent 72%);
+  -webkit-mask-image:linear-gradient(180deg, black 0%, transparent 72%);
+  will-change:transform;
+}
+.wrap{position:relative; z-index:2; max-width:820px; margin:0 auto; padding:0 18px 70px}
+#bar{position:fixed; top:0; left:0; height:3px; width:0; z-index:60;
+  background:linear-gradient(90deg,var(--a1),var(--a2)); box-shadow:0 0 14px rgba(255,122,24,.8)}
 
-  /* ---------- 3D-ФОН ---------- */
-  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;perspective:600px}
-  .bg .grid{
-    position:absolute;left:-50%;right:-50%;bottom:-40%;height:120vh;
-    background-image:
-      linear-gradient(rgba(255,122,24,.16) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,122,24,.16) 1px,transparent 1px);
-    background-size:64px 64px;
-    transform:rotateX(72deg);
-    transform-origin:bottom center;
-    mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);
-    -webkit-mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);
-    will-change:transform;
-  }
-  .bg .glow{
-    position:absolute;left:50%;bottom:-30vh;width:120vw;height:80vh;
-    transform:translateX(-50%);
-    background:radial-gradient(closest-side,rgba(255,122,24,.42),rgba(255,122,24,.10) 55%,transparent 78%);
-    filter:blur(30px);
-    animation:breathe 9s ease-in-out infinite;
-  }
-  @keyframes breathe{
-    0%,100%{opacity:.75;transform:translateX(-50%) scale(1)}
-    50%{opacity:1;transform:translateX(-50%) scale(1.12)}
-  }
-  .sparks{position:absolute;inset:0}
-  .spark{
-    position:absolute;width:3px;height:3px;border-radius:50%;
-    background:var(--o1);opacity:.55;
-    box-shadow:0 0 8px rgba(255,179,71,.8);
-    animation:float linear infinite;
-  }
-  @keyframes float{
-    from{transform:translate3d(0,20px,0);opacity:0}
-    20%{opacity:.7}
-    to{transform:translate3d(14px,-120vh,0);opacity:0}
-  }
+/* ---------- ШАПКА ---------- */
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0 6px}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.4px}
+.brand svg{width:26px;height:26px;flex:none}
+.badge{
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;
+  color:#1a1206; padding:7px 12px; border-radius:999px;
+  background:linear-gradient(135deg,var(--a1),var(--a2));
+  box-shadow:0 6px 20px rgba(255,122,24,.32);
+}
 
-  /* ---------- ПРОГРЕСС ---------- */
-  .progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:50;background:rgba(255,255,255,.05)}
-  .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--o1),var(--o2));box-shadow:0 0 12px rgba(255,122,24,.8);transition:width .1s linear}
+/* ---------- HERO ---------- */
+.hero{position:relative; padding:56px 0 44px; text-align:center; perspective:900px}
+.eyebrow{font-size:12px; letter-spacing:.32em; text-transform:uppercase; color:var(--muted)}
+h1.three{
+  position:relative; margin:14px 0 10px; font-size:clamp(46px,15vw,84px);
+  line-height:.94; font-weight:900; letter-spacing:-.02em;
+  transform-style:preserve-3d; transform:rotateX(12deg);
+  background:linear-gradient(180deg,#fff7ea 0%,#ffcf8a 42%,#ff9425 72%,#b8540f 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(255,255,255,.30)) drop-shadow(0 8px 14px rgba(255,122,24,.45)) drop-shadow(0 20px 34px rgba(0,0,0,.9));
+  animation:float3d 7s ease-in-out infinite alternate;
+}
+@keyframes float3d{
+  from{transform:rotateX(12deg) rotateY(-4deg) translateZ(0)}
+  to{transform:rotateX(6deg) rotateY(4deg) translateZ(18px)}
+}
+.sub{font-size:clamp(18px,4.6vw,24px); font-weight:800; letter-spacing:.16em; text-transform:uppercase; margin:0 0 12px}
+.lead{color:var(--muted); max-width:520px; margin:0 auto; font-size:15px}
+.pills{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:20px}
+.pill{font-size:12px; letter-spacing:.1em; font-weight:700; text-transform:uppercase;
+  padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:var(--glass);
+  backdrop-filter:blur(10px)}
+.pill.hot{border-color:rgba(255,122,24,.5); color:#ffcf8a}
 
-  /* ---------- ШАПКА ---------- */
-  .top{
-    position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;
-    padding:18px 20px;max-width:900px;margin:0 auto;
-  }
-  .brand{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .badge{
-    font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--o1);
-    border:1px solid var(--line);padding:6px 12px;border-radius:999px;
-    background:rgba(255,122,24,.06);
-  }
+/* ---------- 3D ТЕЛЕФОН ---------- */
+.stage{perspective:1100px; margin:36px auto 10px; max-width:300px}
+.phone{
+  position:relative; border-radius:34px; padding:10px;
+  background:linear-gradient(160deg,#2a2620,#0e0d10 45%,#332c22);
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.10),
+             inset 0 1px 0 rgba(255,255,255,.35), 0 0 70px rgba(255,122,24,.22);
+  transform-style:preserve-3d; transition:transform .18s ease-out; will-change:transform;
+}
+.phone .notch{position:absolute; top:16px; left:50%; transform:translateX(-50%);
+  width:74px; height:16px; border-radius:999px; background:#000; z-index:3; opacity:.85}
+.screen{position:relative; border-radius:26px; overflow:hidden; background:#191917; aspect-ratio:9/19.5}
+.screen img{width:100%; height:100%; object-fit:cover; display:block}
+.screen .fallback{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:8px; text-align:center; padding:20px; font-size:12px; color:var(--muted);
+  background:radial-gradient(circle at 50% 30%,#252220,#131215)}
+.screen .fallback b{color:#ffcf8a; font-size:13px}
+.hint{text-align:center; font-size:12px; color:var(--muted); margin-top:14px}
 
-  main{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:10px 18px 90px}
+/* ---------- СЕКЦИИ ---------- */
+section{position:relative; margin:44px 0}
+.card{
+  border-radius:var(--r); padding:22px 20px; border:1px solid var(--line);
+  background:linear-gradient(150deg, rgba(255,255,255,.085), rgba(255,255,255,.025));
+  backdrop-filter:blur(14px);
+  box-shadow:0 18px 44px -22px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.22);
+  transform-style:preserve-3d;
+}
+.card.tilt{transition:transform .2s ease-out, box-shadow .25s ease}
+.card.tilt:hover{box-shadow:0 26px 60px -22px rgba(255,122,24,.35), inset 0 1px 0 rgba(255,255,255,.3)}
+.sec-num{
+  display:inline-flex; align-items:center; justify-content:center; min-width:52px; height:52px;
+  padding:0 12px; border-radius:14px; font-weight:900; font-size:19px; color:#1a1206;
+  background:linear-gradient(160deg,#fff0d4,var(--a1) 45%,#c9650f);
+  box-shadow:0 8px 0 -2px #7a3d09, 0 16px 30px -10px rgba(255,122,24,.7), inset 0 1px 0 #fff8;
+  transform:translateZ(24px) rotateX(-6deg);
+}
+h2{font-size:clamp(22px,6vw,29px); line-height:1.2; margin:14px 0 10px; font-weight:800; letter-spacing:-.01em}
+h2 .dot{color:var(--a1)}
+h3{font-size:17px; margin:0 0 6px; font-weight:800}
+p{margin:0 0 12px}
+ul{margin:0 0 14px; padding-left:20px}
+li{margin-bottom:7px}
+.muted{color:var(--muted)}
+.warn{
+  border-left:3px solid var(--a1); border-radius:12px; padding:12px 14px; margin:14px 0;
+  background:rgba(255,179,71,.09); font-size:14px;
+}
+.warn b{color:#ffcf8a}
 
-  /* ---------- HERO ---------- */
-  .hero{padding:34px 0 40px;text-align:center;perspective:800px}
-  .title{
-    font-size:clamp(40px,13vw,86px);
-    font-weight:900;letter-spacing:-.02em;line-height:.95;
-    background:linear-gradient(180deg,#fff5e6 0%,var(--o1) 42%,var(--o2) 78%,#b34a00 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    position:relative;transform-style:preserve-3d;
-    animation:tilt3d 7s ease-in-out infinite;
-    text-shadow:0 1px 0 rgba(255,255,255,.25);
-    filter:drop-shadow(0 10px 24px rgba(255,122,24,.35));
-  }
-  /* объём: слои-тени под буквами */
-  .title::after{
-    content:attr(data-t);
-    position:absolute;left:0;right:0;top:0;
-    z-index:-1;
-    color:#5a2600;
-    transform:translate3d(0,6px,0);
-    filter:blur(.4px);
-    opacity:.55;
-  }
-  @keyframes tilt3d{
-    0%,100%{transform:rotateX(4deg) rotateZ(-.4deg)}
-    50%{transform:rotateX(-2deg) rotateZ(.4deg)}
-  }
-  .sub{
-    margin-top:10px;font-size:clamp(18px,5vw,26px);font-weight:700;
-    color:#ffe2b8;letter-spacing:.04em;
-  }
-  .lead{max-width:620px;margin:14px auto 0;color:var(--muted);font-size:16px}
-  .hero .btn{margin-top:24px}
+/* таблицы */
+.tbl-wrap{overflow-x:auto; border-radius:16px; border:1px solid var(--line); margin:14px 0;
+  background:rgba(255,255,255,.03)}
+table{width:100%; border-collapse:collapse; font-size:14px; min-width:420px}
+th,td{padding:11px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,.08)}
+th{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,179,71,.07)}
+td b{color:#ffcf8a}
 
-  /* ---------- КНОПКИ ---------- */
-  .btn{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:15px 28px;border-radius:14px;border:0;cursor:pointer;
-    font-size:16px;font-weight:700;font-family:inherit;
-    color:#1a0d00;text-decoration:none;
-    background:linear-gradient(180deg,var(--o1),var(--o2));
-    box-shadow:0 10px 30px -8px rgba(255,122,24,.85),inset 0 1px 0 rgba(255,255,255,.5);
-    transition:transform .2s,box-shadow .2s;
-    animation:pulse 2.6s ease-in-out infinite;
-  }
-  .btn:active{transform:translateY(2px) scale(.99)}
-  .btn.ghost{
-    background:transparent;color:var(--o1);border:1px solid var(--line);
-    box-shadow:none;animation:none;margin-left:8px;
-  }
-  @keyframes pulse{
-    0%,100%{box-shadow:0 10px 30px -8px rgba(255,122,24,.7),inset 0 1px 0 rgba(255,255,255,.5)}
-    50%{box-shadow:0 14px 44px -6px rgba(255,122,24,1),inset 0 1px 0 rgba(255,255,255,.6)}
-  }
+/* ---------- КАРУСЕЛЬ ---------- */
+.carousel{perspective:1200px; margin:22px 0 10px; overflow:hidden}
+.track{position:relative; height:250px; transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.22,.9,.28,1); will-change:transform}
+.slide{
+  position:absolute; top:0; left:50%; width:210px; margin-left:-105px; height:230px;
+  border-radius:20px; padding:18px 16px; border:1px solid var(--line);
+  background:linear-gradient(160deg, rgba(255,255,255,.13), rgba(255,255,255,.03));
+  backdrop-filter:blur(10px); box-shadow:0 20px 40px -18px #000;
+  backface-visibility:hidden; display:flex; flex-direction:column; justify-content:space-between;
+}
+.slide .ico{font-size:30px; line-height:1}
+.slide h4{margin:8px 0 4px; font-size:18px; font-weight:900}
+.slide p{font-size:12.5px; color:var(--muted); margin:0}
+.slide .tag{font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#ffcf8a; font-weight:800}
+.c-nav{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:16px}
+.c-btn{width:42px; height:42px; border-radius:50%; border:1px solid var(--line); background:var(--glass);
+  color:var(--ink); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center}
+.c-btn:active{transform:scale(.94)}
+.dots{display:flex; gap:7px}
+.dot-i{width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.25)}
+.dot-i.on{background:linear-gradient(135deg,var(--a1),var(--a2)); box-shadow:0 0 10px rgba(255,122,24,.9)}
 
-  /* ---------- КАРТОЧКИ ---------- */
-  .card{
-    position:relative;
-    background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
-    border:1px solid var(--line);
-    border-radius:24px;
-    padding:26px 22px;
-    margin:18px 0;
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 24px 60px -28px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.14);
-    transform-style:preserve-3d;
-    transition:transform .25s ease,box-shadow .25s ease,border-color .25s;
-    will-change:transform;
-  }
-  .card:hover{border-color:rgba(255,179,71,.45);box-shadow:0 30px 70px -26px rgba(0,0,0,1),0 0 40px -18px rgba(255,122,24,.55),inset 0 1px 0 rgba(255,255,255,.2)}
-  .card h2{font-size:clamp(21px,5.4vw,28px);line-height:1.25;margin-bottom:12px}
-  .card h3{font-size:18px;margin:18px 0 8px;color:#ffd9a8}
-  .card p{color:#e6ded5;margin-bottom:10px}
-  .card p.muted{color:var(--muted);font-size:15px}
-  .card ul,.card ol{margin:10px 0 10px 20px;color:#e6ded5}
-  .card li{margin-bottom:7px}
-  .card a{color:var(--o1);text-decoration:none;border-bottom:1px dashed rgba(255,179,71,.5);word-break:break-word}
+/* ---------- КУБ ---------- */
+.cube-stage{perspective:800px; height:250px; display:flex; align-items:center; justify-content:center;
+  touch-action:none; margin:18px 0 6px; cursor:grab}
+.cube{position:relative; width:130px; height:130px; transform-style:preserve-3d; will-change:transform;
+  transform:rotateX(-16deg) rotateY(24deg)}
+.face{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; border-radius:16px; border:1px solid rgba(255,179,71,.45);
+  background:linear-gradient(150deg, rgba(255,179,71,.20), rgba(10,10,12,.85));
+  box-shadow:inset 0 0 24px rgba(255,122,24,.28); font-weight:900; font-size:14px; text-align:center;
+}
+.face small{font-weight:600; font-size:10px; color:var(--muted); letter-spacing:.08em}
+.f1{transform:translateZ(65px)} .f2{transform:rotateY(180deg) translateZ(65px)}
+.f3{transform:rotateY(90deg) translateZ(65px)} .f4{transform:rotateY(-90deg) translateZ(65px)}
+.f5{transform:rotateX(90deg) translateZ(65px)} .f6{transform:rotateX(-90deg) translateZ(65px)}
 
-  .num{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:52px;height:52px;margin-bottom:14px;
-    border-radius:14px;
-    font-weight:900;font-size:19px;color:#2a1200;
-    background:linear-gradient(180deg,#ffe0b0,var(--o1) 55%,#d96200);
-    box-shadow:0 8px 0 -2px #8a3d00,0 14px 26px -10px rgba(255,122,24,.9),inset 0 1px 0 rgba(255,255,255,.7);
-    transform:translateZ(24px);
-  }
+/* ---------- ФЛИП ---------- */
+.flips{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px}
+.flip{perspective:800px; height:170px; cursor:pointer}
+.flip-in{position:relative; width:100%; height:100%; transform-style:preserve-3d;
+  transition:transform .65s cubic-bezier(.3,.1,.2,1)}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.flip-f,.flip-b{position:absolute; inset:0; border-radius:18px; padding:16px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden; border:1px solid var(--line);
+  display:flex; flex-direction:column; justify-content:center}
+.flip-f{background:linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,.03))}
+.flip-b{transform:rotateY(180deg); background:linear-gradient(160deg, rgba(255,122,24,.22), rgba(255,255,255,.03))}
+.flip h4{margin:0 0 6px; font-size:16px; font-weight:900}
+.flip p{margin:0; font-size:12.5px; color:var(--muted)}
+.flip .tip{font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#ffcf8a; font-weight:800; margin-top:8px}
 
-  .warn{
-    margin:14px 0;padding:14px 16px;border-radius:14px;
-    background:rgba(255,122,24,.10);border:1px solid rgba(255,122,24,.35);
-    border-left:4px solid var(--o2);font-size:15px;color:#ffdfb9;
-  }
+/* ---------- КОЛЛАЖ ---------- */
+.collage{position:relative; height:330px; margin:20px 0 0; perspective:1000px; touch-action:pan-y}
+.cl{position:absolute; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 24px 50px -18px #000, 0 0 40px rgba(255,122,24,.16); background:#18161a;
+  transition:transform .35s ease-out; will-change:transform}
+.cl img{width:100%; height:100%; object-fit:cover; display:block}
+.cl .ph{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:11px; color:var(--muted); text-align:center; padding:10px}
+.c1{width:46%; height:58%; left:2%; top:6%; transform:translateZ(60px) rotate(-6deg)}
+.c2{width:44%; height:54%; right:2%; top:0; transform:translateZ(20px) rotate(5deg)}
+.c3{width:52%; height:44%; left:24%; bottom:2%; transform:translateZ(100px) rotate(-2deg)}
 
-  /* ---------- ТАБЛИЦЫ ---------- */
-  .tbl{overflow-x:auto;margin:14px 0;border-radius:16px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
-  table{width:100%;border-collapse:collapse;min-width:420px;font-size:15px}
-  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.07)}
-  th{background:rgba(255,122,24,.13);color:#ffd9a8;font-weight:700;font-size:14px;letter-spacing:.03em}
-  tbody tr{transition:background .2s}
-  tbody tr:hover{background:rgba(255,179,71,.08)}
-  tr:last-child td{border-bottom:0}
+/* ---------- ЧЕК-ЛИСТ ---------- */
+.check{display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08)}
+.check:last-child{border-bottom:none}
+.cb{flex:none; width:28px; height:28px; border-radius:9px; border:1px solid var(--line);
+  background:linear-gradient(160deg,#2a2520,#151316); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:14px; color:transparent;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 4px 10px -4px #000; transition:.18s}
+.cb.on{background:linear-gradient(160deg,var(--a1),var(--a2)); color:#1a1206; font-weight:900;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.25), 0 0 18px rgba(255,122,24,.7)}
+.check span{font-size:14.5px; padding-top:2px}
+.progress-line{margin-top:14px; font-size:13px; color:var(--muted)}
 
-  /* ---------- СОДЕРЖАНИЕ ---------- */
-  .toc ol{list-style:none;margin:0;counter-reset:toc}
-  .toc li{counter-increment:toc;margin-bottom:6px}
-  .toc a{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 14px;border-radius:12px;text-decoration:none;
-    color:#efe7de;border:1px solid transparent;transition:.2s;
-    border-bottom:0;
-  }
-  .toc a::before{
-    content:counter(toc,decimal-leading-zero);
-    font-size:13px;font-weight:700;color:var(--o2);opacity:.9;
-  }
-  .toc a:hover,.toc a:focus{background:rgba(255,179,71,.1);border-color:var(--line);transform:translateX(4px)}
+/* ---------- ТРЕНАЖЁР ---------- */
+.builder label{display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--muted); font-weight:700; margin:14px 0 6px}
+.builder input,.builder textarea{
+  width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--line);
+  background:rgba(0,0,0,.35); color:var(--ink); font-size:15px; font-family:inherit; resize:vertical;
+}
+.builder input:focus,.builder textarea:focus{outline:none; border-color:rgba(255,179,71,.6)}
+.out{white-space:pre-wrap; font-size:14px; padding:14px; border-radius:14px; margin-top:16px;
+  background:rgba(255,179,71,.08); border:1px dashed rgba(255,179,71,.45); min-height:60px}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%;
+  padding:15px 20px; border-radius:14px; border:none; cursor:pointer; font-size:15px; font-weight:800;
+  color:#1a1206; background:linear-gradient(135deg,var(--a1),var(--a2));
+  box-shadow:0 10px 26px -8px rgba(255,122,24,.8), inset 0 1px 0 #fff8;
+  margin-top:14px; letter-spacing:.02em;
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 10px 26px -8px rgba(255,122,24,.65), inset 0 1px 0 #fff8}
+  50%{box-shadow:0 10px 40px 2px rgba(255,122,24,.95), inset 0 1px 0 #fff8}
+}
+.btn:active{transform:translateY(1px) scale(.995)}
+.btn.ghost{background:var(--glass); color:var(--ink); border:1px solid var(--line); animation:none;
+  box-shadow:none; font-weight:700}
+.ok{color:#8ee6a8; font-size:13px; margin-top:8px; min-height:18px}
 
-  /* ---------- ТРЕНАЖЁР ЗАПРОСА ---------- */
-  .trainer label{display:block;font-size:14px;color:var(--muted);margin:14px 0 6px}
-  .trainer input,.trainer textarea{
-    width:100%;padding:12px 14px;border-radius:12px;
-    background:rgba(0,0,0,.4);border:1px solid var(--line);
-    color:var(--ink);font-family:inherit;font-size:15px;outline:none;
-    transition:border-color .2s,box-shadow .2s;
-  }
-  .trainer input:focus,.trainer textarea:focus{border-color:var(--o1);box-shadow:0 0 0 3px rgba(255,122,24,.16)}
-  .trainer textarea{min-height:130px;resize:vertical;line-height:1.5}
-  .trainer .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media (max-width:560px){.trainer .row{grid-template-columns:1fr}}
-  .hint{font-size:13.5px;color:var(--muted);margin-top:8px}
+/* ---------- ФИНАЛ ---------- */
+.final{text-align:center; padding:36px 20px}
+.final h2{font-size:clamp(26px,7.5vw,34px)}
 
-  /* ---------- ЧЕК-ЛИСТ ---------- */
-  .check{list-style:none;margin:8px 0 0}
-  .check li{margin:0 0 8px}
-  .check label{
-    display:flex;align-items:flex-start;gap:12px;cursor:pointer;
-    padding:13px 15px;border-radius:13px;
-    background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.07);
-    transition:.2s;font-size:15px;color:#e6ded5;
-  }
-  .check label:hover{border-color:var(--line);background:rgba(255,179,71,.07)}
-  .check input{position:absolute;opacity:0;width:0;height:0}
-  .check .box{
-    flex:0 0 auto;width:24px;height:24px;border-radius:7px;margin-top:1px;
-    border:1px solid rgba(255,179,71,.5);
-    background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(0,0,0,.35));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 3px 0 #000;
-    display:flex;align-items:center;justify-content:center;
-    font-size:14px;color:#2a1200;font-weight:900;transition:.15s;
-  }
-  .check input:checked + .box{
-    background:linear-gradient(180deg,var(--o1),var(--o2));
-    box-shadow:inset 0 2px 4px rgba(0,0,0,.35);
-    transform:translateY(2px) scale(.96);
-  }
-  .check input:checked + .box::after{content:"✓"}
-  .check input:checked ~ span{opacity:.55;text-decoration:line-through}
-  .check-bar{font-size:14px;color:var(--o1);margin-top:14px;font-weight:600}
+/* ---------- МЕЛОЧИ ---------- */
+.fab{position:fixed; right:16px; bottom:20px; z-index:50; width:48px; height:48px; border-radius:50%;
+  border:1px solid var(--line); background:rgba(20,18,22,.85); backdrop-filter:blur(12px);
+  color:var(--ink); font-size:18px; cursor:pointer; opacity:0; pointer-events:none; transition:.3s}
+.fab.on{opacity:1; pointer-events:auto}
+.settings{display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin-top:22px; padding:12px 16px; border-radius:14px; border:1px solid var(--line);
+  background:var(--glass); font-size:13px}
+.switch{position:relative; width:48px; height:26px; border-radius:999px; background:rgba(255,255,255,.14);
+  border:1px solid var(--line); cursor:pointer; flex:none; transition:.2s}
+.switch::after{content:""; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%;
+  background:var(--muted); transition:.2s}
+.switch.on{background:rgba(255,122,24,.35)}
+.switch.on::after{left:24px; background:linear-gradient(135deg,var(--a1),var(--a2))}
+footer{text-align:center; color:var(--muted); font-size:12.5px; padding:34px 0 10px; letter-spacing:.05em}
 
-  /* ---------- ПОДАРОК ---------- */
-  .gift{
-    background:linear-gradient(150deg,rgba(255,179,71,.16),rgba(255,122,24,.05));
-    border-color:rgba(255,179,71,.45);
-    text-align:center;
-    box-shadow:0 30px 80px -30px rgba(255,122,24,.6),inset 0 1px 0 rgba(255,255,255,.22);
-  }
-  .gift .big{font-size:clamp(24px,6vw,34px);font-weight:900;margin-bottom:10px;
-    background:linear-gradient(180deg,#fff2de,var(--o1));-webkit-background-clip:text;background-clip:text;color:transparent}
+/* анимация появления — только через JS, базовое состояние видимое */
+.rv-hide{opacity:0; transform:translate3d(0,28px,0); transition:opacity .55s ease, transform .55s cubic-bezier(.22,.9,.28,1)}
+.rv-in{opacity:1 !important; transform:none !important}
 
-  /* ---------- КНОПКА НАВЕРХ ---------- */
-  .up{
-    position:fixed;right:16px;bottom:18px;z-index:40;
-    width:48px;height:48px;border-radius:14px;border:1px solid var(--line);
-    background:rgba(20,14,10,.85);color:var(--o1);font-size:20px;cursor:pointer;
-    backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:.25s;
-  }
-  .up.on{opacity:1;pointer-events:auto}
-
-  footer{
-    position:relative;z-index:2;text-align:center;padding:26px 18px 40px;
-    color:var(--muted);font-size:14px;border-top:1px solid rgba(255,255,255,.07);
-    max-width:900px;margin:20px auto 0;
-  }
-
-  /* ---------- ПОЯВЛЕНИЕ (включается только через JS) ---------- */
-  html.js .reveal{opacity:0;transform:translate3d(0,34px,-60px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
-  html.js .reveal.in{opacity:1;transform:none}
-  html.js .stagger > *{opacity:0;transform:translate3d(0,20px,0);transition:opacity .55s ease,transform .55s ease}
-  html.js .stagger.in > *{opacity:1;transform:none}
-
-  /* ---------- ОТКЛЮЧЕНИЕ ЭФФЕКТОВ ---------- */
-  html.no-fx .bg .grid,html.no-fx .bg .glow,html.no-fx .sparks{animation:none}
-  html.no-fx .title{animation:none;transform:none}
-  html.no-fx .btn{animation:none}
-  html.no-fx .card{transition:none}
-  @media (prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-    html.js .reveal,html.js .stagger > *{opacity:1!important;transform:none!important}
-  }
+@media (max-width:400px){
+  .flips{grid-template-columns:1fr}
+  .slide{width:180px; margin-left:-90px; height:210px}
+  .track{height:230px}
+  .collage{height:290px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important}
+  h1.three{transform:none}
+  .rv-hide{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
+<div class="grid-bg" id="gridBg"></div>
+<div id="bar"></div>
 
-<div class="bg" aria-hidden="true">
-  <div class="grid" id="grid"></div>
-  <div class="glow"></div>
-  <div class="sparks" id="sparks"></div>
-</div>
+<div class="wrap">
 
-<div class="progress" aria-hidden="true"><i id="pbar"></i></div>
-
-<header class="top">
-  <span class="brand">Nagibatorz · гайд</span>
-  <span class="badge">3D · Нейро-пак</span>
-</header>
-
-<main>
+  <!-- ШАПКА -->
+  <div class="top">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffb347" stroke-width="1.6">
+        <path d="M12 21c0-6 3-9 9-9-6 0-9-3-9-9 0 6-3 9-9 9 6 0 9 3 9 9z"/>
+      </svg>
+      <span>Nagibatorz</span>
+    </div>
+    <div class="badge">Нейро-пак</div>
+  </div>
 
   <!-- HERO -->
-  <section class="hero">
-    <h1 class="title" data-t="НЕЙРО-ПАК">НЕЙРО-ПАК</h1>
+  <div class="hero">
+    <div class="eyebrow">пошаговый гайд</div>
+    <h1 class="three">НЕЙРО-ПАК</h1>
     <p class="sub">Все ИИ в одном окне</p>
-    <p class="lead">GPT, Gemini, Grok, Claude и десятки других — без подписок и оплат. Ты пишешь запрос один раз и сравниваешь ответы разных моделей.</p>
-    <a class="btn" href="#step1">Начать гайд</a>
-    <button class="btn ghost" id="fxBtn" type="button">Убавить эффекты</button>
-  </section>
-
-  <!-- СОДЕРЖАНИЕ -->
-  <section class="card toc reveal">
-    <h2>Содержание</h2>
-    <ol>
-      <li><a href="#step1">Открываем площадку</a></li>
-      <li><a href="#step2">Режим Direct Chat</a></li>
-      <li><a href="#step3">Кнопка Max</a></li>
-      <li><a href="#step4">Выбор модели</a></li>
-      <li><a href="#step5">Как писать запросы</a></li>
-      <li><a href="#step6">Что можно делать</a></li>
-      <li><a href="#step7">Сравнение моделей</a></li>
-      <li><a href="#step8">Ограничения и честность</a></li>
-      <li><a href="#step9">Если что-то не работает</a></li>
-      <li><a href="#step10">Чек-лист</a></li>
-      <li><a href="#trainer">Тренажёр запроса</a></li>
-      <li><a href="#gift">Твой подарок</a></li>
-    </ol>
-  </section>
-
-  <!-- 1 -->
-  <section class="card reveal" id="step1">
-    <div class="num">01</div>
-    <h2>Открываем площадку</h2>
-    <p>Перейди по ссылке с любого устройства — телефон, планшет, компьютер. Работает в браузере, ничего устанавливать не нужно.</p>
-    <p><a href="https://arena.ai/text/direct" target="_blank" rel="noopener">arena.ai/text/direct</a></p>
-    <p>Если площадка попросит войти — авторизуйся удобным способом. Это бесплатно.</p>
-    <p class="muted">Сразу добавь страницу в закладки браузера, чтобы не искать ссылку каждый раз.</p>
-  </section>
-
-  <!-- 2 -->
-  <section class="card reveal" id="step2">
-    <div class="num">02</div>
-    <h2>Находим Direct Chat</h2>
-    <p>В левом верхнем углу есть переключатель режимов. Нажми на него и выбери <strong>Direct Chat</strong>.</p>
-    <p>Именно в этом режиме ты общаешься с одной выбранной моделью — как в обычном чате. В других режимах запрос уходит сразу в несколько моделей и сравнивает ответы.</p>
-  </section>
-
-  <!-- 3 -->
-  <section class="card reveal" id="step3">
-    <div class="num">03</div>
-    <h2>Нажимаем Max</h2>
-    <p>Рядом с переключателем есть кнопка <strong>Max</strong> — нажми её. Она открывает полный список доступных моделей, а не только те, что показаны по умолчанию.</p>
-    <div class="warn">⚠️ Если кнопки Max не видно — обнови страницу. На маленьких экранах часть интерфейса иногда прячется за краем.</div>
-  </section>
-
-  <!-- 4 -->
-  <section class="card reveal" id="step4">
-    <div class="num">04</div>
-    <h2>Выбираем нужную нейросеть</h2>
-    <p>Из списка выбери модель под свою задачу. Ориентируйся так:</p>
-    <div class="tbl">
-      <table>
-        <thead><tr><th>Задача</th><th>На что смотреть</th></tr></thead>
-        <tbody>
-          <tr><td>Текст, статьи, письма</td><td>Любая топовая модель</td></tr>
-          <tr><td>Код и сайты</td><td>Модели с уклоном в программирование</td></tr>
-          <tr><td>Логика и математика</td><td>Модели с «reasoning» в названии</td></tr>
-          <tr><td>Быстрый короткий ответ</td><td>Лёгкие и быстрые модели</td></tr>
-          <tr><td>Творчество и идеи</td><td>Любая, но лучше две разные</td></tr>
-        </tbody>
-      </table>
+    <p class="lead">Десять шагов от первого открытия площадки до готового запроса. Без подписок, без оплат за модели.</p>
+    <div class="pills">
+      <div class="pill">10 шагов</div>
+      <div class="pill hot">без оплат</div>
+      <div class="pill">телефон · ПК</div>
     </div>
-    <p class="muted">Названия моделей на площадке обновляются постоянно — это нормально. Если модель пропала из списка, выбери другую того же уровня.</p>
-  </section>
+  </div>
 
-  <!-- 5 -->
-  <section class="card reveal" id="step5">
-    <div class="num">05</div>
-    <h2>Как писать запросы, чтобы получать нормальный ответ</h2>
-    <p>90% плохих ответов — это плохо сформулированный запрос. Правило простое: чем больше контекста, тем лучше результат.</p>
-    <h3>Формула хорошего запроса</h3>
-    <ul>
-      <li><strong>Роль</strong> — «Ты опытный редактор»</li>
-      <li><strong>Задача</strong> — «Напиши описание товара»</li>
-      <li><strong>Вводные</strong> — что за товар, для кого, где будет размещён</li>
-      <li><strong>Формат</strong> — «Списком, до 100 слов, без воды»</li>
-      <li><strong>Ограничения</strong> — «Не используй слово „уникальный“»</li>
-    </ul>
-    <p><strong>Плохо:</strong> «напиши текст про телефон»</p>
-    <p><strong>Хорошо:</strong> «Ты копирайтер. Напиши описание смартфона Infinix для объявления на маркетплейсе: 4 абзаца, без эмодзи, упор на батарею и экран»</p>
-    <div class="warn">Не нравится ответ — не начинай заново, а уточняй: «Короче», «Проще, для школьника», «Перепиши в другом тоне». Модель доработает то, что уже есть.</div>
-    <a class="btn" href="#trainer" style="margin-top:9px">Собрать запрос в тренажёре</a>
-  </section>
-
-  <!-- 6 -->
-  <section class="card reveal" id="step6">
-    <div class="num">06</div>
-    <h2>Что реально можно делать</h2>
-    <div class="tbl">
-      <table>
-        <thead><tr><th>Задача</th><th>Пример запроса</th></tr></thead>
-        <tbody>
-          <tr><td>Тексты</td><td>Описания товаров, посты, письма</td></tr>
-          <tr><td>Учёба</td><td>Объясни тему простыми словами</td></tr>
-          <tr><td>Код</td><td>Напиши функцию на Python</td></tr>
-          <tr><td>Переводы</td><td>Переведи и сохрани стиль</td></tr>
-          <tr><td>Работа с текстом</td><td>Сократи, перепиши, проверь ошибки</td></tr>
-          <tr><td>Идеи</td><td>10 вариантов названия для товара</td></tr>
-          <tr><td>Разбор</td><td>Что не так с этим объявлением</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 7 -->
-  <section class="card reveal" id="step7">
-    <div class="num">07</div>
-    <h2>Сравнение моделей — главная фишка</h2>
-    <p>Один и тот же запрос можно отправить двум разным моделям и сравнить ответы. Это бесплатно и экономит время: не нужно гадать, какая модель лучше — видно сразу.</p>
-    <ol>
-      <li>Задай вопрос первой модели</li>
-      <li>Скопируй запрос</li>
-      <li>Переключи модель через Max</li>
-      <li>Задай тот же вопрос</li>
-      <li>Возьми лучшие куски из двух ответов</li>
-    </ol>
-    <p class="muted">Для важных задач всегда так и делай — две модели ошибаются реже, чем одна.</p>
-  </section>
-
-  <!-- 8 -->
-  <section class="card reveal" id="step8">
-    <div class="num">08</div>
-    <h2>Ограничения — честно</h2>
-    <p>Чтобы не было сюрпризов:</p>
-    <ul>
-      <li>Это не подписка ChatGPT Plus или Claude Pro. Ты получаешь доступ к моделям на площадке-агрегаторе, а не аккаунт с оплаченным тарифом.</li>
-      <li>Набор моделей и лимиты меняются. Площадка добавляет и убирает модели, иногда ограничивает число запросов в день.</li>
-      <li>История чатов живёт на площадке. Важные ответы копируй себе в заметки.</li>
-      <li>Не отправляй туда пароли, документы и личные данные. Никогда и ни в какую нейросеть.</li>
-    </ul>
-    <div class="warn">⚠️ Нейросеть может ошибаться. Проверяй факты, даты, цены и цифры — особенно если ответ пойдёт клиенту или в документ.</div>
-  </section>
-
-  <!-- 9 -->
-  <section class="card reveal" id="step9">
-    <div class="num">09</div>
-    <h2>Если что-то не работает</h2>
-    <h3>Страница не грузится</h3>
-    <ul>
-      <li>Проверь интернет и обнови страницу</li>
-      <li>Попробуй другой браузер</li>
-      <li>Отключи VPN, если он включён</li>
-    </ul>
-    <h3>Модель не отвечает или пишет про лимит</h3>
-    <ul>
-      <li>Подожди пару минут и повтори</li>
-      <li>Переключись на другую модель через Max</li>
-      <li>Начни новый чат — старый мог переполниться</li>
-    </ul>
-    <p class="muted">Ответ обрывается: напиши «продолжи» — модель допишет с того места.</p>
-  </section>
-
-  <!-- 10 -->
-  <section class="card reveal" id="step10">
-    <div class="num">10</div>
-    <h2>Чек-лист</h2>
-    <ul class="check" id="check">
-      <li><label><input type="checkbox" data-k="c1"><span class="box"></span><span>Открыл ссылку и авторизовался</span></label></li>
-      <li><label><input type="checkbox" data-k="c2"><span class="box"></span><span>Включил режим Direct Chat</span></label></li>
-      <li><label><input type="checkbox" data-k="c3"><span class="box"></span><span>Нажал Max и увидел список моделей</span></label></li>
-      <li><label><input type="checkbox" data-k="c4"><span class="box"></span><span>Выбрал модель под свою задачу</span></label></li>
-      <li><label><input type="checkbox" data-k="c5"><span class="box"></span><span>Написал запрос по формуле: роль, задача, формат</span></label></li>
-      <li><label><input type="checkbox" data-k="c6"><span class="box"></span><span>Сравнил ответ двух моделей на важном вопросе</span></label></li>
-      <li><label><input type="checkbox" data-k="c7"><span class="box"></span><span>Сохранил нужные ответы себе</span></label></li>
-      <li><label><input type="checkbox" data-k="c8"><span class="box"></span><span>Не отправил в чат личные данные</span></label></li>
-    </ul>
-    <p class="check-bar" id="cbar">Пройдено: 0 из 8</p>
-  </section>
-
-  <!-- ТРЕНАЖЁР -->
-  <section class="card reveal trainer" id="trainer">
-    <div class="num">✦</div>
-    <h2>Тренажёр запроса</h2>
-    <p>Собери запрос из пяти частей — и забирай готовый текст. Работает прямо здесь, без интернета.</p>
-
-    <label for="t-role">Роль</label>
-    <input id="t-role" type="text" placeholder="Ты опытный копирайтер">
-
-    <label for="t-task">Задача</label>
-    <input id="t-task" type="text" placeholder="Напиши описание товара">
-
-    <div class="row">
-      <div>
-        <label for="t-ctx">Вводные</label>
-        <input id="t-ctx" type="text" placeholder="Спамблок для Телеграм, для маркетплейса">
-      </div>
-      <div>
-        <label for="t-fmt">Формат</label>
-        <input id="t-fmt" type="text" placeholder="Списком, до 100 слов">
+  <!-- 3D ТЕЛЕФОН -->
+  <div class="stage" id="phoneStage">
+    <div class="phone" id="phone">
+      <div class="notch"></div>
+      <div class="screen">
+        <img src="img/hero.png" alt="Интерфейс площадки" onerror="this.style.display='none'">
+        <div class="fallback"><b>Тут будет скриншот</b><span>залей файл img/hero.png</span></div>
       </div>
     </div>
+  </div>
+  <div class="hint">Наклони телефон или проведи пальцем по экрану — картинка повернётся</div>
 
-    <label for="t-lim">Ограничения</label>
-    <input id="t-lim" type="text" placeholder="Без слова «уникальный», без эмодзи">
-
-    <label for="t-out">Готовый запрос</label>
-    <textarea id="t-out" readonly placeholder="Заполни поля — текст появится здесь"></textarea>
-
-    <button class="btn" id="t-copy" type="button" style="margin-top:14px">Скопировать запрос</button>
-    <button class="btn ghost" id="t-clear" type="button">Очистить</button>
-    <p class="hint" id="t-hint">Ничего никуда не отправляется — всё остаётся на этом устройстве.</p>
+  <!-- ШАГ 1 -->
+  <section>
+    <div class="card tilt">
+      <div class="sec-num">01</div>
+      <h2>Открываем площадку<span class="dot">.</span></h2>
+      <p>Заходишь на сайт в браузере — с телефона или компьютера. Ничего скачивать и устанавливать не нужно.</p>
+      <p class="muted">Внизу экрана появится поле ввода и строка статуса. Это главный экран, с него начинается вся работа.</p>
+    </div>
   </section>
 
-  <!-- ПОДАРОК -->
-  <section class="card gift reveal" id="gift">
-    <div class="num" style="margin:0 auto 14px">🎁</div>
-    <div class="big">Твой подарок</div>
-    <p>Пакет из 100 гайдов по играм и цифровым фишкам: раскладки, фарм, настройки, промокоды.</p>
-    <!-- ↓ Подставь свою ссылку на бонус вместо # -->
-    <a class="btn" href="#" target="_blank" rel="noopener" style="margin-top:18px">Забрать бонус</a>
+  <!-- КАРУСЕЛЬ РЕЖИМОВ -->
+  <section>
+    <div class="card">
+      <h2>Четыре режима<span class="dot">.</span></h2>
+      <p class="muted">Они прячутся за кнопкой со значком чата слева от поля ввода. Листай карточки свайпом.</p>
+      <div class="carousel" id="carousel">
+        <div class="track" id="track">
+          <div class="slide" style="transform:rotateY(-60deg) translateZ(220px)">
+            <div><div class="ico">⚔️</div><h4>Battle Mode</h4><p>Две анонимные модели отвечают на один вопрос, ты выбираешь лучший ответ.</p></div>
+            <div class="tag">сравнение вслепую</div>
+          </div>
+          <div class="slide" style="transform:rotateY(-30deg) translateZ(220px)">
+            <div><div class="ico">✳️</div><h4>Agent Mode</h4><p>Для сложных задач: модель сама разбивает работу на этапы.</p></div>
+            <div class="tag">сложные задачи</div>
+          </div>
+          <div class="slide" style="transform:rotateY(0deg) translateZ(220px)">
+            <div><div class="ico">🆚</div><h4>Side by Side</h4><p>Две модели на выбор отвечают рядом — удобно сравнивать стиль.</p></div>
+            <div class="tag">сравнение моделей</div>
+          </div>
+          <div class="slide" style="transform:rotateY(30deg) translateZ(220px)">
+            <div><div class="ico">💬</div><h4>Direct</h4><p>Обычный чат с одной моделью. Основной режим для повседневной работы.</p></div>
+            <div class="tag">наш выбор</div>
+          </div>
+          <div class="slide" style="transform:rotateY(60deg) translateZ(220px)">
+            <div><div class="ico">🧠</div><h4>Max</h4><p>Маршрутизатор: сам подбирает подходящую модель под запрос.</p></div>
+            <div class="tag">режим по умолчанию</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-nav">
+        <button class="c-btn" id="prev" aria-label="Назад">‹</button>
+        <div class="dots" id="dots"></div>
+        <button class="c-btn" id="next" aria-label="Вперёд">›</button>
+      </div>
+    </div>
   </section>
 
-</main>
+  <!-- ШАГ 2 -->
+  <section>
+    <div class="card tilt">
+      <div class="sec-num">02</div>
+      <h2>Настраиваем Direct<span class="dot">.</span></h2>
+      <p>Открой меню режимов и выбери <b>Direct</b> — «чат с одной моделью за раз».</p>
+      <ul>
+        <li>Нажми на значок чата рядом с плюсом.</li>
+        <li>В списке выбери <b>Direct</b>.</li>
+        <li>Рядом с кнопкой модели появится её название — значит режим включён.</li>
+      </ul>
+      <div class="warn"><b>Ошибка новичка:</b> писать в режиме Battle, думая, что это обычный чат. Там ответы идут парами и перепутать легко.</div>
+    </div>
+  </section>
 
-<footer>
-  Nagibatorz · Нейро-пак 3D · 2026<br>
-  Все модели и лимиты принадлежат площадке-агрегатору. Гайд описывает работу с ней.
-</footer>
+  <!-- ШАГ 3 / МОДЕЛИ -->
+  <section>
+    <div class="card">
+      <div class="sec-num">03</div>
+      <h2>Кнопка Max<span class="dot">.</span></h2>
+      <p>Рядом с полем ввода есть кнопка с буквой <b>M</b> и подписью <b>Max</b>. Нажми — откроется список моделей.</p>
+      <p>Самый простой путь: оставить <b>Max</b> включённым. Это маршрутизатор, он сам решает, какая модель ответит на твой запрос.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Модель</th><th>Когда выбирать</th></tr></thead>
+          <tbody>
+            <tr><td><b>Max</b> (router)</td><td>По умолчанию, если не хочешь думать о выборе</td></tr>
+            <tr><td>gpt-5.5-instant</td><td>Быстрые ответы, тексты, объяснения</td></tr>
+            <tr><td>gemini-3-flash</td><td>Скорость и работа с картинками</td></tr>
+            <tr><td>grok-4.5</td><td>Свежие события, живой разговорный стиль</td></tr>
+            <tr><td>grok reasoning</td><td>Задачи, где нужно подумать пошагово</td></tr>
+            <tr><td>qwen3.7-max-preview</td><td>Код и технические задачи</td></tr>
+            <tr><td>glm-5.2 (max)</td><td>Длинные тексты и разбор документов</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">Над списком есть фильтры: текст, код, изображения, веб-поиск. Быстрее найти нужное ими, чем листать всё подряд.</p>
+    </div>
+  </section>
 
-<button class="up" id="up" type="button" aria-label="Наверх">↑</button>
+  <!-- КУБ -->
+  <section>
+    <div class="card">
+      <h2>Покрути куб<span class="dot">.</span></h2>
+      <p class="muted">Шесть задач, которые закрывает площадка. Крути пальцем.</p>
+      <div class="cube-stage" id="cubeStage">
+        <div class="cube" id="cube">
+          <div class="face f1">Текст<small>письма, посты</small></div>
+          <div class="face f2">Код<small>скрипты, баги</small></div>
+          <div class="face f3">Перевод<small>со стилем</small></div>
+          <div class="face f4">Учёба<small>простыми словами</small></div>
+          <div class="face f5">Идеи<small>планы, названия</small></div>
+          <div class="face f6">Проверка<small>вычитка ошибок</small></div>
+        </div>
+      </div>
+      <div class="hint">Крутится пальцем в любую сторону</div>
+    </div>
+  </section>
+
+  <!-- ШАГ 4 ФЛИП -->
+  <section>
+    <div class="card">
+      <div class="sec-num">04</div>
+      <h2>Выбери модель под задачу<span class="dot">.</span></h2>
+      <p class="muted">Коснись карточки — она перевернётся и покажет, для чего модель лучше всего.</p>
+      <div class="flips">
+        <div class="flip"><div class="flip-in">
+          <div class="flip-f"><h4>GPT</h4><p>Универсал</p><div class="tip">нажми</div></div>
+          <div class="flip-b"><h4>Тексты</h4><p>Описания товаров, посты, письма, объяснения простыми словами.</p></div>
+        </div></div>
+        <div class="flip"><div class="flip-in">
+          <div class="flip-f"><h4>Gemini</h4><p>Быстро и с картинками</p><div class="tip">нажми</div></div>
+          <div class="flip-b"><h4>Разбор изображений</h4><p>Скриншоты, фото, таблицы, короткие быстрые ответы.</p></div>
+        </div></div>
+        <div class="flip"><div class="flip-in">
+          <div class="flip-f"><h4>Grok</h4><p>Свежие события</p><div class="tip">нажми</div></div>
+          <div class="flip-b"><h4>Актуальное</h4><p>Новости, тренды, живой разговорный стиль.</p></div>
+        </div></div>
+        <div class="flip"><div class="flip-in">
+          <div class="flip-f"><h4>Claude</h4><p>Длинные тексты</p><div class="tip">нажми</div></div>
+          <div class="flip-b"><h4>Объём</h4><p>Большие документы, аккуратная структура, редактура.</p></div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ШАГ 5 ТРЕНАЖЁР -->
+  <section>
+    <div class="card builder">
+      <div class="sec-num">05</div>
+      <h2>Как писать запросы<span class="dot">.</span></h2>
+      <p>Хороший запрос держится на пяти вещах. Заполни поля — получишь готовый.</p>
+
+      <label>Роль</label>
+      <input id="b1" placeholder="Ты — опытный продавец цифровых товаров" value="Ты — опытный продавец цифровых товаров">
+      <label>Задача</label>
+      <input id="b2" placeholder="Напиши описание товара" value="Напиши описание товара">
+      <label>Вводные</label>
+      <input id="b3" placeholder="Товар: гайд по нейросетям, цена 90 ₽" value="Товар: гайд по нейросетям, цена 90 ₽">
+      <label>Формат</label>
+      <input id="b4" placeholder="Короткие абзацы, без воды" value="Короткие абзацы, без воды">
+      <label>Ограничения</label>
+      <input id="b5" placeholder="До 800 знаков, без обещаний дохода" value="До 800 знаков, без обещаний дохода">
+
+      <div class="out" id="bOut"></div>
+      <button class="btn" id="bMake">Собрать запрос</button>
+      <button class="btn ghost" id="bCopy">Скопировать</button>
+      <div class="ok" id="bOk"></div>
+
+      <div class="warn" style="margin-top:18px"><b>Правило:</b> чем конкретнее вводные, тем меньше модель выдумывает. Формат и ограничения — половина результата.</div>
+    </div>
+  </section>
+
+  <!-- КОЛЛАЖ -->
+  <section>
+    <div class="card">
+      <h2>Как это выглядит<span class="dot">.</span></h2>
+      <p class="muted">Наклони телефон или проведи пальцем — слой картинок разъедется в глубину.</p>
+      <div class="collage" id="collage">
+        <div class="cl c1"><img src="img/s1.png" alt="" onerror="this.style.display='none'"><div class="ph">img/s1.png</div></div>
+        <div class="cl c2"><img src="img/s2.png" alt="" onerror="this.style.display='none'"><div class="ph">img/s2.png</div></div>
+        <div class="cl c3"><img src="img/s3.png" alt="" onerror="this.style.display='none'"><div class="ph">img/s3.png</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ШАГ 6 -->
+  <section>
+    <div class="card tilt">
+      <div class="sec-num">06</div>
+      <h2>Что делать каждый день<span class="dot">.</span></h2>
+      <ul>
+        <li><b>Тексты для товаров.</b> Описания, заголовки, ответы покупателям.</li>
+        <li><b>Учёба.</b> «Объясни как для 12-летнего» работает лучше всего.</li>
+        <li><b>Код.</b> Спроси готовый скрипт и попроси объяснить каждую строку.</li>
+        <li><b>Переводы.</b> Проси сохранить тон, а не переводить дословно.</li>
+        <li><b>Идеи.</b> Пять вариантов названий, три плана на неделю, два способа решить проблему.</li>
+        <li><b>Проверка.</b> Вставь свой текст и попроси найти ошибки и слабые места.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ШАГ 7 -->
+  <section>
+    <div class="card">
+      <div class="sec-num">07</div>
+      <h2>Сравнение моделей<span class="dot">.</span></h2>
+      <p>Один и тот же вопрос разным моделям даёт разный результат. Быстрый способ проверить — режим <b>Side by Side</b> или <b>Battle Mode</b>.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Задача</th><th>Что выбрать</th></tr></thead>
+          <tbody>
+            <tr><td>Описание товара</td><td>Max или gpt-5.5-instant</td></tr>
+            <tr><td>Разбор скриншота</td><td>gemini-3-flash</td></tr>
+            <tr><td>Сложная логика</td><td>grok reasoning</td></tr>
+            <tr><td>Длинный документ</td><td>glm-5.2 или Claude</td></tr>
+            <tr><td>Не знаешь, что выбрать</td><td>Max</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ШАГ 8 -->
+  <section>
+    <div class="card tilt">
+      <div class="sec-num">08</div>
+      <h2>Ограничения площадки<span class="dot">.</span></h2>
+      <p>Чтобы не было сюрпризов, держи в голове три вещи:</p>
+      <ul>
+        <li>Это агрегатор: модели доступны на площадке, а не в виде подписки ChatGPT Plus.</li>
+        <li>Лимиты на количество запросов есть у всех моделей — при активной работе они заканчиваются.</li>
+        <li>Модель может ошибаться. Факты, цифры и законы всегда проверяй.</li>
+      </ul>
+      <div class="warn"><b>Важно:</b> не отправляй в чат пароли, коды и данные карт. Никогда.</div>
+    </div>
+  </section>
+
+  <!-- ШАГ 9 -->
+  <section>
+    <div class="card">
+      <div class="sec-num">09</div>
+      <h2>Если что-то не работает<span class="dot">.</span></h2>
+      <ul>
+        <li><b>Не отправляется запрос.</b> Обнови страницу — чаще всего помогает.</li>
+        <li><b>Модель не отвечает.</b> Переключись на другую в том же меню.</li>
+        <li><b>Ответ оборвался.</b> Напиши «продолжи» — модель допишет с места остановки.</li>
+        <li><b>Страница тормозит.</b> Закрой лишние вкладки, эффекты тут не при чём.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ШАГ 10 ЧЕК-ЛИСТ -->
+  <section>
+    <div class="card">
+      <div class="sec-num">10</div>
+      <h2>Чек-лист перед запросом<span class="dot">.</span></h2>
+      <p class="muted">Отмечай — галочки сохранятся, даже если закроешь страницу.</p>
+      <div id="checks">
+        <div class="check"><div class="cb" data-k="c1">✓</div><span>Указал роль: «Ты — …»</span></div>
+        <div class="check"><div class="cb" data-k="c2">✓</div><span>Сформулировал задачу одной строкой</span></div>
+        <div class="check"><div class="cb" data-k="c3">✓</div><span>Дал вводные: детали, цифры, контекст</span></div>
+        <div class="check"><div class="cb" data-k="c4">✓</div><span>Задал формат ответа</span></div>
+        <div class="check"><div class="cb" data-k="c5">✓</div><span>Указал ограничения: объём, стиль, чего избегать</span></div>
+        <div class="check"><div class="cb" data-k="c6">✓</div><span>Проверил, что не отправляю личные данные</span></div>
+        <div class="check"><div class="cb" data-k="c7">✓</div><span>Выбрал режим Direct, а не Battle</span></div>
+        <div class="check"><div class="cb" data-k="c8">✓</div><span>Готов переписать запрос, если ответ слабый</span></div>
+      </div>
+      <div class="progress-line" id="cProg">Пройдено: 0 из 8</div>
+    </div>
+  </section>
+
+  <!-- ФИНАЛ -->
+  <section>
+    <div class="card final">
+      <h2>Всё, можно начинать<span class="dot">.</span></h2>
+      <p class="muted">Открой площадку, выбери Direct, оставь Max — и задай первый запрос.</p>
+      <button class="btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Вернуться к началу</button>
+    </div>
+  </section>
+
+  <div class="settings">
+    <div>Убавить 3D-эффекты<br><span class="muted" style="font-size:11.5px">если телефон греется или тормозит</span></div>
+    <div class="switch" id="fxSwitch"></div>
+  </div>
+
+  <footer>Nagibatorz · 2026 · гайд по нейро-паку</footer>
+</div>
+
+<button class="fab" id="fab" aria-label="Наверх">↑</button>
 
 <script>
 (function(){
   "use strict";
-  var html = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fx = !reduce;
+  var weak = (navigator.hardwareConcurrency || 4) < 4;
+  if (weak) fx = false;
 
-  /* ---------- Слабые устройства и reduced-motion ---------- */
-  var lowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) ||
-                 (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  if (lowPower) html.classList.add('no-fx');
-
-  var fxOff = false;
-  var fxBtn = document.getElementById('fxBtn');
-  if (lowPower) fxBtn.textContent = 'Эффекты выключены';
-  fxBtn.addEventListener('click', function(){
-    fxOff = !fxOff;
-    html.classList.toggle('no-fx', fxOff);
-    fxBtn.textContent = fxOff ? 'Включить эффекты' : 'Убавить эффекты';
-  });
-
-  /* ---------- Искры ---------- */
-  var sparks = document.getElementById('sparks');
-  if (!lowPower && sparks){
-    for (var i=0;i<26;i++){
-      var s = document.createElement('span');
-      s.className = 'spark';
-      s.style.left = (Math.random()*100) + '%';
-      s.style.top = (100 + Math.random()*40) + '%';
-      s.style.animationDuration = (7 + Math.random()*9) + 's';
-      s.style.animationDelay = (-Math.random()*12) + 's';
-      s.style.opacity = 0.25 + Math.random()*0.5;
-      var sz = 2 + Math.random()*3;
-      s.style.width = sz + 'px';
-      s.style.height = sz + 'px';
-      sparks.appendChild(s);
-    }
-  }
-
-  /* ---------- Появление блоков ---------- */
-  function safe(node, cls){ if(node) node.classList.add(cls); }
-
-  var revealItems = [].slice.call(document.querySelectorAll('.reveal'));
-  var staggerParents = [].slice.call(document.querySelectorAll('.stagger'));
-  var allTargets = revealItems.concat(staggerParents);
-
+  /* ---------- появление секций: скрывает ТОЛЬКО скрипт ---------- */
+  var blocks = document.querySelectorAll('section, .hero, .stage');
   function showAll(){
-    allTargets.forEach(function(el){ el.classList.add('in'); });
+    for (var i=0;i<blocks.length;i++){ blocks[i].classList.remove('rv-hide'); blocks[i].classList.add('rv-in'); }
   }
-
-  if ('IntersectionObserver' in window && !lowPower){
+  function initReveal(){
+    if (reduce || !('IntersectionObserver' in window)) { showAll(); return; }
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
-        if (e.isIntersecting){ safe(e.target,'in'); io.unobserve(e.target); }
+        if (e.isIntersecting){ e.target.classList.add('rv-in'); e.target.classList.remove('rv-hide'); io.unobserve(e.target); }
       });
     }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
-
-    allTargets.forEach(function(el){ io.observe(el); });
-    window.__rv = true;                 // сигнал страховке: скрипт жив
-    setTimeout(showAll, 2600);          // дополнительная подстраховка
-  } else {
-    showAll();                          // нет IO — показываем сразу, без анимаций
-  }
-
-  /* Каскад внутри секций: карточки, пункты, шаги */
-  document.querySelectorAll('.card').forEach(function(card){
-    var kids = card.querySelectorAll(':scope > h2, :scope > h3, :scope > p, :scope > ul, :scope > ol, :scope > .tbl, :scope > .warn, :scope > .num, :scope > .row, :scope > label, :scope > input, :scope > textarea, :scope > .btn');
-    kids.forEach(function(k, idx){
-      k.style.transitionDelay = Math.min(idx*70, 420) + 'ms';
-    });
-  });
-
-  /* ---------- Для .stagger (если появится) ---------- */
-  staggerParents.forEach(function(p){
-    [].forEach.call(p.children, function(c, idx){
-      c.style.transitionDelay = (idx*80) + 'ms';
-    });
-  });
-
-  /* ---------- 3D-наклон карточек ---------- */
-  if (!lowPower){
-    var cards = document.querySelectorAll('.card');
-    [].forEach.call(cards, function(card){
-      function tilt(cx, cy, r){
-        var b = card.getBoundingClientRect();
-        var px = (cx - b.left) / b.width;
-        var py = (cy - b.top) / b.height;
-        var rx = (0.5 - py) * 6;
-        var ry = (px - 0.5) * 6;
-        card.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(6px)';
+    var vh = window.innerHeight || 800;
+    for (var i=0;i<blocks.length;i++){
+      var b = blocks[i];
+      if (b.getBoundingClientRect().top > vh * 0.92){
+        b.classList.add('rv-hide');
+        io.observe(b);
+      } else {
+        b.classList.add('rv-in');
       }
-      card.addEventListener('mousemove', function(e){ if(!fxOff) tilt(e.clientX, e.clientY); });
-      card.addEventListener('mouseleave', function(){ card.style.transform = ''; });
-      card.addEventListener('touchstart', function(e){
-        if (fxOff) return;
-        var t = e.touches[0]; if (t) tilt(t.clientX, t.clientY);
-      }, {passive:true});
-      card.addEventListener('touchend', function(){ card.style.transform = ''; }, {passive:true});
-    });
+    }
   }
+  initReveal();
+  setTimeout(showAll, 1500); /* страховка: даже если IO не сработал */
 
-  /* ---------- Параллакс + прогресс ---------- */
-  var grid = document.getElementById('grid');
-  var pbar = document.getElementById('pbar');
-  var upBtn = document.getElementById('up');
-  var ticking = false;
-
+  /* ---------- прогресс чтения ---------- */
+  var bar = document.getElementById('bar'), fab = document.getElementById('fab');
   function onScroll(){
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      var y = window.scrollY || window.pageYOffset;
-      if (grid && !fxOff && !lowPower){
-        grid.style.transform = 'rotateX(72deg) translate3d(0,' + (y*0.12).toFixed(1) + 'px,0)';
-      }
-      var h = document.body.scrollHeight - window.innerHeight;
-      if (pbar) pbar.style.width = (h > 0 ? Math.min(100, (y/h)*100) : 0) + '%';
-      if (upBtn) upBtn.classList.toggle('on', y > 700);
-      ticking = false;
-    });
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+    bar.style.width = (p*100).toFixed(1) + '%';
+    if (p > 0.03) fab.classList.add('on'); else fab.classList.remove('on');
+    if (fx) parallaх();
+  }
+  fab.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---------- параллакс фона ---------- */
+  var grid = document.getElementById('gridBg');
+  function parallaх(){
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    grid.style.transform = 'perspective(600px) rotateX(62deg) translateZ(-120px) translateY(' + (y * 0.12) + 'px)';
   }
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
 
-  if (upBtn) upBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
-
-  /* ---------- Чек-лист с сохранением ---------- */
-  var boxes = document.querySelectorAll('#check input[type="checkbox"]');
-  var cbar = document.getElementById('cbar');
-  var KEY = 'np3d_check_v1';
-
-  function loadChecks(){
-    try{
-      var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
-      boxes.forEach(function(b){ b.checked = !!saved[b.dataset.k]; });
-    }catch(e){}
-  }
-  function saveChecks(){
-    var data = {};
-    boxes.forEach(function(b){ data[b.dataset.k] = b.checked; });
-    try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){}
-  }
-  function updateBar(){
-    var done = 0;
-    boxes.forEach(function(b){ if (b.checked) done++; });
-    if (cbar) cbar.textContent = 'Пройдено: ' + done + ' из ' + boxes.length;
-  }
-  if (boxes.length){
-    loadChecks(); updateBar();
-    boxes.forEach(function(b){
-      b.addEventListener('change', function(){ saveChecks(); updateBar(); });
+  /* ---------- наклон карточек ---------- */
+  if (fx){
+    document.querySelectorAll('.tilt').forEach(function(card){
+      card.addEventListener('pointermove', function(ev){
+        var r = card.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - 0.5;
+        var py = (ev.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'rotateX(' + (-py*6).toFixed(2) + 'deg) rotateY(' + (px*8).toFixed(2) + 'deg) translateZ(6px)';
+      });
+      card.addEventListener('pointerleave', function(){ card.style.transform = ''; });
     });
   }
 
-  /* ---------- Тренажёр запроса ---------- */
-  var f = {
-    role: document.getElementById('t-role'),
-    task: document.getElementById('t-task'),
-    ctx:  document.getElementById('t-ctx'),
-    fmt:  document.getElementById('t-fmt'),
-    lim:  document.getElementById('t-lim'),
-    out:  document.getElementById('t-out')
-  };
-  var THINT = document.getElementById('t-hint');
-
-  function build(){
-    var parts = [];
-    if (f.role.value.trim()) parts.push(f.role.value.trim().replace(/\.$/,'') + '.');
-    if (f.task.value.trim()) parts.push(f.task.value.trim().replace(/\.$/,'') + '.');
-    if (f.ctx.value.trim())  parts.push('Вводные: ' + f.ctx.value.trim().replace(/\.$/,'') + '.');
-    if (f.fmt.value.trim())  parts.push('Формат: ' + f.fmt.value.trim().replace(/\.$/,'') + '.');
-    if (f.lim.value.trim())  parts.push('Ограничения: ' + f.lim.value.trim().replace(/\.$/,'') + '.');
-    f.out.value = parts.join(' ');
+  /* ---------- 3D-телефон ---------- */
+  var phone = document.getElementById('phone');
+  if (phone && fx){
+    var tX = 0, tY = 0, cX = 0, cY = 0;
+    function tiltLoop(){
+      cX += (tX - cX) * 0.12; cY += (tY - cY) * 0.12;
+      phone.style.transform = 'rotateY(' + cX.toFixed(2) + 'deg) rotateX(' + cY.toFixed(2) + 'deg)';
+      requestAnimationFrame(tiltLoop);
+    }
+    tiltLoop();
+    var stage = document.getElementById('phoneStage');
+    stage.addEventListener('pointermove', function(e){
+      var r = stage.getBoundingClientRect();
+      tX = ((e.clientX - r.left)/r.width - 0.5) * 26;
+      tY = -((e.clientY - r.top)/r.height - 0.5) * 20;
+    });
+    stage.addEventListener('pointerleave', function(){ tX = 0; tY = 0; });
+    if (window.DeviceOrientationEvent){
+      window.addEventListener('deviceorientation', function(e){
+        if (e.gamma == null) return;
+        tX = Math.max(-22, Math.min(22, e.gamma * 1.4));
+        tY = Math.max(-18, Math.min(18, (e.beta - 45) * 0.6));
+      });
+    }
   }
-  Object.keys(f).forEach(function(k){
-    if (k !== 'out' && f[k]) f[k].addEventListener('input', build);
+
+  /* ---------- карусель ---------- */
+  var carousel = document.getElementById('carousel'), track = document.getElementById('track');
+  var slides = track.querySelectorAll('.slide');
+  var total = slides.length, cur = 2, step = 60;
+  var dotsBox = document.getElementById('dots');
+  for (var d=0; d<total; d++){
+    var dd = document.createElement('div'); dd.className = 'dot-i'; dotsBox.appendChild(dd);
+  }
+  function renderCar(){
+    for (var i=0;i<total;i++){
+      var off = ((i - cur) * step);
+      var norm = ((i - cur + total) % total);
+      if (norm > total/2) norm -= total;
+      slides[i].style.transform = 'rotateY(' + (norm*step) + 'deg) translateZ(220px)';
+      slides[i].style.opacity = (Math.abs(norm) <= 1) ? 1 : 0.25;
+      slides[i].style.zIndex = 10 - Math.abs(norm);
+    }
+    dotsBox.childNodes.forEach(function(el, i){ el.className = 'dot-i' + (i===cur?' on':''); });
+  }
+  if (total){ renderCar();
+    document.getElementById('next').addEventListener('click', function(){ cur = (cur+1)%total; renderCar(); });
+    document.getElementById('prev').addEventListener('click', function(){ cur = (cur-1+total)%total; renderCar(); });
+    var sx = 0;
+    carousel.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
+    carousel.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 40) { cur = (cur + (dx < 0 ? 1 : -1) + total) % total; renderCar(); }
+    }, {passive:true});
+  }
+
+  /* ---------- куб ---------- */
+  var cubeStage = document.getElementById('cubeStage'), cube = document.getElementById('cube');
+  if (cubeStage && fx){
+    var rx = -16, ry = 24, drag = false, lastX = 0, lastY = 0, vx = 0, vy = 0;
+    function applyCube(){ cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)'; }
+    applyCube();
+    function spin(){
+      if (!drag){ ry += 0.25; rx += 0.05; if (rx > 20) rx = 20; applyCube(); }
+      requestAnimationFrame(spin);
+    }
+    spin();
+    cubeStage.addEventListener('pointerdown', function(e){ drag = true; lastX = e.clientX; lastY = e.clientY; cubeStage.style.cursor='grabbing'; });
+    window.addEventListener('pointerup', function(){ drag = false; cubeStage.style.cursor='grab'; });
+    window.addEventListener('pointermove', function(e){
+      if (!drag) return;
+      ry += (e.clientX - lastX) * 0.6;
+      rx -= (e.clientY - lastY) * 0.6;
+      rx = Math.max(-80, Math.min(80, rx));
+      lastX = e.clientX; lastY = e.clientY; applyCube();
+    });
+  } else if (cube){ cube.style.transform = 'rotateX(-16deg) rotateY(24deg)'; }
+
+  /* ---------- флип-карточки ---------- */
+  document.querySelectorAll('.flip').forEach(function(f){
+    f.addEventListener('click', function(){ f.classList.toggle('on'); });
   });
 
-  var copyBtn = document.getElementById('t-copy');
-  var clearBtn = document.getElementById('t-clear');
+  /* ---------- коллаж ---------- */
+  var col = document.getElementById('collage');
+  if (col && fx){
+    var layers = col.querySelectorAll('.cl');
+    col.addEventListener('pointermove', function(e){
+      var r = col.getBoundingClientRect();
+      var px = (e.clientX - r.left)/r.width - 0.5;
+      var py = (e.clientY - r.top)/r.height - 0.5;
+      layers[0].style.transform = 'translate3d(' + (px*-18) + 'px,' + (py*-14) + 'px,60px) rotate(-6deg)';
+      layers[1].style.transform = 'translate3d(' + (px*22) + 'px,' + (py*12) + 'px,20px) rotate(5deg)';
+      layers[2].style.transform = 'translate3d(' + (px*30) + 'px,' + (py*22) + 'px,100px) rotate(-2deg)';
+    });
+    col.addEventListener('pointerleave', function(){
+      layers[0].style.transform = 'translateZ(60px) rotate(-6deg)';
+      layers[1].style.transform = 'translateZ(20px) rotate(5deg)';
+      layers[2].style.transform = 'translateZ(100px) rotate(-2deg)';
+    });
+  }
 
-  copyBtn.addEventListener('click', function(){
-    build();
-    var text = f.out.value.trim();
-    if (!text){
-      THINT.textContent = 'Сначала заполни хотя бы задачу — иначе копировать нечего.';
-      return;
-    }
-    function ok(){ THINT.textContent = 'Запрос скопирован. Вставляй в чат и правь под себя.'; }
-    function fallback(){
-      f.out.removeAttribute('readonly');
-      f.out.select();
-      try{ document.execCommand('copy'); ok(); }
-      catch(e){ THINT.textContent = 'Не получилось скопировать автоматически — выдели текст в поле и скопируй вручную.'; }
-      f.out.setAttribute('readonly','readonly');
-    }
+  /* ---------- чек-лист ---------- */
+  var boxes = document.querySelectorAll('.cb');
+  var prog = document.getElementById('cProg');
+  var KEY = 'np3d_checks_v1';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ saved = {}; }
+  function updateProg(){
+    var n = document.querySelectorAll('.cb.on').length;
+    prog.textContent = 'Пройдено: ' + n + ' из ' + boxes.length;
+  }
+  boxes.forEach(function(b){
+    if (saved[b.dataset.k]) b.classList.add('on');
+    b.addEventListener('click', function(){
+      b.classList.toggle('on');
+      saved[b.dataset.k] = b.classList.contains('on');
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e){}
+      updateProg();
+    });
+  });
+  updateProg();
+
+  /* ---------- тренажёр запроса ---------- */
+  var out = document.getElementById('bOut'), ok = document.getElementById('bOk');
+  function build(){
+    var g = function(id){ return (document.getElementById(id).value || '').trim(); };
+    var parts = [];
+    if (g('b1')) parts.push(g('b1') + '.');
+    if (g('b2')) parts.push('Задача: ' + g('b2') + '.');
+    if (g('b3')) parts.push('Вводные: ' + g('b3') + '.');
+    if (g('b4')) parts.push('Формат: ' + g('b4') + '.');
+    if (g('b5')) parts.push('Ограничения: ' + g('b5') + '.');
+    out.textContent = parts.join('\n') || 'Заполни поля выше — тут появится готовый запрос.';
+  }
+  document.getElementById('bMake').addEventListener('click', build);
+  document.getElementById('bCopy').addEventListener('click', function(){
+    var txt = out.textContent || '';
     if (navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(ok).catch(fallback);
-    } else fallback();
+      navigator.clipboard.writeText(txt).then(function(){ ok.textContent = 'Скопировано ✓'; })
+      .catch(function(){ ok.textContent = 'Не получилось — выдели текст вручную'; });
+    } else {
+      ok.textContent = 'Выдели текст и скопируй вручную';
+    }
+    setTimeout(function(){ ok.textContent = ''; }, 2500);
   });
+  build();
 
-  clearBtn.addEventListener('click', function(){
-    Object.keys(f).forEach(function(k){ f[k].value = ''; });
-    THINT.textContent = 'Поля очищены.';
+  /* ---------- переключатель эффектов ---------- */
+  var sw = document.getElementById('fxSwitch');
+  if (!fx) sw.classList.add('on');
+  sw.addEventListener('click', function(){
+    sw.classList.toggle('on');
+    var off = sw.classList.contains('on');
+    if (off){
+      document.body.style.setProperty('--fx', 'off');
+      document.querySelectorAll('.phone,.cube,.tilt,.cl').forEach(function(el){ el.style.transform = ''; });
+    }
+    location.reload();
   });
-
 })();
 </script>
 </body>
