@@ -67,34 +67,78 @@
   }
   .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
 
-  /* ---------- 3D телефон ---------- */
-  .stage{perspective:1100px;display:flex;justify-content:center;margin:26px 0 6px}
+  /* ---------- 3D телефон (объёмный корпус) ---------- */
+  .stage{position:relative;perspective:1200px;display:flex;justify-content:center;margin:34px 0 6px}
+  .stage::after{
+    content:"";position:absolute;left:50%;bottom:-30px;
+    width:230px;height:38px;transform:translateX(-50%);
+    background:radial-gradient(ellipse at center,rgba(255,122,24,.4),rgba(255,122,24,0) 72%);
+    filter:blur(10px);pointer-events:none;
+  }
   .phone{
-    position:relative;width:min(282px,74vw);
-    padding:9px;border-radius:40px;
-    background:linear-gradient(160deg,#33261a,#120d09 42%,#2a1e13);
-    border:1px solid rgba(255,170,90,.3);
-    box-shadow:0 34px 80px rgba(0,0,0,.7),0 0 70px rgba(255,122,24,.2),inset 0 1px 0 rgba(255,255,255,.14);
-    transform-style:preserve-3d;will-change:transform;
+    position:relative;
+    width:min(282px,74vw);
+    padding:10px;
+    border-radius:42px;
+    background:
+      linear-gradient(150deg,#4a3a28 0%,#241a10 18%,#0f0b07 52%,#2c2115 82%,#4a3a28 100%);
+    border:1px solid rgba(255,180,100,.3);
+    box-shadow:
+      0 34px 80px rgba(0,0,0,.75),
+      0 0 70px rgba(255,122,24,.22),
+      inset 0 1px 0 rgba(255,255,255,.2),
+      inset 0 -1px 0 rgba(0,0,0,.6);
+    transform-style:preserve-3d;
+    transform:rotateX(6deg) rotateY(-14deg);
+    will-change:transform;
     transition:transform .16s ease-out;
   }
-  .phone::after{
-    content:"";position:absolute;inset:0;border-radius:40px;pointer-events:none;
-    background:linear-gradient(125deg,rgba(255,255,255,.18),rgba(255,255,255,0) 36%,rgba(255,255,255,0) 68%,rgba(255,255,255,.09));
+  /* торцы корпуса — дают видимую толщину */
+  .phone .edge{
+    position:absolute;top:12px;bottom:12px;width:18px;border-radius:16px;
+    background:linear-gradient(90deg,#0b0805,#3b2c1c 42%,#1a1209);
+    transform:translateZ(-9px);
   }
-  .notch{position:absolute;left:50%;top:15px;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#07070a;z-index:3;border:1px solid rgba(255,255,255,.07)}
+  .phone .edge-l{left:1px}
+  .phone .edge-r{right:1px;background:linear-gradient(270deg,#0b0805,#3b2c1c 42%,#1a1209)}
+  /* боковые кнопки */
+  .phone .btn-side{
+    position:absolute;border-radius:3px;
+    background:linear-gradient(180deg,#4a3a28,#1a1209);
+    box-shadow:0 0 6px rgba(0,0,0,.8);
+    transform:translateZ(1px);
+  }
+  .phone .btn-power{right:-3px;top:26%;width:4px;height:52px}
+  .phone .btn-vol1{left:-3px;top:20%;width:4px;height:34px}
+  .phone .btn-vol2{left:-3px;top:31%;width:4px;height:52px}
+  /* блик по стеклу */
+  .phone::after{
+    content:"";position:absolute;inset:0;border-radius:42px;pointer-events:none;
+    background:linear-gradient(122deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 66%,rgba(255,255,255,.12) 100%);
+    transform:translateZ(11px);
+  }
+  .notch{
+    position:absolute;left:50%;top:17px;
+    transform:translateX(-50%) translateZ(12px);
+    width:78px;height:20px;border-radius:12px;
+    background:#07070a;z-index:3;
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.9);
+  }
   .screen{
-    position:relative;border-radius:31px;overflow:hidden;
+    position:relative;border-radius:32px;overflow:hidden;
     background:linear-gradient(180deg,#171218,#0a080c 62%);
-    padding:34px 16px 20px;
+    padding:36px 16px 20px;
+    transform:translateZ(6px);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.05), inset 0 2px 18px rgba(0,0,0,.8);
   }
   .scr-top{text-align:center;font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;color:#8e8478;font-weight:800}
   .scr-big{
-    text-align:center;margin-top:10px;font-size:44px;font-weight:900;line-height:1;letter-spacing:-1px;
+    text-align:center;margin-top:10px;font-size:38px;font-weight:900;line-height:1.05;letter-spacing:-1px;
     background:linear-gradient(180deg,#fff,#ffb347);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     filter:drop-shadow(0 4px 18px rgba(255,140,30,.5));
   }
-  .scr-sub{text-align:center;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:#9a8f80;margin-top:4px}
+  .scr-sub{text-align:center;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:#9a8f80;margin-top:6px}
   .scr-bars{margin:18px 0 4px;display:grid;gap:9px}
   .scr-bar{height:7px;border-radius:100px;background:rgba(255,255,255,.07);overflow:hidden}
   .scr-bar i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--orange),var(--orange2));box-shadow:0 0 12px rgba(255,140,30,.6)}
@@ -106,7 +150,7 @@
     animation:pulseBtn 2.6s ease-in-out infinite;
   }
   @keyframes pulseBtn{0%,100%{box-shadow:0 8px 22px rgba(255,122,24,.35)}50%{box-shadow:0 10px 34px rgba(255,150,40,.7)}}
-  .stage-cap{text-align:center;font-size:12.5px;color:#7b8089;margin:14px 0 0}
+  .stage-cap{text-align:center;font-size:12.5px;color:#7b8089;margin:20px 0 0}
 
   .mets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 0;perspective:900px}
   .met{
@@ -416,7 +460,6 @@
     margin-top:20px;padding:17px 20px;border-radius:15px;
     text-decoration:none;font-weight:900;font-size:15.5px;letter-spacing:.2px;
     color:#2a1704;
-    background:linear-gradient(160deg,#ffdca8,#ff9a2e 55%,#ec۷a10);
     background:linear-gradient(160deg,#ffdca8,#ff9a2e 55%,#ec7a10);
     box-shadow:0 14px 38px rgba(255,130,20,.42),inset 0 1px 0 rgba(255,255,255,.65),inset 0 -2px 0 rgba(150,70,0,.35);
     overflow:hidden;transition:transform .15s;
@@ -486,6 +529,7 @@
     .promo{padding:22px 16px 20px;border-radius:22px}
     .met b{font-size:17px}
     .met span{font-size:9px;letter-spacing:.9px}
+    .scr-big{font-size:34px}
   }
 </style>
 </head>
@@ -500,14 +544,19 @@
 
     <div class="stage">
       <div class="phone" id="phone">
+        <div class="edge edge-l"></div>
+        <div class="edge edge-r"></div>
+        <div class="btn-side btn-power"></div>
+        <div class="btn-side btn-vol1"></div>
+        <div class="btn-side btn-vol2"></div>
         <div class="notch"></div>
         <div class="screen">
           <div class="scr-top">матч завершён</div>
-          <div class="scr-big">+120</div>
-          <div class="scr-sub">серебра за катку</div>
+          <div class="scr-big">5–500</div>
+          <div class="scr-sub">серебра за бонус</div>
           <div class="scr-bars">
             <div>
-              <div class="scr-lab"><span>за матч</span><span>+120</span></div>
+              <div class="scr-lab"><span>катка</span><span>✓ засчитана</span></div>
               <div class="scr-bar"><i style="width:62%"></i></div>
             </div>
             <div>
@@ -756,8 +805,9 @@
   var metCards = [].slice.call(document.querySelectorAll('[data-tilt]'));
   var calcCard = document.getElementById('calcCard');
   var fxOn = true;
+  var BASE_X = 6, BASE_Y = -14;
 
-  function setTilt(el, rx, ry, max){
+  function setTilt(el, rx, ry){
     if (!fxOn || !el) return;
     el.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
   }
@@ -767,7 +817,7 @@
       if (!fxOn) return;
       var b = Math.max(-1, Math.min(1, (e.beta || 0) / 45));
       var g = Math.max(-1, Math.min(1, (e.gamma || 0) / 45));
-      setTilt(phone, -b * 7, g * 9);
+      setTilt(phone, BASE_X - b * 7, BASE_Y + g * 9);
       setTilt(calcCard, -b * 3, g * 4);
       metCards.forEach(function(m, i){
         var k = (i % 2 === 0) ? 1 : -1;
@@ -777,12 +827,13 @@
   }
 
   window.addEventListener('pointermove', function(e){
-    if (!fxOn) return;
-    var cx = e.clientX, cy = e.clientY;
+    if (!fxOn || !phone) return;
     var r = phone.getBoundingClientRect();
-    var dx = (cx - (r.left + r.width / 2)) / (r.width || 1);
-    var dy = (cy - (r.top + r.height / 2)) / (r.height || 1);
-    if (Math.abs(dx) < 1.6) setTilt(phone, -dy * 8, dx * 10);
+    var dx = (e.clientX - (r.left + r.width / 2)) / (r.width || 1);
+    var dy = (e.clientY - (r.top + r.height / 2)) / (r.height || 1);
+    if (Math.abs(dx) < 1.8 && Math.abs(dy) < 1.8) {
+      setTilt(phone, BASE_X - dy * 8, BASE_Y + dx * 12);
+    }
   }, {passive:true});
 
   /* калькулятор */
@@ -812,7 +863,11 @@
     document.body.classList.toggle('no-fx', !fxOn);
     fx.textContent = fxOn ? '3D: вкл' : '3D: выкл';
     if (!fxOn) {
-      [phone, calcCard].concat(metCards).forEach(function(el){ if (el) el.style.transform = ''; });
+      [phone, calcCard].concat(metCards).forEach(function(el){
+        if (el) el.style.transform = '';
+      });
+    } else {
+      if (phone) phone.style.transform = 'rotateX(' + BASE_X + 'deg) rotateY(' + BASE_Y + 'deg)';
     }
   });
 
