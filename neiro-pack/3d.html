@@ -68,7 +68,7 @@ h1{
   transform-style:preserve-3d;
 }
 .sub{font-size:clamp(16px,4.6vw,22px);font-weight:800;letter-spacing:2.4px;margin:0 0 12px;color:#fff}
-.lead{color:var(--mut);font-size:15px;max-width:430px;margin:0 auto 26px}
+.lead{color:var(--mut);font-size:15px;max-width:460px;margin:0 auto 26px}
 .lead b{color:var(--gold2)}
 
 /* 3D телефон */
@@ -159,8 +159,8 @@ h2 .num{
 .dots i.on{background:var(--acc);width:20px;border-radius:99px;box-shadow:0 0 10px rgba(255,138,43,.8)}
 
 /* флип-карточки */
-.flips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}
-.flip{perspective:900px;height:148px;cursor:pointer}
+.flips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 12px}
+.flip{perspective:900px;height:158px;cursor:pointer}
 .flip .in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
 .flip.on .in{transform:rotateY(180deg)}
 .side{position:absolute;inset:0;border-radius:16px;padding:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
@@ -171,6 +171,8 @@ h2 .num{
 .side span{font-size:11px;letter-spacing:1.4px;color:var(--acc);font-weight:800}
 .side p{margin:0;font-size:12.5px;color:#ded4ca;line-height:1.45}
 .fliptip{font-size:12.5px;color:var(--mut);text-align:center;margin:0 0 14px}
+.more{font-size:12.5px;color:var(--mut);text-align:center;margin:0 0 14px;line-height:1.5}
+.more b{color:var(--gold2)}
 
 /* куб */
 .cube-stage{perspective:900px;height:250px;display:flex;align-items:center;justify-content:center;margin:0 0 8px;touch-action:none}
@@ -236,7 +238,7 @@ body.no-fx{scroll-behavior:auto}
   <section class="hero">
     <h1 id="h1">НЕЙРО-ПАК</h1>
     <p class="sub">ВСЕ ИИ В ОДНОМ ОКНЕ</p>
-    <p class="lead">GPT, Gemini, Grok, Claude и десятки других — <b>без подписок и оплат</b></p>
+    <p class="lead">GPT, Gemini, Grok, Claude, Qwen, DeepSeek, Llama, Mistral и десятки других — <b>без подписок и оплат</b></p>
 
     <div class="phone-wrap">
       <div class="phone" id="phone">
@@ -266,7 +268,8 @@ body.no-fx{scroll-behavior:auto}
     <p class="eyebrow">ШАГ 01</p>
     <h2><span class="num">01</span>Открываем площадку</h2>
     <div class="card">
-      <p>Заходишь на <b>arena.ai</b> с любого телефона. Регистрироваться не нужно — открывается сразу рабочее окно с полем ввода.</p>
+      <p>Заходишь на <b>arena.ai</b> с любого устройства — телефон, планшет или компьютер. Нужен только браузер: ничего скачивать и устанавливать не надо.</p>
+      <p>Регистрироваться не нужно — открывается сразу рабочее окно с полем ввода. Один и тот же аккаунт-окно работает где угодно: начал на телефоне, продолжил на ПК.</p>
       <p>Сверху видно приветствие и кнопку с моделью: она показывает, кто сейчас будет отвечать. Если там стоит <b>Max</b> — всё готово, можно писать запрос.</p>
     </div>
   </section>
@@ -336,7 +339,8 @@ body.no-fx{scroll-behavior:auto}
     <p class="eyebrow">ШАГ 04</p>
     <h2><span class="num">04</span>Выбор модели под задачу</h2>
     <div class="card">
-      <p>Если нужен предсказуемый результат, бери модель конкретно, а не роутер. В списке видно всё семейство: GPT, Gemini, Grok, Qwen и другие — каждая со своими сильными сторонами.</p>
+      <p>Если нужен предсказуемый результат, бери модель конкретно, а не роутер. В списке видно всё семейство: GPT, Gemini, Grok, Claude, Qwen, DeepSeek, Llama, Mistral — и многие другие. У каждой свои сильные стороны.</p>
+      <p class="muted">Список моделей живой: его обновляют и пополняют, поэтому новые там появляются чаще, чем ты успеваешь их запомнить.</p>
     </div>
 
     <div class="shot">
@@ -364,7 +368,16 @@ body.no-fx{scroll-behavior:auto}
         <div class="side front"><span>ДЛИННЫЕ ТЕКСТЫ</span><h5>Claude</h5><p>Много текста без потери смысла.</p></div>
         <div class="side back"><h5>Бери для</h5><p>Статей, описаний товаров, правок и переписывания текста.</p></div>
       </div></div>
+      <div class="flip"><div class="in">
+        <div class="side front"><span>МАТЕМАТИКА И КОД</span><h5>DeepSeek</h5><p>Счёт, логика, программирование.</p></div>
+        <div class="side back"><h5>Бери для</h5><p>Задач по математике, скриптов и разбора ошибок в коде.</p></div>
+      </div></div>
+      <div class="flip"><div class="in">
+        <div class="side front"><span>МНОГО ЯЗЫКОВ</span><h5>Qwen</h5><p>Переводы и азиатские языки.</p></div>
+        <div class="side back"><h5>Бери для</h5><p>Перевода, работы с китайскими сервисами и разбора документации.</p></div>
+      </div></div>
     </div>
+    <p class="more">…а ещё <b>Llama</b>, <b>Mistral</b>, <b>Gemma</b> и десятки других — полный список всегда внутри площадки</p>
   </section>
 
   <section class="step rv" id="s5">
@@ -380,6 +393,7 @@ body.no-fx{scroll-behavior:auto}
         <li><b>Идеи</b> — планы, названия, варианты дизайна.</li>
         <li><b>Учёба</b> — конспекты, объяснения простыми словами.</li>
       </ul>
+      <p class="muted">И это не только с телефона: на компьютере в браузере открывается то же самое окно, только удобнее печатать.</p>
     </div>
   </section>
 
@@ -519,7 +533,7 @@ body.no-fx{scroll-behavior:auto}
   /* куб: вращение пальцем + авто */
   var cube = document.getElementById('cube'), stage = document.getElementById('stage');
   if (cube && stage){
-    var rx = -18, ry = 24, dragging = false, lx = 0, ly = 0, idle = 0;
+    var rx = -18, ry = 24, dragging = false, lx = 0, ly = 0;
     stage.addEventListener('pointerdown', function(e){
       dragging = true; lx = e.clientX; ly = e.clientY; stage.setPointerCapture(e.pointerId);
     });
