@@ -2,164 +2,249 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="referrer" content="no-referrer">
 <title>Снятие спамблока в Telegram · Nagibatorz</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#0a0a0c;--card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.07);
-    --line:rgba(255,255,255,.1);--orange:#ff7a18;--orange2:#ffb347;
-    --green:#37c97a;--text:#edeff2;--muted:#9aa0aa;
+    --bg:#0a0806;--card:rgba(255,255,255,.04);--line:rgba(255,168,80,.16);
+    --acc:#ff8a2b;--acc2:#ffb347;--gold:#f5b544;--green:#37c97a;
+    --txt:#f3ece4;--mut:#a2958a;
+    --disp:"Arial Black","Segoe UI",Roboto,system-ui,sans-serif;
   }
   html{scroll-behavior:smooth}
   body{
-    background:var(--bg);color:var(--text);line-height:1.65;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background:var(--bg);color:var(--txt);line-height:1.66;overflow-x:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
   }
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background:
-      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
-      radial-gradient(700px 420px at 96% 6%, rgba(55,201,122,.12), transparent 60%),
-      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
+      radial-gradient(900px 520px at 10% -10%, rgba(255,138,43,.20), transparent 62%),
+      radial-gradient(720px 460px at 95% 8%, rgba(255,177,71,.10), transparent 60%),
+      radial-gradient(820px 520px at 50% 106%, rgba(255,120,20,.09), transparent 62%);
   }
-  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
-  .hero{padding:48px 0 34px;text-align:center;border-bottom:1px solid var(--line);margin-bottom:34px}
-  .hero .tag{
-    display:inline-block;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
-    color:var(--orange2);border:1px solid rgba(255,122,24,.35);background:rgba(255,122,24,.08);
-    border-radius:100px;padding:6px 16px;margin-bottom:20px;
-  }
-  .hero h1{
-    font-size:clamp(28px,7.5vw,48px);line-height:1.12;font-weight:900;letter-spacing:-.5px;
-    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
+  .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 16px 90px}
+
+  /* прогресс */
+  #bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;
+    background:linear-gradient(90deg,#ff8a2b,#ffd28a);box-shadow:0 0 14px rgba(255,138,43,.7)}
+
+  /* верхняя панель */
+  .topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;margin:0 -16px 0;background:rgba(10,8,6,.86);
+    backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,168,80,.14)}
+  .brand{font-size:16px;font-weight:900;letter-spacing:-.2px}
+  .brand span{color:var(--acc)}
+  .pill{font-size:11.5px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;
+    color:#1a0f05;padding:8px 14px;border-radius:100px;white-space:nowrap;
+    background:linear-gradient(160deg,#ffc074,#ff8a2b 55%,#e06f14);
+    box-shadow:0 0 0 1px rgba(255,196,120,.5),0 8px 22px rgba(255,120,20,.32)}
+
+  /* герой */
+  .hero{text-align:center;padding:30px 0 8px}
+  .kicker{font-size:11.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--acc);
+    font-weight:900;margin-bottom:12px}
+  h1{font-family:var(--disp);font-weight:900;line-height:1.02;letter-spacing:-1.2px;
+    font-size:clamp(31px,10vw,54px);text-transform:uppercase;
+    background:linear-gradient(180deg,#fff 0%,#ffe0bd 42%,#ff8a2b 92%);
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
+    filter:drop-shadow(0 6px 26px rgba(255,120,20,.35))}
+  .sub{color:var(--mut);font-size:15px;margin-top:12px}
+
+  /* 3D телефон */
+  .phone-wrap{display:flex;justify-content:center;margin:26px 0 10px;perspective:1100px}
+  .phone{
+    position:relative;width:min(280px,72vw);padding:9px;border-radius:38px;
+    transform-style:preserve-3d;transition:transform .12s linear;
+    background:linear-gradient(160deg,#3a2a1c,#171009 42%,#2c1f14 78%,#5a3d22);
+    box-shadow:0 0 0 1px rgba(255,196,120,.35),0 0 46px rgba(255,120,20,.30),
+               0 26px 54px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,220,170,.35);
   }
-  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
-  .note{
-    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
-    border:1px solid rgba(255,122,24,.28);border-radius:16px;padding:16px 18px;
-    font-size:14.5px;margin-bottom:26px;color:#f3e3d6;
-  }
-  .note b{color:var(--orange2)}
-  .step{
-    background:var(--card);border:1px solid var(--line);border-radius:18px;
-    padding:20px 20px 22px;margin-bottom:14px;backdrop-filter:blur(10px);scroll-margin-top:18px;
-  }
-  .step h3{
-    font-size:17.5px;font-weight:800;margin-bottom:12px;display:flex;gap:11px;
-    align-items:flex-start;letter-spacing:-.2px;
-  }
-  .num{
-    flex:0 0 28px;height:28px;display:grid;place-items:center;border-radius:9px;
-    background:linear-gradient(150deg,var(--orange),#d95a00);color:#fff;
-    font-size:13.5px;font-weight:900;box-shadow:0 4px 14px rgba(255,122,24,.35);
-  }
-  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
-  .step p:last-child{margin-bottom:0}
-  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
-  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
-  .step li::marker{color:var(--orange)}
-  kbd{
-    display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
-    border-bottom-width:2px;border-radius:6px;padding:1px 7px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#fff;white-space:nowrap;
-  }
-  code{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
-    background:rgba(255,122,24,.12);color:var(--orange2);padding:2px 7px;border-radius:6px;
-  }
-  .copyblock{
-    background:rgba(0,0,0,.45);border:1px solid var(--line);border-radius:12px;
-    padding:14px 16px;margin:12px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12.8px;line-height:1.7;color:#ffcf9a;white-space:pre-wrap;
-  }
-  .warn{
-    background:rgba(255,60,60,.09);border:1px solid rgba(255,80,80,.32);
-    border-left:3px solid #ff4d4d;border-radius:12px;padding:13px 16px;margin:14px 0 0;
-    font-size:14px;color:#ffc9c9;
-  }
-  .warn b{color:#ff8f8f}
-  .tip{
-    background:rgba(70,200,120,.08);border:1px solid rgba(70,200,120,.25);
-    border-left:3px solid var(--green);border-radius:12px;padding:13px 16px;margin:14px 0 0;
-    font-size:14px;color:#c3f0d8;
-  }
+  .phone::after{content:"";position:absolute;inset:0;border-radius:38px;pointer-events:none;
+    background:linear-gradient(125deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,0) 26%,rgba(255,255,255,0) 74%,rgba(255,255,255,.09) 100%)}
+  .notch{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:88px;height:22px;
+    border-radius:100px;background:#070504;z-index:3;box-shadow:inset 0 1px 3px rgba(0,0,0,.9)}
+  .screen{position:relative;border-radius:31px;overflow:hidden;background:#1b1e24;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.7)}
+
+  /* макет чата Telegram */
+  .tg-top{display:flex;align-items:center;gap:9px;padding:20px 12px 10px;
+    background:linear-gradient(180deg,#232830,#1b1e24);border-bottom:1px solid rgba(255,255,255,.06)}
+  .tg-av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:15px;
+    background:linear-gradient(150deg,#ffb347,#ff7a18);box-shadow:0 3px 10px rgba(255,120,20,.4)}
+  .tg-name{font-size:12.5px;font-weight:800;color:#eef1f5;line-height:1.2}
+  .tg-sub{font-size:10px;color:#8b93a1}
+  .tg-chat{padding:12px 10px 16px;display:flex;flex-direction:column;gap:7px;min-height:250px;
+    background:
+      radial-gradient(340px 200px at 80% 0%, rgba(255,138,43,.10), transparent 70%),
+      #171a20}
+  .msg{font-size:10.8px;line-height:1.42;padding:8px 10px;border-radius:12px;max-width:88%}
+  .msg.in{background:#272c34;color:#e6eaf0;border-bottom-left-radius:4px;align-self:flex-start}
+  .msg.out{background:linear-gradient(150deg,#3f7bd8,#2f63b8);color:#fff;
+    border-bottom-right-radius:4px;align-self:flex-end}
+  .msg.ok{background:rgba(55,201,122,.16);border:1px solid rgba(55,201,122,.4);
+    color:#b9f2d3;align-self:flex-start}
+  .msg b{color:#ffd0a1}
+
+  .caption{text-align:center;color:var(--mut);font-size:12.5px;margin:0 0 24px}
+
+  /* карточки */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:20px;margin-bottom:14px;backdrop-filter:blur(10px);
+    box-shadow:0 12px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,220,180,.06)}
+  .card h3{font-size:17.5px;font-weight:900;letter-spacing:-.2px;margin-bottom:12px;
+    display:flex;gap:11px;align-items:flex-start;line-height:1.3}
+  .num{flex:0 0 30px;height:30px;display:grid;place-items:center;border-radius:9px;
+    background:linear-gradient(160deg,#ffc074,#ff8a2b 55%,#d9670f);color:#20120a;
+    font-family:var(--disp);font-size:14px;font-weight:900;
+    box-shadow:0 4px 14px rgba(255,120,20,.34),inset 0 1px 0 rgba(255,240,220,.6)}
+  .card p{font-size:15px;color:#d6ccc2;margin-bottom:10px}
+  .card p:last-child{margin-bottom:0}
+  .card ul,.card ol{margin:10px 0 0 4px;padding-left:19px}
+  .card li{font-size:15px;color:#d6ccc2;margin-bottom:7px}
+  .card li::marker{color:var(--acc)}
+
+  .step-tag{font-size:11px;letter-spacing:2.2px;text-transform:uppercase;color:var(--acc);
+    font-weight:900;margin:26px 0 10px}
+
+  code{font-family:ui-monospace,Menlo,monospace;font-size:12.8px;background:rgba(255,138,43,.14);
+    color:#ffcf9a;padding:2px 7px;border-radius:6px;white-space:nowrap}
+
+  /* блок с текстом обращения */
+  .copyblock{background:rgba(0,0,0,.52);border:1px solid var(--line);border-radius:13px;
+    padding:15px 16px;margin:12px 0;font-family:ui-monospace,Menlo,monospace;
+    font-size:12.8px;line-height:1.72;color:#ffcf9a;white-space:pre-wrap}
+  .copybtn{display:block;width:100%;margin-top:10px;padding:13px;border:none;border-radius:12px;
+    font-size:14.5px;font-weight:900;color:#20120a;cursor:pointer;
+    background:linear-gradient(160deg,#ffc074,#ff8a2b 58%,#e06f14);
+    box-shadow:0 8px 22px rgba(255,120,20,.30),inset 0 1px 0 rgba(255,245,230,.55);
+    transition:.15s}
+  .copybtn:active{transform:scale(.98)}
+  .copybtn.done{background:linear-gradient(160deg,#6ee6a4,#37c97a 60%,#1f9a58);color:#062514}
+
+  .tip{background:rgba(55,201,122,.09);border:1px solid rgba(55,201,122,.28);
+    border-left:3px solid var(--green);border-radius:12px;padding:13px 16px;margin:13px 0 0;
+    font-size:14px;color:#c3f0d8}
   .tip b{color:#8ef0bb}
-  .bonus{
-    margin-top:56px;background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
-    border:1px solid rgba(255,122,24,.35);border-radius:22px;padding:28px 24px;
-    text-align:center;scroll-margin-top:18px;
-  }
-  .bonus h2{
-    font-size:24px;font-weight:900;margin-bottom:10px;
-    background:linear-gradient(90deg,#fff,var(--orange2));
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  }
-  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
-  .btn{
-    display:inline-block;background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;text-decoration:none;font-weight:800;font-size:15.5px;
-    padding:15px 34px;border-radius:14px;box-shadow:0 10px 30px rgba(255,122,24,.35);
-    transition:.18s;
-  }
-  .btn:active{transform:scale(.97)}
-  footer{
-    margin-top:54px;padding-top:26px;border-top:1px solid var(--line);
-    text-align:center;color:var(--muted);font-size:13.5px;
-  }
-  footer b{color:var(--text)}
-  .top{
-    position:fixed;right:16px;bottom:18px;width:46px;height:46px;border-radius:50%;
-    background:rgba(255,122,24,.9);color:#fff;border:none;font-size:19px;
-    display:grid;place-items:center;box-shadow:0 8px 24px rgba(255,122,24,.4);
-    cursor:pointer;opacity:0;pointer-events:none;transition:.25s;z-index:50;
-  }
+  .warn{background:rgba(255,70,70,.09);border:1px solid rgba(255,90,90,.32);
+    border-left:3px solid #ff4d4d;border-radius:12px;padding:13px 16px;margin:14px 0 0;
+    font-size:14px;color:#ffc9c9}
+  .warn b{color:#ff9a9a}
+
+  /* промо магазина */
+  .promo{margin-top:44px;padding:26px 22px;border-radius:24px;text-align:center;
+    background:linear-gradient(150deg,rgba(255,138,43,.20),rgba(255,138,43,.04) 55%,rgba(255,177,71,.10));
+    border:1px solid rgba(255,168,80,.34);
+    box-shadow:0 20px 50px rgba(255,110,10,.16),inset 0 1px 0 rgba(255,220,180,.18)}
+  .promo-kicker{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--acc2);
+    font-weight:900;margin-bottom:10px}
+  .promo h2{font-family:var(--disp);font-size:clamp(22px,6vw,30px);text-transform:uppercase;
+    letter-spacing:-.6px;line-height:1.1;margin-bottom:12px;
+    background:linear-gradient(90deg,#fff,#ffd5a4);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .promo p{font-size:14.5px;color:#f0ddd0;margin-bottom:16px}
+  .promo-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0 0 20px;
+    text-align:left;max-width:330px;margin-left:auto;margin-right:auto}
+  .promo-list li{font-size:14px;color:#f0ddd0;display:flex;gap:9px;align-items:flex-start}
+  .promo-list li::before{content:"●";color:var(--acc);font-size:9px;line-height:1.9}
+  .promo-btn{display:block;max-width:330px;margin:0 auto;padding:16px 24px;border-radius:15px;
+    text-decoration:none;font-size:16px;font-weight:900;color:#20120a;
+    background:linear-gradient(160deg,#ffc978,#ff8a2b 55%,#df6d12);
+    box-shadow:0 12px 30px rgba(255,120,20,.36),inset 0 1px 0 rgba(255,245,230,.6);
+    transition:.16s}
+  .promo-btn:active{transform:scale(.98)}
+  .promo-note{margin-top:12px;font-size:11.5px;color:#c8a68e;letter-spacing:.4px}
+
+  footer{margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,168,80,.14);
+    text-align:center;color:var(--mut);font-size:13px}
+  footer b{color:var(--txt)}
+
+  .top{position:fixed;right:16px;bottom:20px;width:48px;height:48px;border-radius:50%;
+    border:none;display:grid;place-items:center;font-size:19px;color:#20120a;cursor:pointer;
+    background:linear-gradient(160deg,#ffc074,#ff8a2b);z-index:70;
+    box-shadow:0 10px 26px rgba(255,120,20,.42),inset 0 1px 0 rgba(255,245,230,.6);
+    opacity:0;pointer-events:none;transition:.22s}
   .top.show{opacity:1;pointer-events:auto}
+
+  body.no-fx .phone{transform:none!important}
+
   @media(max-width:430px){
-    .wrap{padding:0 14px 84px}
-    .hero{padding:34px 0 26px}
-    .step{padding:17px 15px 19px;border-radius:16px}
-    .step h3{font-size:16.5px}
-    .step p,.step li{font-size:14.5px}
+    .wrap{padding:0 13px 84px}
+    .card{padding:17px 15px;border-radius:16px}
+    .card h3{font-size:16.5px}
+    .card p,.card li{font-size:14.5px}
     .copyblock{font-size:12px}
+    .topbar{padding:11px 13px;margin:0 -13px}
+    .brand{font-size:14.5px}
+    .pill{font-size:10.5px;padding:7px 11px}
   }
 </style>
 </head>
 <body>
+<div id="bar"></div>
+
 <div class="wrap">
-
-  <div class="hero">
-    <div class="tag">Nagibatorz · гайд</div>
-    <h1>Снятие спамблока<br>в Telegram</h1>
-    <p>Пошаговая инструкция через официального бота @spambot</p>
+  <div class="topbar">
+    <div class="brand">Nagibatorz · <span>гайд</span></div>
+    <div class="pill">Спамблок</div>
   </div>
 
-  <div class="note">
-    <b>Проверено на себе:</b> этот способ снял ограничение с реального аккаунта. Но решение всегда принимает Telegram — инструкция повышает шанс, а не гарантирует результат. Проходи шаги по порядку, ничего не пропускай.
+  <section class="hero">
+    <div class="kicker">Telegram · ограничения</div>
+    <h1>Снятие<br>спамблока</h1>
+    <p class="sub">Пошагово через официального бота <b>@spambot</b></p>
+
+    <div class="phone-wrap">
+      <div class="phone" id="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="tg-top">
+            <div class="tg-av">🤖</div>
+            <div>
+              <div class="tg-name">Spam Info Bot</div>
+              <div class="tg-sub">bot · официальный</div>
+            </div>
+          </div>
+          <div class="tg-chat">
+            <div class="msg in">Ваш аккаунт ограничен. Хотите подать апелляцию?</div>
+            <div class="msg out">This is a mistake</div>
+            <div class="msg in">Отправляли ли вы массовые сообщения или ссылки недавно?</div>
+            <div class="msg out">No, nothing like this happened</div>
+            <div class="msg ok"><b>Ваш аккаунт свободен</b> от каких-либо ограничений</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="caption">Так выглядит диалог с ботом — от апелляции до снятия</p>
+  </section>
+
+  <div class="card">
+    <p><b>Проверено на себе:</b> этот способ снял ограничение с реального аккаунта. Но решение всегда принимает Telegram — инструкция повышает шанс, а не гарантирует результат. Проходи шаги по порядку и ничего не пропускай.</p>
   </div>
 
-  <div class="step">
+  <div class="step-tag">Шаг 01</div>
+  <div class="card">
     <h3><span class="num">1</span> Запускаем официального бота</h3>
-    <p>Открой Telegram → в поиске введи <code>@spambot</code> → нажми <b>Start</b>, чтобы начать диалог.</p>
-    <div class="tip">Убедись, что открылся именно <b>@spambot</b> с галочкой или статусом официального бота. Похожие имена — подделки.</div>
+    <p>Открой Telegram → в поиске введи <code>@spambot</code> → нажми <b>Start</b>.</p>
+    <div class="tip">Убедись, что открылся именно <b>@spambot</b> со статусом официального бота. Похожие имена — подделки.</div>
   </div>
 
-  <div class="step">
-    <h3><span class="num">2</span> Проверяем, есть ли ограничения</h3>
-    <p>Бот сразу покажет текущий статус аккаунта. Вариантов два:</p>
+  <div class="step-tag">Шаг 02</div>
+  <div class="card">
+    <h3><span class="num">2</span> Проверяем ограничения</h3>
+    <p>Бот сразу покажет статус аккаунта:</p>
     <ul>
-      <li>«Ваш аккаунт ограничен…» — блок есть, продолжаем</li>
+      <li>«Ваш аккаунт ограничен…» — блок есть, идём дальше</li>
       <li>«Ваш аккаунт свободен от ограничений» — всё чисто, инструкция не нужна</li>
     </ul>
-    <p><b>Если блок есть — идём дальше.</b></p>
   </div>
 
-  <div class="step">
+  <div class="step-tag">Шаг 03</div>
+  <div class="card">
     <h3><span class="num">3</span> Проходим опрос внутри бота</h3>
     <p>Отвечай строго в таком порядке:</p>
     <ol>
@@ -170,35 +255,40 @@
     <p>После этого бот предложит отправить пояснение.</p>
   </div>
 
-  <div class="step">
+  <div class="step-tag">Шаг 04</div>
+  <div class="card">
     <h3><span class="num">4</span> Отправляем обращение</h3>
-    <p>Скопируй этот текст целиком и отправь боту:</p>
-    <div class="copyblock">Hello Telegram Support!
+    <p>Скопируй текст целиком и отправь боту:</p>
+    <div class="copyblock" id="text">Hello Telegram Support!
 
 My account seems to be restricted by mistake. I haven't been active in public groups or sent mass messages recently. Please review my account and remove any restrictions if possible. Thank you!</div>
-    <p>Текст вежливый, без ошибок и короткий — именно такое обращение читают до конца и рассматривают по существу.</p>
+    <button class="copybtn" id="copy">Скопировать текст</button>
+    <p style="margin-top:12px">Текст вежливый, без ошибок и короткий — именно такое обращение читают до конца и рассматривают по существу.</p>
   </div>
 
-  <div class="step">
+  <div class="step-tag">Шаг 05</div>
+  <div class="card">
     <h3><span class="num">5</span> Ждём обновления статуса</h3>
     <p>Обычно ответ приходит в течение <b>24 часов</b>. Через сутки снова напиши <code>/start</code> боту <code>@spambot</code> и проверь статус.</p>
-    <div class="tip"><b>Статус «Ваш аккаунт свободен от каких-либо ограничений»</b> — готово, спамблок снят.</div>
+    <div class="tip"><b>«Ваш аккаунт свободен от каких-либо ограничений»</b> — готово, спамблок снят.</div>
   </div>
 
-  <div class="step">
+  <div class="step-tag">Шаг 06</div>
+  <div class="card">
     <h3><span class="num">6</span> Если ограничения остались</h3>
-    <p>Это не значит, что способ не сработал. Telegram иногда снимает ограничения только через несколько недель.</p>
+    <p>Это не значит, что способ не сработал — Telegram иногда снимает ограничения только через несколько недель.</p>
     <ul>
       <li>Повторить обращение можно через <b>1–3 месяца</b>, не раньше</li>
       <li>Частые обращения снижают шанс на положительный ответ</li>
-      <li>До повторной попытки не отправляй массовые сообщения, не вступай в сотни групп, не используй рекламу и спам</li>
+      <li>До повторной попытки не отправляй массовые сообщения и не вступай в сотни групп</li>
     </ul>
   </div>
 
-  <div class="step">
-    <h3><span class="num">!</span> Что важно понимать</h3>
-    <p><b>1. Решение принимает Telegram.</b> Ни одна инструкция не гарантирует 100% снятие — но правильный запрос сильно повышает шанс.</p>
-    <p><b>2. Причину блокировки не сообщают.</b> Даже если ты уверен, что «ничего не делал», ограничение могло прилететь за:</p>
+  <div class="step-tag">Важно понимать</div>
+  <div class="card">
+    <h3><span class="num">!</span> Что нужно знать</h3>
+    <p><b>1. Решение принимает Telegram.</b> Ни одна инструкция не даёт 100% снятия — но правильный запрос сильно повышает шанс.</p>
+    <p><b>2. Причину блокировки не сообщают.</b> Даже если ты уверен, что «ничего не делал», ограничение могло прийти за:</p>
     <ul>
       <li>частые одинаковые сообщения</li>
       <li>подозрительные ссылки</li>
@@ -206,33 +296,72 @@ My account seems to be restricted by mistake. I haven't been active in public gr
       <li>пересылки и подозрительную активность</li>
     </ul>
     <p><b>3. Не спамь в поддержку.</b> Многократные попытки ухудшают доверие к аккаунту.</p>
-    <p><b>4. После снятия не нарушай правила.</b> Иначе блок вернётся, и иногда уже навсегда.</p>
-    <div class="warn">⚠️ <b>Не покупай «разбан» у третьих лиц и не вводи данные аккаунта на сторонних сайтах.</b> Официальный путь один — бот <code>@spambot</code> внутри самого Telegram.</div>
+    <p><b>4. После снятия не нарушай правила</b> — иначе блок вернётся, иногда уже навсегда.</p>
+    <div class="warn"><b>Не покупай «разбан» у третьих лиц</b> и не вводи данные аккаунта на сторонних сайтах. Официальный путь один — бот <code>@spambot</code> внутри самого Telegram.</div>
   </div>
 
-  <div class="bonus">
-    <h2>🎁 Подарок к покупке</h2>
-    <p>В чате Playerok тебя ждёт набор дополнительных материалов.</p>
-    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Забрать подарок</a>
-  </div>
+  <section class="promo">
+    <div class="promo-kicker">Мой магазин</div>
+    <h2>Ещё больше полезного</h2>
+    <p>Гайды по Standoff 2, настройки, фарм, графика и прицелы — всё в одном месте.</p>
+    <ul class="promo-list">
+      <li>Проверенные гайды и настройки</li>
+      <li>Авто-выдача сразу после оплаты</li>
+      <li>Отвечаю на вопросы в чате</li>
+    </ul>
+    <a class="promo-btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener noreferrer">Перейти в магазин →</a>
+    <div class="promo-note">playerok.com/profile/Nagibatorz</div>
+  </section>
 
   <footer>
-    Гайд <b>Nagibatorz</b> · инструкция по снятию ограничений Telegram<br>
-    Telegram самостоятельно принимает решение по каждому аккаунту
+    Гайд <b>Nagibatorz</b> · снятие ограничений Telegram<br>
+    Решение по каждому аккаунту Telegram принимает самостоятельно
   </footer>
-
 </div>
 
 <button class="top" id="top" aria-label="Наверх">↑</button>
 <script>
-  var topBtn = document.getElementById('top');
-  window.addEventListener('scroll', function(){
-    if (window.scrollY > 500) topBtn.classList.add('show');
-    else topBtn.classList.remove('show');
+(function(){
+  var bar=document.getElementById('bar'), topBtn=document.getElementById('top');
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?(window.scrollY/h)*100:0)+'%';
+    if(window.scrollY>500){topBtn.classList.add('show')}else{topBtn.classList.remove('show')}
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+  topBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  /* копирование текста обращения */
+  var txt=document.getElementById('text'), btn=document.getElementById('copy');
+  btn.addEventListener('click',function(){
+    var t=txt.innerText;
+    function ok(){btn.textContent='Скопировано ✓';btn.classList.add('done');
+      setTimeout(function(){btn.textContent='Скопировать текст';btn.classList.remove('done')},2200)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(ok).catch(function(){fallback()});
+    }else{fallback()}
+    function fallback(){
+      var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';
+      ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');ok()}catch(e){btn.textContent='Выдели текст вручную'}
+      document.body.removeChild(ta);
+    }
   });
-  topBtn.addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
+
+  /* лёгкий наклон телефона */
+  var phone=document.getElementById('phone'), rx=0, ry=0;
+  function apply(){phone.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)'}
+  window.addEventListener('pointermove',function(e){
+    if(document.body.classList.contains('no-fx'))return;
+    var r=phone.getBoundingClientRect();
+    var dx=(e.clientX-(r.left+r.width/2))/r.width;
+    var dy=(e.clientY-(r.top+r.height/2))/r.height;
+    ry=Math.max(-14,Math.min(14,dx*20));
+    rx=Math.max(-12,Math.min(12,-dy*16));
+    apply();
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
