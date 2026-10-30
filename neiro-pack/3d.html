@@ -175,10 +175,18 @@ h2 .num{
 .more b{color:var(--gold2)}
 
 /* куб */
-.cube-stage{perspective:900px;height:250px;display:flex;align-items:center;justify-content:center;margin:0 0 8px;touch-action:none}
-.cube{position:relative;width:140px;height:140px;transform-style:preserve-3d;transform:rotateX(-18deg) rotateY(24deg);transition:transform .1s linear}
+.cube-stage{
+  perspective:900px;height:250px;display:flex;align-items:center;justify-content:center;
+  margin:0 0 8px;touch-action:none;-ms-touch-action:none;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;
+}
+.cube-stage:active{cursor:grabbing}
+.cube{position:relative;width:140px;height:140px;transform-style:preserve-3d;
+  transform:rotateX(-18deg) rotateY(24deg);transition:transform .1s linear;
+  touch-action:none;pointer-events:none;will-change:transform}
 .face{position:absolute;width:140px;height:140px;border-radius:14px;display:flex;align-items:center;justify-content:center;
   text-align:center;font-weight:900;font-size:14.5px;padding:10px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
   background:linear-gradient(150deg,rgba(255,138,43,.34),rgba(30,16,8,.94));
   border:1px solid rgba(245,181,68,.5);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 24px rgba(255,138,43,.16)}
@@ -210,9 +218,8 @@ footer{text-align:center;color:#6c6158;font-size:12.5px;padding:26px 0 6px}
   box-shadow:0 10px 26px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1);cursor:pointer;
 }
 
-/* отключение эффектов */
-body.no-fx .phone,body.no-fx .cube,body.no-fx h1{transform:none!important}
-body.no-fx .phone .in{transition:none}
+/* отключение эффектов (куб остаётся управляемым) */
+body.no-fx .phone,body.no-fx h1{transform:none!important}
 body.no-fx{scroll-behavior:auto}
 
 /* ревил */
@@ -331,7 +338,7 @@ body.no-fx{scroll-behavior:auto}
     <div class="card">
       <p>Это сердце всего пака. Рядом с выбором модели стоит <b>Max</b> с пометкой Router — он автоматически подбирает модель под твою задачу.</p>
       <p>Просишь код — идёт модель для кода. Просишь разобрать фото — уходит туда, где лучше с изображениями. Тебе не нужно ничего переключать руками.</p>
-      <p class="muted">Проверить, включён ли роутер: открой список моделей, у Max должна стоять зелёная галочка.</p>
+      <p class="muted">Проверить, включён ли роутер: открой список моделей и выбери Max вручную — дальше он работает сам.</p>
     </div>
   </section>
 
@@ -347,7 +354,7 @@ body.no-fx{scroll-behavior:auto}
       <img src="img/Screenshot_20261031-004735.jpg" alt="Список моделей"
            onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <div class="miss" style="display:none">Список моделей<br><code>img/Screenshot_20261031-004735.jpg</code></div>
-      <div class="cap">Список моделей: Max Router выделен галочкой</div>
+      <div class="cap">Список моделей внутри площадки</div>
     </div>
 
     <p class="fliptip">Коснись карточки — перевернётся</p>
@@ -458,7 +465,7 @@ body.no-fx{scroll-behavior:auto}
   var noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var body = document.body;
 
-  /* прогрес чтения */
+  /* прогресс чтения */
   var bar = document.getElementById('bar');
   function prog(){
     var h = document.documentElement.scrollHeight - window.innerHeight;
@@ -476,7 +483,6 @@ body.no-fx{scroll-behavior:auto}
       });
     }, {rootMargin:'0px 0px -8% 0px', threshold:0.06});
     items.forEach(function(el){ io.observe(el); });
-    /* страховка: через 1.5 с показываем всё, что ещё не раскрылось */
     setTimeout(function(){ items.forEach(function(el){ el.classList.add('in'); }); }, 1500);
   } else {
     items.forEach(function(el){ el.classList.add('in'); });
@@ -486,9 +492,8 @@ body.no-fx{scroll-behavior:auto}
   var phone = document.getElementById('phone');
   var baseY = -9, baseX = 7;
   if (phone && !noMotion){
-    var rect = function(){ return phone.getBoundingClientRect(); };
     window.addEventListener('pointermove', function(e){
-      var r = rect();
+      var r = phone.getBoundingClientRect();
       var cx = r.left + r.width/2, cy = r.top + r.height/2;
       var dx = (e.clientX - cx) / (r.width || 1);
       var dy = (e.clientY - cy) / (r.height || 1);
@@ -534,39 +539,81 @@ body.no-fx{scroll-behavior:auto}
   var cube = document.getElementById('cube'), stage = document.getElementById('stage');
   if (cube && stage){
     var rx = -18, ry = 24, dragging = false, lx = 0, ly = 0;
-    stage.addEventListener('pointerdown', function(e){
-      dragging = true; lx = e.clientX; ly = e.clientY; stage.setPointerCapture(e.pointerId);
-    });
-    stage.addEventListener('pointermove', function(e){
-      if (!dragging) return;
-      ry += (e.clientX - lx) * 0.7;
-      rx -= (e.clientY - ly) * 0.7;
-      lx = e.clientX; ly = e.clientY;
-      cube.style.transition = 'none';
-      cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
-    });
-    stage.addEventListener('pointerup', function(){ dragging = false; });
-    stage.addEventListener('pointercancel', function(){ dragging = false; });
 
+    function paint(){
+      cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+    }
+    function down(x, y){
+      dragging = true; lx = x; ly = y;
+      cube.style.transition = 'none';
+    }
+    function move(x, y){
+      if (!dragging) return;
+      ry += (x - lx) * 0.75;
+      rx -= (y - ly) * 0.75;
+      if (rx > 90) rx = 90; if (rx < -90) rx = -90;
+      lx = x; ly = y;
+      paint();
+    }
+    function up(){ dragging = false; }
+
+    /* pointer events */
+    if (window.PointerEvent){
+      stage.addEventListener('pointerdown', function(e){
+        down(e.clientX, e.clientY);
+        try { stage.setPointerCapture(e.pointerId); } catch(_){}
+        e.preventDefault();
+      }, {passive:false});
+      stage.addEventListener('pointermove', function(e){
+        if (!dragging) return;
+        move(e.clientX, e.clientY);
+        e.preventDefault();
+      }, {passive:false});
+      stage.addEventListener('pointerup', up);
+      stage.addEventListener('pointercancel', up);
+      stage.addEventListener('pointerleave', up);
+    }
+
+    /* фолбэк: мышь и касания */
+    stage.addEventListener('mousedown', function(e){ down(e.clientX, e.clientY); e.preventDefault(); });
+    window.addEventListener('mousemove', function(e){ move(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', up);
+
+    stage.addEventListener('touchstart', function(e){
+      if (!e.touches[0]) return;
+      down(e.touches[0].clientX, e.touches[0].clientY);
+      e.preventDefault();
+    }, {passive:false});
+    stage.addEventListener('touchmove', function(e){
+      if (!e.touches[0]) return;
+      move(e.touches[0].clientX, e.touches[0].clientY);
+      e.preventDefault();
+    }, {passive:false});
+    stage.addEventListener('touchend', up, {passive:true});
+    stage.addEventListener('touchcancel', up, {passive:true});
+
+    /* авто-вращение, когда не трогают */
     if (!noMotion){
       setInterval(function(){
         if (dragging || body.classList.contains('no-fx')) return;
-        ry += 0.35;
-        cube.style.transition = 'transform .1s linear';
-        cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
-      }, 40);
+        ry += 0.4;
+        cube.style.transition = 'transform .12s linear';
+        paint();
+      }, 50);
     }
   }
 
   /* переключатель эффектов */
   var fx = document.getElementById('fx');
-  fx.addEventListener('click', function(){
-    body.classList.toggle('no-fx');
-    var off = body.classList.contains('no-fx');
-    fx.textContent = off ? '3D: выкл' : '3D: вкл';
-    if (off && phone) phone.style.transform = 'none';
-  });
-  if (noMotion && fx) { fx.textContent = '3D: выкл'; body.classList.add('no-fx'); }
+  if (fx){
+    fx.addEventListener('click', function(){
+      body.classList.toggle('no-fx');
+      var off = body.classList.contains('no-fx');
+      fx.textContent = off ? '3D: выкл' : '3D: вкл';
+      if (off && phone) phone.style.transform = 'none';
+    });
+    if (noMotion){ fx.textContent = '3D: выкл'; body.classList.add('no-fx'); }
+  }
 
   /* лёгкий параллакс фона */
   if (!noMotion){
