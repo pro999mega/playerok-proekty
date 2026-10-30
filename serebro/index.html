@@ -38,11 +38,13 @@
   }
   .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
 
+  .prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--orange2));box-shadow:0 0 14px rgba(255,122,24,.85);z-index:100;transition:width .1s linear}
+
   .hero{
-    padding:48px 0 34px;
+    padding:40px 0 30px;
     text-align:center;
     border-bottom:1px solid var(--line);
-    margin-bottom:34px;
+    margin-bottom:32px;
   }
   .hero .tag{
     display:inline-block;
@@ -65,13 +67,67 @@
   }
   .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
 
+  /* ---------- 3D телефон ---------- */
+  .stage{perspective:1100px;display:flex;justify-content:center;margin:26px 0 6px}
+  .phone{
+    position:relative;width:min(282px,74vw);
+    padding:9px;border-radius:40px;
+    background:linear-gradient(160deg,#33261a,#120d09 42%,#2a1e13);
+    border:1px solid rgba(255,170,90,.3);
+    box-shadow:0 34px 80px rgba(0,0,0,.7),0 0 70px rgba(255,122,24,.2),inset 0 1px 0 rgba(255,255,255,.14);
+    transform-style:preserve-3d;will-change:transform;
+    transition:transform .16s ease-out;
+  }
+  .phone::after{
+    content:"";position:absolute;inset:0;border-radius:40px;pointer-events:none;
+    background:linear-gradient(125deg,rgba(255,255,255,.18),rgba(255,255,255,0) 36%,rgba(255,255,255,0) 68%,rgba(255,255,255,.09));
+  }
+  .notch{position:absolute;left:50%;top:15px;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#07070a;z-index:3;border:1px solid rgba(255,255,255,.07)}
+  .screen{
+    position:relative;border-radius:31px;overflow:hidden;
+    background:linear-gradient(180deg,#171218,#0a080c 62%);
+    padding:34px 16px 20px;
+  }
+  .scr-top{text-align:center;font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;color:#8e8478;font-weight:800}
+  .scr-big{
+    text-align:center;margin-top:10px;font-size:44px;font-weight:900;line-height:1;letter-spacing:-1px;
+    background:linear-gradient(180deg,#fff,#ffb347);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 18px rgba(255,140,30,.5));
+  }
+  .scr-sub{text-align:center;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:#9a8f80;margin-top:4px}
+  .scr-bars{margin:18px 0 4px;display:grid;gap:9px}
+  .scr-bar{height:7px;border-radius:100px;background:rgba(255,255,255,.07);overflow:hidden}
+  .scr-bar i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--orange),var(--orange2));box-shadow:0 0 12px rgba(255,140,30,.6)}
+  .scr-lab{display:flex;justify-content:space-between;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:#7d746a;margin-bottom:2px}
+  .scr-btn{
+    margin-top:16px;text-align:center;font-size:11px;font-weight:900;letter-spacing:1.8px;color:#241304;
+    padding:12px;border-radius:12px;background:linear-gradient(150deg,#ffd9a4,var(--orange));
+    box-shadow:0 8px 22px rgba(255,122,24,.45);
+    animation:pulseBtn 2.6s ease-in-out infinite;
+  }
+  @keyframes pulseBtn{0%,100%{box-shadow:0 8px 22px rgba(255,122,24,.35)}50%{box-shadow:0 10px 34px rgba(255,150,40,.7)}}
+  .stage-cap{text-align:center;font-size:12.5px;color:#7b8089;margin:14px 0 0}
+
+  .mets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 0;perspective:900px}
+  .met{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:15px 8px;text-align:center;transform-style:preserve-3d;
+    transition:transform .18s ease-out;will-change:transform;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .met b{
+    display:block;font-size:19px;font-weight:900;letter-spacing:-.3px;
+    background:linear-gradient(180deg,#fff,var(--orange2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .met span{display:block;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
   .note{
     background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
     border:1px solid rgba(255,122,24,.28);
     border-radius:16px;
     padding:16px 18px;
     font-size:14.5px;
-    margin-bottom:26px;
+    margin:26px 0;
     color:#f3e3d6;
   }
   .note b{color:var(--orange2)}
@@ -236,32 +292,143 @@
   .tbl tr:last-child td{border-bottom:none}
   .tbl td:first-child{font-weight:600;color:#fff}
 
-  .bonus{
-    margin-top:56px;
-    background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
-    border:1px solid rgba(255,122,24,.35);
-    border-radius:22px;
-    padding:28px 24px;
-    text-align:center;
-    scroll-margin-top:18px;
+  /* ---------- калькулятор ---------- */
+  .calc-wrap{margin:56px 0 0;perspective:1200px}
+  .calc{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg,rgba(255,122,24,.14),rgba(255,255,255,.035) 42%,rgba(255,255,255,.02));
+    border:1px solid rgba(255,168,80,.3);
+    border-radius:24px;padding:26px 22px 24px;
+    box-shadow:0 26px 66px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.1);
+    transform-style:preserve-3d;transition:transform .18s ease-out;will-change:transform;
   }
-  .bonus h2{
-    font-size:24px;font-weight:900;margin-bottom:10px;
-    background:linear-gradient(90deg,#fff,var(--orange2));
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
+  .calc::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,200,140,.8),transparent);
   }
-  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
-  .btn{
-    display:inline-block;
-    background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;text-decoration:none;
-    font-weight:800;font-size:15.5px;
-    padding:15px 34px;border-radius:14px;
-    box-shadow:0 10px 30px rgba(255,122,24,.35);
-    transition:.18s;
+  .kicker{font-size:11.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--orange2);font-weight:800;text-align:center}
+  .calc h2{
+    font-size:clamp(20px,5vw,26px);font-weight:900;letter-spacing:-.4px;text-align:center;margin-top:8px;
+    background:linear-gradient(180deg,#fff,#ffd0a0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   }
-  .btn:active{transform:scale(.97)}
+  .calc-sub{text-align:center;font-size:13.5px;color:var(--muted);margin-top:8px}
+  .calc-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:20px;font-size:14px;color:#cfd4db}
+  .calc-row b{font-size:22px;font-weight:900;color:#fff}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:40px;background:transparent;margin-top:2px;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:8px;border-radius:100px;
+    background:linear-gradient(90deg,rgba(255,122,24,.85),rgba(255,180,70,.5) var(--p,50%),rgba(255,255,255,.1) var(--p,50%));
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;margin-top:-9px;
+    background:linear-gradient(160deg,#ffe0b8,var(--orange));
+    border:2px solid #2a1a0e;
+    box-shadow:0 4px 16px rgba(255,122,24,.6);
+  }
+  input[type=range]::-moz-range-track{height:8px;border-radius:100px;background:rgba(255,255,255,.12)}
+  input[type=range]::-moz-range-progress{height:8px;border-radius:100px;background:linear-gradient(90deg,var(--orange),var(--orange2))}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #2a1a0e;border-radius:50%;background:linear-gradient(160deg,#ffe0b8,var(--orange))}
+  .calc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  .calc-out>div{
+    background:rgba(0,0,0,.34);border:1px solid var(--line);border-radius:16px;padding:16px 10px;text-align:center;
+  }
+  .calc-big{font-size:24px;font-weight:900;color:#fff;letter-spacing:-.5px}
+  .calc-big.acc{
+    background:linear-gradient(180deg,#fff,var(--orange2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .calc-lbl{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .calc-hint{margin-top:16px;font-size:12.5px;color:var(--muted);text-align:center;line-height:1.55}
+
+  /* ---------- премиальная карточка магазина ---------- */
+  .promo-wrap{position:relative;margin-top:58px;perspective:1200px}
+  .promo-glow{
+    position:absolute;inset:-50px -14px -30px;
+    background:radial-gradient(58% 58% at 50% 42%,rgba(255,150,40,.26),transparent 72%);
+    filter:blur(22px);pointer-events:none;
+  }
+  .promo-frame{
+    position:relative;padding:1px;border-radius:27px;
+    background:linear-gradient(140deg,#ffd89a,#ff8a2b 34%,#5c3a12 64%,#ffb347);
+    box-shadow:0 34px 90px rgba(255,120,20,.2);
+  }
+  .promo{
+    position:relative;overflow:hidden;border-radius:26px;
+    padding:26px 22px 24px;
+    background:
+      radial-gradient(120% 90% at 12% 0%,rgba(255,170,60,.16),transparent 55%),
+      linear-gradient(165deg,#231708 0%,#191108 40%,#100b07 100%);
+  }
+  .promo::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,225,180,.85),transparent);
+  }
+  .promo-shine{
+    position:absolute;top:-60%;left:-40%;width:60%;height:220%;
+    background:linear-gradient(100deg,transparent,rgba(255,235,200,.13),transparent);
+    transform:rotate(14deg);pointer-events:none;
+    animation:shine 7s ease-in-out infinite;
+  }
+  @keyframes shine{0%,70%{left:-60%}100%{left:130%}}
+  .promo-top{display:flex;align-items:center;gap:12px;position:relative}
+  .promo-ava{
+    width:50px;height:50px;flex:0 0 50px;border-radius:14px;
+    display:grid;place-items:center;
+    font-size:22px;font-weight:900;color:#2a1704;
+    background:linear-gradient(160deg,#ffe1b4,#ffa53a);
+    box-shadow:0 8px 24px rgba(255,150,40,.45),inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  .promo-id{flex:1;min-width:0}
+  .promo-name{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:900;letter-spacing:-.2px;color:#fff}
+  .promo-badge{
+    font-size:8.5px;letter-spacing:1.6px;text-transform:uppercase;font-weight:900;color:#2a1704;
+    padding:3px 7px;border-radius:5px;
+    background:linear-gradient(150deg,#ffe1b4,#ffa53a);
+  }
+  .promo-sub{font-size:12px;color:#b7a894;margin-top:2px}
+  .promo-crown{
+    font-size:24px;color:#ffc978;line-height:1;
+    filter:drop-shadow(0 0 14px rgba(255,180,70,.7));
+  }
+  .promo h2{
+    position:relative;margin-top:20px;font-size:clamp(22px,5.6vw,28px);font-weight:900;letter-spacing:-.5px;line-height:1.15;
+    background:linear-gradient(180deg,#fff 0%,#ffe6c4 55%,#ffa53a 120%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 20px rgba(255,140,30,.35));
+  }
+  .promo-text{position:relative;font-size:14px;color:#ddd2c4;margin-top:10px;line-height:1.6}
+  .promo-list{position:relative;display:grid;gap:8px;margin-top:16px}
+  .promo-item{
+    display:flex;align-items:center;gap:10px;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,190,110,.18);
+    border-radius:12px;padding:11px 13px;
+    font-size:13.5px;color:#f0e6da;
+  }
+  .promo-item i{
+    width:7px;height:7px;flex:0 0 7px;transform:rotate(45deg);
+    background:linear-gradient(150deg,#ffe1b4,#ffa53a);
+    box-shadow:0 0 10px rgba(255,170,60,.8);
+  }
+  .promo-btn{
+    position:relative;display:flex;align-items:center;justify-content:center;gap:10px;
+    margin-top:20px;padding:17px 20px;border-radius:15px;
+    text-decoration:none;font-weight:900;font-size:15.5px;letter-spacing:.2px;
+    color:#2a1704;
+    background:linear-gradient(160deg,#ffdca8,#ff9a2e 55%,#ec۷a10);
+    background:linear-gradient(160deg,#ffdca8,#ff9a2e 55%,#ec7a10);
+    box-shadow:0 14px 38px rgba(255,130,20,.42),inset 0 1px 0 rgba(255,255,255,.65),inset 0 -2px 0 rgba(150,70,0,.35);
+    overflow:hidden;transition:transform .15s;
+  }
+  .promo-btn:active{transform:scale(.98)}
+  .promo-btn::after{
+    content:"";position:absolute;top:-40%;left:-30%;width:40%;height:200%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:rotate(16deg);animation:shine 4.5s ease-in-out infinite;
+  }
+  .promo-btn span{font-size:19px;line-height:1}
+  .promo-note{position:relative;text-align:center;font-size:11px;letter-spacing:.6px;color:#8d8073;margin-top:12px;word-break:break-all}
 
   footer{
     margin-top:54px;
@@ -290,24 +457,75 @@
   }
   .top.show{opacity:1;pointer-events:auto}
 
+  .fx{
+    position:fixed;left:14px;bottom:18px;z-index:60;
+    background:rgba(18,12,7,.9);
+    border:1px solid rgba(255,168,80,.35);
+    color:#ffcf9a;font-size:11.5px;font-weight:900;letter-spacing:1.3px;
+    padding:10px 15px;border-radius:100px;
+    backdrop-filter:blur(10px);cursor:pointer;
+  }
+
   .hide{display:none!important}
+
+  body.no-fx .phone,body.no-fx .met,body.no-fx .calc{transform:none!important;transition:none!important}
+  body.no-fx .scr-btn,body.no-fx .promo-btn::after,body.no-fx .promo-shine{animation:none!important}
+
+  @media(prefers-reduced-motion:reduce){
+    .phone,.met,.calc{transition:none!important}
+    .scr-btn,.promo-btn::after,.promo-shine{animation:none!important}
+  }
 
   @media(max-width:430px){
     .wrap{padding:0 14px 84px}
-    .hero{padding:34px 0 26px}
+    .hero{padding:30px 0 24px}
     .step{padding:17px 15px 19px;border-radius:16px}
     .step h3{font-size:16.5px}
     .step p,.step li{font-size:14.5px}
+    .calc{padding:22px 16px 20px;border-radius:20px}
+    .promo{padding:22px 16px 20px;border-radius:22px}
+    .met b{font-size:17px}
+    .met span{font-size:9px;letter-spacing:.9px}
   }
 </style>
 </head>
 <body>
+<div class="prog" id="prog"></div>
 <div class="wrap">
 
   <div class="hero">
     <div class="tag">Nagibatorz · гайд</div>
     <h1>Серебро в&nbsp;Standoff&nbsp;2</h1>
     <p>Схема фарма через напарники + бонус за катку</p>
+
+    <div class="stage">
+      <div class="phone" id="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="scr-top">матч завершён</div>
+          <div class="scr-big">+120</div>
+          <div class="scr-sub">серебра за катку</div>
+          <div class="scr-bars">
+            <div>
+              <div class="scr-lab"><span>за матч</span><span>+120</span></div>
+              <div class="scr-bar"><i style="width:62%"></i></div>
+            </div>
+            <div>
+              <div class="scr-lab"><span>get bonus</span><span>5–500</span></div>
+              <div class="scr-bar"><i style="width:88%"></i></div>
+            </div>
+          </div>
+          <div class="scr-btn">GET BONUS</div>
+        </div>
+      </div>
+    </div>
+    <div class="stage-cap">Поверни телефон — экран наклонится</div>
+
+    <div class="mets">
+      <div class="met" data-tilt><b>≈2 мин</b><span>цикл матча</span></div>
+      <div class="met" data-tilt><b>5–500</b><span>бонус</span></div>
+      <div class="met" data-tilt><b>0 ₽</b><span>вложений</span></div>
+    </div>
   </div>
 
   <div class="note">
@@ -458,10 +676,51 @@
     </ul>
   </div>
 
-  <div class="bonus" id="bonus">
-    <h2>🎁 Твой подарок</h2>
-    <p>Пакет из 100 гайдов по играм: раскладки, фарм, промокоды, настройки под конкретные игры.</p>
-    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">Забрать бонус</a>
+  <div class="calc-wrap">
+    <div class="calc" id="calcCard">
+      <div class="kicker">интерактив</div>
+      <h2>Сколько выходит за вечер</h2>
+      <p class="calc-sub">Двигай ползунок — покажу диапазон с бонусов.</p>
+      <div class="calc-row"><span>Каток за вечер</span><b id="calcN">10</b></div>
+      <input type="range" id="rng" min="1" max="20" value="10" step="1">
+      <div class="calc-out">
+        <div>
+          <div class="calc-big" id="calcMin">50</div>
+          <div class="calc-lbl">минимум серебра</div>
+        </div>
+        <div>
+          <div class="calc-big acc" id="calcMax">5 000</div>
+          <div class="calc-lbl">максимум серебра</div>
+        </div>
+      </div>
+      <div class="calc-hint">Бонус даёт от 5 до 500 серебра. Столько выйдет, если <b>Get Bonus</b> появляется после каждой катки — на деле кнопка бывает не всегда.</div>
+    </div>
+  </div>
+
+  <div class="promo-wrap">
+    <div class="promo-glow"></div>
+    <div class="promo-frame">
+      <div class="promo">
+        <div class="promo-shine"></div>
+        <div class="promo-top">
+          <div class="promo-ava">N</div>
+          <div class="promo-id">
+            <div class="promo-name">Nagibatorz <span class="promo-badge">премиум</span></div>
+            <div class="promo-sub">магазин на Playerok</div>
+          </div>
+          <div class="promo-crown">♛</div>
+        </div>
+        <h2>Ещё больше полезного</h2>
+        <p class="promo-text">Гайды по Standoff 2, настройки телефона, фарм и прицелы — всё в одном месте, с авто-выдачей сразу после покупки.</p>
+        <div class="promo-list">
+          <div class="promo-item"><i></i>Проверенные гайды и настройки</div>
+          <div class="promo-item"><i></i>Авто-выдача 24/7</div>
+          <div class="promo-item"><i></i>Ответы на вопросы в чате</div>
+        </div>
+        <a class="promo-btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Перейти в магазин <span>→</span></a>
+        <div class="promo-note">playerok.com/profile/Nagibatorz</div>
+      </div>
+    </div>
   </div>
 
   <footer>
@@ -472,17 +731,92 @@
 </div>
 
 <button class="top" id="toTop" aria-label="Наверх">↑</button>
+<button class="fx" id="fx">3D: вкл</button>
 
 <script>
+  /* прогресс чтения */
+  var prog = document.getElementById('prog');
+  window.addEventListener('scroll', function(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }, {passive:true});
+
+  /* наверх */
   var btn = document.getElementById('toTop');
   window.addEventListener('scroll', function(){
     if (window.scrollY > 500) btn.classList.add('show');
     else btn.classList.remove('show');
-  });
+  }, {passive:true});
   btn.addEventListener('click', function(){
     window.scrollTo({top:0, behavior:'smooth'});
   });
 
+  /* 3D наклон */
+  var phone = document.getElementById('phone');
+  var metCards = [].slice.call(document.querySelectorAll('[data-tilt]'));
+  var calcCard = document.getElementById('calcCard');
+  var fxOn = true;
+
+  function setTilt(el, rx, ry, max){
+    if (!fxOn || !el) return;
+    el.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+  }
+
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(e){
+      if (!fxOn) return;
+      var b = Math.max(-1, Math.min(1, (e.beta || 0) / 45));
+      var g = Math.max(-1, Math.min(1, (e.gamma || 0) / 45));
+      setTilt(phone, -b * 7, g * 9);
+      setTilt(calcCard, -b * 3, g * 4);
+      metCards.forEach(function(m, i){
+        var k = (i % 2 === 0) ? 1 : -1;
+        setTilt(m, -b * 4, g * 5 * k);
+      });
+    }, {passive:true});
+  }
+
+  window.addEventListener('pointermove', function(e){
+    if (!fxOn) return;
+    var cx = e.clientX, cy = e.clientY;
+    var r = phone.getBoundingClientRect();
+    var dx = (cx - (r.left + r.width / 2)) / (r.width || 1);
+    var dy = (cy - (r.top + r.height / 2)) / (r.height || 1);
+    if (Math.abs(dx) < 1.6) setTilt(phone, -dy * 8, dx * 10);
+  }, {passive:true});
+
+  /* калькулятор */
+  var rng = document.getElementById('rng');
+  var calcN = document.getElementById('calcN');
+  var calcMin = document.getElementById('calcMin');
+  var calcMax = document.getElementById('calcMax');
+
+  function fmt(n){
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+  function updCalc(){
+    var n = +rng.value;
+    calcN.textContent = n;
+    calcMin.textContent = fmt(5 * n);
+    calcMax.textContent = fmt(500 * n);
+    var p = ((n - 1) / 19) * 100;
+    rng.style.setProperty('--p', p + '%');
+  }
+  rng.addEventListener('input', updCalc);
+  updCalc();
+
+  /* 3D вкл/выкл */
+  var fx = document.getElementById('fx');
+  fx.addEventListener('click', function(){
+    fxOn = !fxOn;
+    document.body.classList.toggle('no-fx', !fxOn);
+    fx.textContent = fxOn ? '3D: вкл' : '3D: выкл';
+    if (!fxOn) {
+      [phone, calcCard].concat(metCards).forEach(function(el){ if (el) el.style.transform = ''; });
+    }
+  });
+
+  /* поиск */
   var q = document.getElementById('q');
   q.addEventListener('input', function(){
     var v = this.value.trim().toLowerCase();
