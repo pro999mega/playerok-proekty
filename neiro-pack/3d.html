@@ -1,668 +1,507 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Нейро-пак — 3D-гайд</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Нейро-пак — все ИИ в одном окне | 3D-гайд</title>
 <style>
 :root{
-  --bg:#0b0a09; --acc:#FF7A18; --acc2:#FFB347;
-  --txt:#f6efe8; --muted:#a89f97;
-  --glass:rgba(255,255,255,.055); --line:rgba(255,255,255,.13);
+  --acc:#FF8A2B; --acc2:#FFC46B; --ink:#F4F1EC; --mut:#9A958E;
+  --card:rgba(255,255,255,.055); --line:rgba(255,255,255,.11);
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{
-  margin:0; background:var(--bg); color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  line-height:1.6; overflow-x:hidden; -webkit-tap-highlight-color:transparent;
+  margin:0;padding:0 0 96px;
+  font:400 16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color:var(--ink);background:#0A0807;overflow-x:hidden;
 }
 body::before{
-  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  content:"";position:fixed;inset:-20% -20% 0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(120% 60% at 50% 108%, rgba(255,122,24,.30), transparent 65%),
-    radial-gradient(80% 40% at 15% 0%, rgba(255,179,71,.10), transparent 60%);
+    radial-gradient(60% 45% at 50% 100%,rgba(255,122,24,.30),transparent 70%),
+    radial-gradient(45% 30% at 82% 8%,rgba(255,180,90,.10),transparent 70%),
+    linear-gradient(#0A0807,#0A0807);
 }
-body::after{
-  content:""; position:fixed; inset:-20% -20% -40%; z-index:0; pointer-events:none;
-  background-image:linear-gradient(rgba(255,179,71,.07) 1px, transparent 1px),
-                   linear-gradient(90deg, rgba(255,179,71,.07) 1px, transparent 1px);
-  background-size:60px 60px;
-  transform:perspective(600px) rotateX(62deg);
-  transform-origin:50% 100%;
-  mask-image:linear-gradient(to top, rgba(0,0,0,.9), transparent 62%);
-  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,.9), transparent 62%);
+.grid{
+  position:fixed;left:-40%;right:-40%;bottom:-10%;height:70vh;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,138,43,.28) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,138,43,.28) 1px,transparent 1px);
+  background-size:56px 56px;
+  transform:perspective(420px) rotateX(62deg);transform-origin:bottom center;
+  mask-image:linear-gradient(to top,#000 8%,transparent 72%);
+  -webkit-mask-image:linear-gradient(to top,#000 8%,transparent 72%);
+  opacity:.55;will-change:transform;
 }
-main,header,footer{position:relative; z-index:1}
-.wrap{max-width:880px; margin:0 auto; padding:0 18px}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:rgba(255,255,255,.06)}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width .1s linear}
 
-/* прогресс */
-.bar{position:fixed; top:0; left:0; height:3px; width:100%; z-index:50; background:rgba(255,255,255,.07)}
-.bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--acc),var(--acc2)); box-shadow:0 0 12px var(--acc)}
-
-/* шапка */
-.top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0 6px}
-.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; letter-spacing:.3px}
-.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#2a2521,#141210);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);overflow:hidden}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.badge{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--acc2); border:1px solid rgba(255,179,71,.45); border-radius:999px; padding:5px 11px; background:rgba(255,179,71,.08)}
-
-/* hero */
-.hero{text-align:center; padding:26px 0 10px; perspective:1000px}
-.title3d{
-  font-size:clamp(38px,12vw,74px); line-height:1; margin:0 0 10px; font-weight:900; letter-spacing:-1px;
-  background:linear-gradient(180deg,#fff5e6 10%,var(--acc2) 48%,var(--acc) 78%,#8a3d00 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  filter:drop-shadow(0 2px 0 #6b3000) drop-shadow(0 8px 22px rgba(255,122,24,.45));
-  transform:rotateX(9deg); transform-origin:50% 100%;
-  animation:float3d 7s ease-in-out infinite;
+header{
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  gap:10px;padding:12px 18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(10,8,7,.72);border-bottom:1px solid var(--line);
 }
-@keyframes float3d{
-  0%,100%{transform:rotateX(9deg) rotateY(-2deg) translateZ(0)}
-  50%{transform:rotateX(6deg) rotateY(2deg) translateZ(10px)}
+.brand{font-weight:700;font-size:14px;letter-spacing:.02em}
+.brand span{color:var(--mut);font-weight:500}
+.badge{
+  font:700 11px/1 system-ui;letter-spacing:.12em;text-transform:uppercase;
+  padding:8px 13px;border-radius:999px;color:var(--acc2);
+  border:1px solid rgba(255,138,43,.45);background:rgba(255,138,43,.10);
 }
-.sub{font-size:clamp(17px,4.6vw,22px); font-weight:800; letter-spacing:2px; text-transform:uppercase; margin:0 0 8px; color:#fff}
-.lead{margin:0 auto 22px; max-width:520px; color:var(--muted); font-size:15px}
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 18px}
+
+.hero{padding:38px 0 6px;text-align:center}
+.kicker{font:800 11px/1 system-ui;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+h1{
+  margin:0;font-size:clamp(36px,11vw,62px);line-height:.95;letter-spacing:-.02em;font-weight:900;
+  background:linear-gradient(180deg,#FFE2B4 0%,#FFB356 42%,#FF7A18 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 0 rgba(120,50,0,.42)) drop-shadow(0 18px 34px rgba(255,122,24,.30));
+  animation:heroIn .9s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes heroIn{from{opacity:0;transform:translateY(26px) scale(.94)}to{opacity:1;transform:none}}
+.sub{margin:14px 0 0;font-size:clamp(17px,4.6vw,22px);font-weight:800;letter-spacing:.02em;animation:heroIn .9s .12s cubic-bezier(.2,.8,.2,1) both}
+.lead{margin:12px auto 0;max-width:44ch;color:var(--mut);font-size:15px;animation:heroIn .9s .22s cubic-bezier(.2,.8,.2,1) both}
 .lead b{color:var(--acc2)}
 
-/* 3D телефон */
-.phone-wrap{perspective:1100px; margin:6px auto 26px; width:min(300px,78vw)}
+/* 3D-телефон */
+.phone-wrap{perspective:1200px;display:grid;place-items:center;margin:26px 0 8px}
 .phone{
-  position:relative; border-radius:34px; padding:10px;
-  background:linear-gradient(160deg,#37312b,#151311 55%,#0a0908);
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 40px 70px -30px rgba(0,0,0,.95), 0 0 40px rgba(255,122,24,.18), inset 0 1px 0 rgba(255,255,255,.22);
-  transform-style:preserve-3d; will-change:transform;
-  transition:transform .18s ease-out;
+  position:relative;width:min(300px,74vw);aspect-ratio:9/19.5;padding:9px;border-radius:40px;
+  background:linear-gradient(160deg,#2A2A31,#111114 45%,#26262C);
+  box-shadow:0 30px 60px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.10) inset,
+             0 0 60px rgba(255,122,24,.20);
+  transform-style:preserve-3d;transition:transform .12s ease-out;
 }
-.screen{
-  position:relative; border-radius:26px; overflow:hidden; aspect-ratio:9/19.5;
-  background:linear-gradient(160deg,#1b1a19,#0e0d0c); border:1px solid rgba(255,255,255,.08);
-}
-.screen img{width:100%; height:100%; object-fit:cover; object-position:top center; display:block}
-.ph{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; font-size:12px; color:#6d635b; padding:16px}
-.notch{position:absolute; top:8px; left:50%; transform:translateX(-50%); width:74px; height:15px; border-radius:99px; background:#0a0908; z-index:2; border:1px solid rgba(255,255,255,.06)}
-.gleam{position:absolute; inset:0; border-radius:26px; pointer-events:none; background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.16) 48%,transparent 58%); background-size:280% 280%; animation:gleam 5.5s linear infinite}
-@keyframes gleam{0%{background-position:120% 0}100%{background-position:-60% 0}}
-
-/* кнопки */
-.btn{
-  display:inline-block; text-decoration:none; cursor:pointer; border:0;
-  padding:15px 34px; border-radius:16px; font-size:16px; font-weight:800; color:#241000;
-  background:linear-gradient(135deg,var(--acc2),var(--acc));
-  box-shadow:0 14px 30px -10px rgba(255,122,24,.85), inset 0 1px 0 rgba(255,255,255,.5);
-  transition:transform .2s ease, box-shadow .2s ease;
-  animation:pulse 2.6s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{box-shadow:0 14px 30px -10px rgba(255,122,24,.75), inset 0 1px 0 rgba(255,255,255,.5)}50%{box-shadow:0 18px 42px -8px rgba(255,122,24,1), inset 0 1px 0 rgba(255,255,255,.5)}}
-.btn:hover{transform:translateY(-2px)}
-.btn.small{padding:11px 22px; font-size:14px}
+.phone::before{content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:86px;height:19px;border-radius:12px;background:#060606;z-index:4}
+.screen{position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;
+  background:linear-gradient(170deg,#131316,#0B0B0D)}
+.screen img{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.shot-ph{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;
+  padding:22px;font:600 12px/1.6 system-ui;color:#7C7770}
+.shot-ph code{display:block;margin-top:6px;color:var(--acc2);font-size:12px}
 
 /* секции */
-section{padding:34px 0}
-.eyebrow{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--acc2); margin:0 0 8px; font-weight:700}
-h2{font-size:clamp(22px,6vw,30px); line-height:1.2; margin:0 0 8px; font-weight:900; letter-spacing:-.3px}
-.intro{color:var(--muted); margin:0 0 20px; font-size:15px}
+.sec{margin:40px 0 0;padding:22px 20px;border-radius:22px;
+  background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.028));
+  border:1px solid var(--line);box-shadow:0 22px 50px rgba(0,0,0,.45);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.sec h2{margin:0 0 10px;font-size:clamp(21px,5.6vw,27px);line-height:1.2;letter-spacing:-.01em}
+.sec h3{margin:22px 0 8px;font-size:17px;color:var(--acc2)}
+.sec p{margin:0 0 12px;color:#D9D4CD}
+.sec ul,.sec ol{margin:0 0 12px;padding-left:20px;color:#D9D4CD}
+.sec li{margin:6px 0}
+.sec code{background:rgba(255,138,43,.13);border:1px solid rgba(255,138,43,.28);
+  color:var(--acc2);padding:2px 7px;border-radius:7px;font-size:13px}
 
-/* содержание */
-.toc{list-style:none; padding:0; margin:0; display:grid; gap:8px}
-.toc a{
-  display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--txt);
-  padding:14px 16px; border-radius:14px; background:var(--glass); border:1px solid var(--line);
-  font-size:15px; transition:transform .2s ease, border-color .2s ease, background .2s ease;
+.step-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.step-num{
+  flex:0 0 auto;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;
+  font:900 19px/1 system-ui;color:#1A0D02;
+  background:linear-gradient(160deg,#FFD9A3,#FF9A3C 55%,#E26A00);
+  box-shadow:0 8px 0 rgba(120,48,0,.55),0 14px 26px rgba(255,122,24,.35),
+             inset 0 1px 0 rgba(255,255,255,.6);
+  transform:translateZ(0);
 }
-.toc a:hover,.toc a:active{transform:translateX(3px); border-color:rgba(255,179,71,.5); background:rgba(255,179,71,.07)}
-.toc b{color:var(--acc); font-variant-numeric:tabular-nums; min-width:22px}
+.step-head h2{margin:0}
 
-/* карточки */
-.card{
-  position:relative; background:linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
-  border:1px solid var(--line); border-radius:22px; padding:20px;
-  box-shadow:0 22px 44px -28px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.16);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  transform-style:preserve-3d;
-}
-.card:hover{transform:translateY(-4px); border-color:rgba(255,179,71,.45); box-shadow:0 30px 56px -26px rgba(0,0,0,.95), 0 0 26px rgba(255,122,24,.18), inset 0 1px 0 rgba(255,255,255,.2)}
-.grid2{display:grid; gap:12px; grid-template-columns:1fr}
-@media(min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+/* таблица */
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 10px;
+  border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.tbl th{background:rgba(255,138,43,.14);color:var(--acc2);text-align:left;padding:10px 12px;font-size:13px}
+.tbl td{padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);color:#D9D4CD;vertical-align:top}
+.tbl tr:hover td{background:rgba(255,138,43,.06)}
 
-/* шаги */
-.step{margin:0 0 16px}
-.step-head{display:flex; align-items:center; gap:14px; margin-bottom:12px}
-.num{
-  flex:0 0 auto; width:52px; height:52px; border-radius:15px; display:flex; align-items:center; justify-content:center;
-  font-weight:900; font-size:18px; color:#2a1600;
-  background:linear-gradient(160deg,#ffe2b8,var(--acc2) 45%,var(--acc));
-  box-shadow:0 10px 22px -8px rgba(255,122,24,.8), inset 0 1px 0 rgba(255,255,255,.7), inset 0 -2px 0 rgba(0,0,0,.22);
-  transform:rotateX(8deg);
-}
-.step h3{margin:0; font-size:17px; font-weight:800; line-height:1.25}
-.step p{margin:0 0 10px; color:#d9d0c7; font-size:15px}
-.shot{margin:12px 0 0; border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#121110; position:relative}
-.shot img{width:100%; display:block}
-.shot .ph{position:relative; inset:auto; padding:34px 16px; font-size:12px; color:#6d635b}
-
-.warn{border-left:3px solid var(--acc); background:rgba(255,122,24,.09); border-radius:12px; padding:12px 14px; margin:12px 0 0; font-size:14px; color:#f0dccb}
+.warn{display:flex;gap:12px;padding:14px 16px;border-radius:16px;margin:14px 0;
+  background:rgba(255,138,43,.09);border:1px solid rgba(255,138,43,.32)}
 .warn b{color:var(--acc2)}
 
-/* карусель */
-.carousel{position:relative; perspective:1200px; height:250px; margin:8px 0 6px; touch-action:pan-y}
-.track{position:absolute; inset:0; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-.slide{
-  position:absolute; top:50%; left:50%; width:min(250px,68vw); min-height:170px; margin:-85px 0 0 -125px;
-  border-radius:20px; padding:18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
-  background:linear-gradient(160deg, rgba(255,255,255,.11), rgba(255,255,255,.03));
-  border:1px solid var(--line); box-shadow:0 24px 44px -26px rgba(0,0,0,.95);
-  transition:opacity .45s ease, border-color .45s ease; backface-visibility:hidden;
-}
-.slide.on{border-color:rgba(255,179,71,.65); box-shadow:0 24px 52px -22px rgba(255,122,24,.55)}
-.slide b{font-size:17px; color:#fff}
-.slide span{font-size:13px; color:var(--muted)}
-.slide .tag{font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--acc2)}
-.dots{display:flex; gap:7px; justify-content:center; margin-top:6px}
-.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:all .3s}
-.dots i.on{background:var(--acc); width:20px; border-radius:99px}
+/* карусель (scroll-snap, без наложений) */
+.carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 2px 16px;margin:0 -4px;scrollbar-width:none}
+.carousel::-webkit-scrollbar{display:none}
+.slide{flex:0 0 82%;scroll-snap-align:center;border-radius:20px;padding:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  border:1px solid var(--line);box-shadow:0 16px 34px rgba(0,0,0,.4)}
+.slide .tag{display:inline-block;font:800 10px/1 system-ui;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.slide h4{margin:0 0 8px;font-size:19px}
+.slide p{margin:0;font-size:14px;color:var(--mut)}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:2px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:.25s}
+.dots i.on{background:var(--acc);width:20px;border-radius:4px}
 
 /* куб */
-.cube-stage{perspective:900px; height:230px; display:flex; align-items:center; justify-content:center; margin:8px 0}
-.cube{width:130px; height:130px; position:relative; transform-style:preserve-3d; transform:rotateX(-18deg) rotateY(-24deg); will-change:transform}
-.face{
-  position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
-  font-size:13px; font-weight:800; padding:8px; border-radius:12px;
-  background:linear-gradient(160deg, rgba(255,179,71,.20), rgba(255,122,24,.06));
-  border:1px solid rgba(255,179,71,.45); color:#ffe7cc; backface-visibility:hidden;
-}
-.f1{transform:translateZ(65px)} .f2{transform:rotateY(180deg) translateZ(65px)}
-.f3{transform:rotateY(90deg) translateZ(65px)} .f4{transform:rotateY(-90deg) translateZ(65px)}
-.f5{transform:rotateX(90deg) translateZ(65px)} .f6{transform:rotateX(-90deg) translateZ(65px)}
+.scene{height:280px;display:grid;place-items:center;perspective:900px;margin:10px 0 0;touch-action:pan-y}
+.cube{position:relative;width:150px;height:150px;transform-style:preserve-3d;
+  transform:rotateX(-18deg) rotateY(-24deg);will-change:transform}
+.face{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12px;
+  font:700 14px/1.3 system-ui;color:#2A1400;border-radius:14px;
+  background:linear-gradient(160deg,#FFD9A3,#FFAB52 60%,#F07E10);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:inset 0 0 26px rgba(255,255,255,.35)}
+.f1{transform:translateZ(75px)}
+.f2{transform:rotateY(90deg) translateZ(75px)}
+.f3{transform:rotateY(180deg) translateZ(75px)}
+.f4{transform:rotateY(-90deg) translateZ(75px)}
+.f5{transform:rotateX(90deg) translateZ(75px)}
+.f6{transform:rotateX(-90deg) translateZ(75px)}
+.hint{text-align:center;font-size:13px;color:var(--mut);margin:8px 0 0}
 
-/* флип */
-.flips{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-.flip{perspective:900px; height:150px; cursor:pointer}
-.flip-in{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .6s cubic-bezier(.3,.8,.2,1)}
+/* флип-карточки */
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-top:12px}
+.flip{height:186px;perspective:1000px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .65s cubic-bezier(.3,.8,.3,1)}
 .flip.on .flip-in{transform:rotateY(180deg)}
-.face-f,.face-b{
-  position:absolute; inset:0; border-radius:18px; padding:16px; display:flex; flex-direction:column; justify-content:center;
-  backface-visibility:hidden; border:1px solid var(--line);
-  background:linear-gradient(160deg, rgba(255,255,255,.1), rgba(255,255,255,.028));
-  box-shadow:0 20px 38px -26px rgba(0,0,0,.9);
+.side{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:18px;padding:14px;display:flex;flex-direction:column;justify-content:center;
+  border:1px solid var(--line);box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.side.front{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.035))}
+.side.back{transform:rotateY(180deg);
+  background:linear-gradient(160deg,rgba(255,138,43,.20),rgba(255,138,43,.07))}
+.side .name{font-weight:800;font-size:17px;margin-bottom:6px}
+.side .txt{font-size:13px;color:var(--mut);line-height:1.45}
+.side.back .txt{color:#F0DCC6}
+
+.cta{display:inline-block;margin-top:6px;padding:15px 26px;border-radius:16px;font-weight:800;
+  color:#190C00;text-decoration:none;background:linear-gradient(160deg,#FFD9A3,#FF9A3C 55%,#E97000);
+  box-shadow:0 10px 0 rgba(120,48,0,.5),0 18px 38px rgba(255,122,24,.38);
+  animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 10px 0 rgba(120,48,0,.5),0 18px 38px rgba(255,122,24,.30)}
+50%{box-shadow:0 10px 0 rgba(120,48,0,.5),0 18px 52px rgba(255,140,40,.55)}}
+footer{max-width:760px;margin:44px auto 0;padding:22px 18px;text-align:center;color:var(--mut);font-size:13px}
+
+/* кнопка эффектов — не перекрывает текст */
+.fx{position:fixed;right:14px;bottom:16px;z-index:55;border:1px solid var(--line);
+  background:rgba(20,16,14,.88);color:var(--acc2);font:700 12px/1 system-ui;
+  padding:11px 15px;border-radius:999px;backdrop-filter:blur(10px);cursor:pointer}
+.fx.off{color:var(--mut)}
+
+/* появление секций — только через JS-класс, базово всё видимо */
+.reveal-init{opacity:0;transform:translate3d(0,26px,0);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.reveal-init.reveal-in{opacity:1;transform:none}
+
+@media (max-width:400px){
+  .slide{flex-basis:88%}
+  .sec{padding:18px 15px;border-radius:18px}
+  .step-num{width:46px;height:46px;font-size:17px}
 }
-.face-f b{font-size:17px; color:#fff}
-.face-f span{font-size:12px; color:var(--muted); margin-top:4px}
-.face-b{transform:rotateY(180deg); background:linear-gradient(160deg, rgba(255,122,24,.20), rgba(255,179,71,.05)); border-color:rgba(255,179,71,.5)}
-.face-b{font-size:13px; color:#ffe7cc}
-.hint{font-size:12px; color:var(--muted); text-align:center; margin:8px 0 0}
-
-/* финал */
-.final{text-align:center; padding:40px 0 20px}
-.final .price{font-size:44px; font-weight:900; background:linear-gradient(180deg,#fff5e6,var(--acc2) 60%,var(--acc)); -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1}
-.final .old{color:var(--muted); text-decoration:line-through; font-size:16px; margin-right:8px}
-.final .off{color:#0c0a08; background:linear-gradient(135deg,var(--acc2),var(--acc)); border-radius:8px; padding:3px 8px; font-size:12px; font-weight:800}
-
-footer{border-top:1px solid var(--line); margin-top:30px; padding:22px 0 90px; color:var(--muted); font-size:13px; text-align:center}
-footer a{color:var(--acc2); text-decoration:none}
-
-/* плавающие кнопки */
-.fab{position:fixed; right:14px; bottom:16px; z-index:60; display:flex; flex-direction:column; gap:10px}
-.fab button{
-  width:46px; height:46px; border-radius:50%; border:1px solid var(--line); cursor:pointer;
-  background:rgba(20,18,16,.86); color:var(--txt); font-size:16px; backdrop-filter:blur(8px);
-  box-shadow:0 12px 26px -12px rgba(0,0,0,.9);
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal-init{opacity:1!important;transform:none!important}
 }
-.fab button:active{transform:scale(.94)}
-.fab .top{opacity:0; pointer-events:none; transition:opacity .25s}
-.fab .top.on{opacity:1; pointer-events:auto}
-
-/* анимация появления */
-.anim-hidden{opacity:0; transform:translateY(26px)}
-.anim-in{opacity:1 !important; transform:none !important; transition:opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1)}
-
-@media (prefers-reduced-motion: reduce){
-  *{animation:none !important; transition:none !important}
-  .anim-hidden{opacity:1; transform:none}
-}
-body.lite *{animation:none !important}
-body.lite .anim-hidden{opacity:1 !important; transform:none !important}
 </style>
 </head>
 <body>
-<div class="bar"><i id="barFill"></i></div>
+<div class="progress"><i id="bar"></i></div>
+<div class="grid" id="grid"></div>
 
-<header class="wrap top">
-  <div class="brand">
-    <div class="avatar"><img src="img/profile.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='N'"></div>
-    <span>Nagibatorz · гайд</span>
-  </div>
-  <span class="badge">Нейро-пак</span>
+<header>
+  <div class="brand">Nagibatorz <span>· гайд</span></div>
+  <div class="badge">Нейро-пак</div>
 </header>
 
-<main class="wrap">
-
-  <!-- HERO -->
+<main>
   <section class="hero">
-    <h1 class="title3d">НЕЙРО-ПАК</h1>
+    <div class="kicker">Инструкция</div>
+    <h1>НЕЙРО-ПАК</h1>
     <p class="sub">Все ИИ в одном окне</p>
     <p class="lead">GPT, Gemini, Grok, Claude и десятки других — <b>без подписок и оплат</b></p>
 
     <div class="phone-wrap">
       <div class="phone" id="phone">
-        <div class="notch"></div>
         <div class="screen">
-          <img src="img/hero.png" alt="Главный экран площадки" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="ph" style="display:none">Сюда встанет скриншот<br><b>img/hero.png</b></div>
+          <div class="shot-ph">Сюда встанет скриншот<code>img/hero.png</code></div>
+          <img src="img/hero.png" alt="Главный экран площадки" onerror="this.style.opacity=0">
         </div>
-        <div class="gleam"></div>
       </div>
     </div>
-
-    <a class="btn" href="#toc">Начать</a>
+    <p class="hint">Поверни телефон — экран наклонится</p>
   </section>
 
-  <!-- СОДЕРЖАНИЕ -->
-  <section id="toc">
-    <p class="eyebrow">Содержание</p>
+  <section class="sec" id="toc">
     <h2>Что внутри</h2>
-    <p class="intro">Семь шагов от первого экрана до готового результата.</p>
-    <ol class="toc">
-      <li><a href="#s1"><b>01</b> Открываем площадку</a></li>
-      <li><a href="#s2"><b>02</b> Direct — главный режим</a></li>
-      <li><a href="#s3"><b>03</b> Кнопка Max</a></li>
-      <li><a href="#s4"><b>04</b> Выбор модели под задачу</a></li>
-      <li><a href="#s5"><b>05</b> Что можно делать каждый день</a></li>
-      <li><a href="#s6"><b>06</b> Ограничения площадки</a></li>
-      <li><a href="#s7"><b>07</b> Если что-то не работает</a></li>
+    <ol>
+      <li><a href="#s1">Открываем площадку</a></li>
+      <li><a href="#s2">Direct — главный режим</a></li>
+      <li><a href="#s3">Кнопка Max</a></li>
+      <li><a href="#s4">Выбор модели под задачу</a></li>
+      <li><a href="#s5">Что можно делать каждый день</a></li>
+      <li><a href="#s6">Ограничения площадки</a></li>
+      <li><a href="#s7">Если что-то не работает</a></li>
     </ol>
   </section>
 
-  <!-- КАРУСЕЛЬ РЕЖИМОВ -->
-  <section>
-    <p class="eyebrow">Интерактив</p>
-    <h2>Четыре режима</h2>
-    <p class="intro">Листай карточки — это те самые кнопки, что на скриншоте ниже.</p>
-    <div class="carousel" id="carousel">
-      <div class="track" id="track"></div>
+  <section class="sec" id="s1">
+    <div class="step-head"><div class="step-num">01</div><h2>Открываем площадку</h2></div>
+    <p>Зайди на сайт площадки с любого устройства — телефон, планшет, компьютер. Приложение ставить не нужно, всё работает в браузере.</p>
+    <p>Регистрация бесплатная: почта и пароль, либо вход через Google. После входа откроется главный экран с полем запроса и кнопкой выбора режима.</p>
+    <div class="warn"><div><b>Совет.</b> Сразу добавь страницу на главный экран телефона — так она открывается в один тап, как обычное приложение.</div></div>
+  </section>
+
+  <section class="sec" id="s2">
+    <div class="step-head"><div class="step-num">02</div><h2>Direct — главный режим</h2></div>
+    <p>У площадки несколько режимов работы. Для повседневных задач нужен <b>Direct</b>: чат с одной моделью, без сравнений и голосований.</p>
+    <ul>
+      <li><b>Direct</b> — обычный диалог с выбранной моделью. Девяносто процентов работы здесь.</li>
+      <li><b>Battle Mode</b> — две анонимные модели отвечают на один вопрос, выбираешь лучший ответ.</li>
+      <li><b>Side by Side</b> — сам выбираешь две модели и сравниваешь ответы рядом.</li>
+      <li><b>Agent Mode</b> — для сложных многошаговых задач, когда нужно что-то собрать или посчитать по шагам.</li>
+    </ul>
+    <p>Открывается кнопкой с иконкой сообщения слева от поля ввода.</p>
+
+    <div class="shot">
+      <div class="shot-ph">Скриншот режимов<code>img/modes.png</code></div>
+      <img src="img/modes.png" alt="Меню режимов площадки" onerror="this.style.opacity=0">
+    </div>
+
+    <div class="carousel" id="car">
+      <div class="slide"><span class="tag">Основной</span><h4>Direct</h4><p>Чат с одной моделью. Всё просто: задал вопрос — получил ответ. С этого начинают все.</p></div>
+      <div class="slide"><span class="tag">Выбор лучшего</span><h4>Battle Mode</h4><p>Две модели отвечают анонимно, ты выбираешь ответ получше. Заодно видишь, кто сильнее.</p></div>
+      <div class="slide"><span class="tag">Сравнение</span><h4>Side by Side</h4><p>Сам ставишь две модели рядом и смотришь, чем отличаются ответы на один вопрос.</p></div>
+      <div class="slide"><span class="tag">Сложные задачи</span><h4>Agent Mode</h4><p>Когда задача многошаговая: собрать, посчитать, проверить. Модель идёт по шагам.</p></div>
+      <div class="slide"><span class="tag">Автоматика</span><h4>Max</h4><p>Сам подбирает модель под запрос. Если не хочешь разбираться, кто где лучше.</p></div>
     </div>
     <div class="dots" id="dots"></div>
+    <p class="hint">Листай карточки вбок</p>
   </section>
 
-  <!-- КУБ -->
-  <section>
-    <p class="eyebrow">Интерактив</p>
-    <h2>Крути куб</h2>
-    <p class="intro">Шесть задач, которые закрывает одна площадка. Вращай пальцем в любую сторону.</p>
-    <div class="cube-stage">
+  <section class="sec" id="s3">
+    <div class="step-head"><div class="step-num">03</div><h2>Кнопка Max</h2></div>
+    <p>В поле ввода есть кнопка с буквой M — это <b>Max</b>. Она включает автоматический выбор модели: площадка сама решает, какая модель лучше справится с твоим запросом.</p>
+    <p>Новичку проще всего работать именно с ней: не нужно знать названия моделей и понимать, чем <code>gpt-5.5-instant</code> отличается от <code>gemini-3-flash</code>.</p>
+    <div class="warn"><div><b>Когда снимать Max.</b> Если нужен конкретный стиль ответа или ты уже знаешь, что с этой задачей лучше справляется определённая модель — выбери её вручную.</div></div>
+  </section>
+
+  <section class="sec" id="s4">
+    <div class="step-head"><div class="step-num">04</div><h2>Выбор модели под задачу</h2></div>
+    <p>Нажми на кнопку модели рядом с полем ввода — откроется список. Там есть поиск и фильтры: текст, код, картинки, поиск в интернете.</p>
+
+    <div class="shot">
+      <div class="shot-ph">Скриншот списка моделей<code>img/models.png</code></div>
+      <img src="img/models.png" alt="Список доступных моделей" onerror="this.style.opacity=0">
+    </div>
+
+    <table class="tbl">
+      <tr><th>Задача</th><th>На что смотреть</th></tr>
+      <tr><td>Тексты, письма, описания</td><td>GPT, Claude, Gemini</td></tr>
+      <tr><td>Код и скрипты</td><td>Модели с пометкой кода в фильтре</td></tr>
+      <tr><td>Картинки</td><td>Фильтр изображений</td></tr>
+      <tr><td>Свежие данные из сети</td><td>Модели с доступом в интернет</td></tr>
+      <tr><td>Не хочу выбирать</td><td>Max — решит сам</td></tr>
+    </table>
+
+    <p>Коснись карточки, чтобы увидеть, для чего модель лучше:</p>
+    <div class="flips" id="flips">
+      <div class="flip"><div class="flip-in">
+        <div class="side front"><div class="name">GPT</div><div class="txt">Универсал</div></div>
+        <div class="side back"><div class="name">GPT</div><div class="txt">Тексты, объяснения, код. Хорош, когда нужен ровный ответ без сюрпризов.</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="side front"><div class="name">Gemini</div><div class="txt">Быстрый</div></div>
+        <div class="side back"><div class="name">Gemini</div><div class="txt">Скорость и работа с изображениями. Удобно, когда нужно быстро и по мелочи.</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="side front"><div class="name">Grok</div><div class="txt">С характером</div></div>
+        <div class="side back"><div class="name">Grok</div><div class="txt">Живой язык, свежие события. Хорош для идей и разбора острых тем.</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="side front"><div class="name">Claude</div><div class="txt">Аккуратный</div></div>
+        <div class="side back"><div class="name">Claude</div><div class="txt">Длинные тексты и работа с документами. Мало воды, много смысла.</div></div>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="s5">
+    <div class="step-head"><div class="step-num">05</div><h2>Что можно делать каждый день</h2></div>
+    <ul>
+      <li><b>Тексты и описания товаров</b> — заголовки, характеристики, ответы покупателям.</li>
+      <li><b>Учёба</b> — объяснить тему простыми словами, проверить конспект, разобрать задачу.</li>
+      <li><b>Код и скрипты</b> — написать, найти ошибку, переписать под себя.</li>
+      <li><b>Переводы</b> — с сохранением стиля, а не дословно.</li>
+      <li><b>Идеи и планы</b> — списки дел, поездки, раскладка бюджета.</li>
+      <li><b>Проверка своих текстов</b> — орфография, тон, лишние слова.</li>
+    </ul>
+
+    <h3>Шесть граней одного доступа</h3>
+    <p class="hint">Крути куб пальцем</p>
+    <div class="scene" id="scene">
       <div class="cube" id="cube">
-        <div class="face f1">Тексты<br>и описания</div>
-        <div class="face f2">Учёба<br>простыми словами</div>
-        <div class="face f3">Код<br>и скрипты</div>
-        <div class="face f4">Переводы<br>со стилем</div>
-        <div class="face f5">Идеи<br>и планы</div>
-        <div class="face f6">Проверка<br>текстов</div>
+        <div class="face f1">Тексты</div>
+        <div class="face f2">Учёба</div>
+        <div class="face f3">Код</div>
+        <div class="face f4">Переводы</div>
+        <div class="face f5">Идеи</div>
+        <div class="face f6">Проверка</div>
       </div>
     </div>
   </section>
 
-  <!-- ФЛИП -->
-  <section>
-    <p class="eyebrow">Интерактив</p>
-    <h2>Кто за что отвечает</h2>
-    <p class="intro">Нажми на карточку — перевернётся и покажет, для чего модель лучше.</p>
-    <div class="flips">
-      <div class="flip"><div class="flip-in">
-        <div class="face-f"><b>GPT</b><span>универсал</span></div>
-        <div class="face-b">Лучше всего: тексты, объяснения, структура, ответы на вопросы.</div>
-      </div></div>
-      <div class="flip"><div class="flip-in">
-        <div class="face-f"><b>Gemini</b><span>скорость</span></div>
-        <div class="face-b">Лучше всего: быстрые ответы, работа с изображениями, поиск.</div>
-      </div></div>
-      <div class="flip"><div class="flip-in">
-        <div class="face-f"><b>Grok</b><span>смелость</span></div>
-        <div class="face-b">Лучше всего: рассуждения, нестандартные идеи, разбор сложного.</div>
-      </div></div>
-      <div class="flip"><div class="flip-in">
-        <div class="face-f"><b>Claude</b><span>аккуратность</span></div>
-        <div class="face-b">Лучше всего: длинные тексты, код, работа с документами.</div>
-      </div></div>
-    </div>
-    <p class="hint">Не уверен, что выбрать — бери Max, он сам подберёт модель.</p>
+  <section class="sec" id="s6">
+    <div class="step-head"><div class="step-num">06</div><h2>Ограничения площадки</h2></div>
+    <p>Честно о том, к чему нужно быть готовым:</p>
+    <ul>
+      <li><b>Это не подписка ChatGPT Plus.</b> Ты получаешь доступ к моделям через площадку-агрегатор, а не личный аккаунт OpenAI.</li>
+      <li>Отдельные модели могут быть недоступны или заменены другими — список меняется.</li>
+      <li>Иногда бывают очереди: ответ приходит не мгновенно, а через несколько секунд.</li>
+      <li>Сложные задачи лучше дробить на части — ответ будет точнее.</li>
+    </ul>
+    <div class="warn"><div><b>Важно.</b> Личные данные, пароли и документы в запросы лучше не вставлять — это открытая площадка.</div></div>
   </section>
 
-  <!-- ШАГИ -->
-  <section id="s1">
-    <p class="eyebrow">Шаг 01</p>
-    <h2>Открываем площадку</h2>
-    <p class="intro">Всё в браузере — ничего скачивать не нужно.</p>
-    <div class="card step">
-      <div class="step-head"><div class="num">01</div><h3>Один адрес — весь набор нейросетей</h3></div>
-      <p>Открой ссылку из гайда в любом браузере: на телефоне, планшете или компьютере. Регистрация занимает меньше минуты, оплата не нужна.</p>
-      <p>Сразу после входа ты увидишь поле «Ask anything» и переключатель модели внизу — это и есть рабочее окно.</p>
-    </div>
+  <section class="sec" id="s7">
+    <div class="step-head"><div class="step-num">07</div><h2>Если что-то не работает</h2></div>
+    <ol>
+      <li><b>Не открывается сайт.</b> Проверь интернет и обнови страницу. Иногда нужен VPN — провайдеры блокируют часть сервисов.</li>
+      <li><b>Не пускает в аккаунт.</b> Проверь правильность почты и пароля, попробуй вход через Google.</li>
+      <li><b>Модель не отвечает.</b> Переключись на другую модель или включи Max — часто одна модель перегружена, а соседняя работает.</li>
+      <li><b>Ответ непонятный.</b> Переформулируй запрос короче и конкретнее, добавь пример того, что хочешь получить.</li>
+      <li><b>Ничего не помогло.</b> Напиши продавцу в чат Playerok — разберёмся вместе.</li>
+    </ol>
   </section>
 
-  <section id="s2">
-    <p class="eyebrow">Шаг 02</p>
-    <h2>Direct — главный режим</h2>
-    <p class="intro">Из четырёх режимов тебе нужен именно этот.</p>
-    <div class="card step">
-      <div class="step-head"><div class="num">02</div><h3>Выбери Direct в меню</h3></div>
-      <p>Нажми на иконку чата слева от переключателя модели — откроется список режимов:</p>
-      <p><b>Battle Mode</b> — две модели отвечают анонимно, ты выбираешь лучшую.<br>
-         <b>Agent Mode</b> — для сложных многошаговых задач.<br>
-         <b>Side by Side</b> — два ответа рядом, для сравнения.<br>
-         <b>Direct</b> — обычный чат с одной выбранной моделью.</p>
-      <p>Для повседневной работы бери <b>Direct</b>: он предсказуемый и не тратит время на сравнения.</p>
-      <div class="shot">
-        <img src="img/modes.png" alt="Меню режимов площадки" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="ph" style="display:none">Сюда встанет скриншот<br><b>img/modes.png</b></div>
-      </div>
-      <div class="warn"><b>Совет:</b> если хочешь понять, какая модель сильнее в твоей задаче — один раз прогони её в Battle Mode, а потом работай в Direct с победителем.</div>
-    </div>
-  </section>
-
-  <section id="s3">
-    <p class="eyebrow">Шаг 03</p>
-    <h2>Кнопка Max</h2>
-    <p class="intro">Самая полезная кнопка на экране.</p>
-    <div class="card step">
-      <div class="step-head"><div class="num">03</div><h3>Не выбирай модель вручную</h3></div>
-      <p>Режим <b>Max</b> — это роутер: он сам решает, какая модель лучше справится с твоим запросом, и переключает её без тебя.</p>
-      <p>Пользуйся им, когда не хочешь разбираться в списке из десятков названий. Для 90% задач этого достаточно.</p>
-      <div class="warn"><b>Важно:</b> Max не «самая умная модель», а автоматический выбор. Если нужен конкретный стиль ответа — выбери модель руками, как в шаге 4.</div>
-    </div>
-  </section>
-
-  <section id="s4">
-    <p class="eyebrow">Шаг 04</p>
-    <h2>Выбор модели под задачу</h2>
-    <p class="intro">Открой список и найди нужное название.</p>
-    <div class="card step">
-      <div class="step-head"><div class="num">04</div><h3>Где смотреть список</h3></div>
-      <p>Нажми на переключатель рядом с Max — откроется поиск по моделям с фильтрами: текст, код, изображения, веб.</p>
-      <p>В списке видно, что доступно: <b>Max</b> (роутер), <b>glm-5.2</b>, <b>qwen3.7-max-preview</b>, <b>gpt-5.5-instant</b>, <b>gemini-3-flash</b>, несколько версий <b>grok</b>.</p>
-      <div class="shot">
-        <img src="img/models.png" alt="Список моделей" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="ph" style="display:none">Сюда встанет скриншот<br><b>img/models.png</b></div>
-      </div>
-      <div class="warn"><b>Ориентир:</b> gpt — для текстов и объяснений, gemini — для скорости и картинок, grok — для рассуждений, qwen — для кода. Названия версий обновляются, ориентируйся на семейство.</div>
-    </div>
-  </section>
-
-  <section id="s5">
-    <p class="eyebrow">Шаг 05</p>
-    <h2>Что можно делать каждый день</h2>
-    <p class="intro">Шесть задач, которые закрывают почти всё.</p>
-    <div class="grid2">
-      <div class="card"><h3 style="margin:0 0 6px;font-size:16px">Тексты и описания</h3><p style="margin:0;font-size:14px;color:#d9d0c7">Описания товаров, посты, объявления — по образцу и без воды.</p></div>
-      <div class="card"><h3 style="margin:0 0 6px;font-size:16px">Учёба</h3><p style="margin:0;font-size:14px;color:#d9d0c7">Объяснение темы простыми словами и разбор ошибок.</p></div>
-      <div class="card"><h3 style="margin:0 0 6px;font-size:16px">Код и скрипты</h3><p style="margin:0;font-size:14px;color:#d9d0c7">Готовые куски кода с пояснением, что куда вставлять.</p></div>
-      <div class="card"><h3 style="margin:0 0 6px;font-size:16px">Переводы</h3><p style="margin:0;font-size:14px;color:#d9d0c7">С сохранением стиля, а не дословно.</p></div>
-      <div class="card"><h3 style="margin:0 0 6px;font-size:16px">Идеи и планы</h3><p style="margin:0;font-size:14px;color:#d9d0c7">Разложить цель на шаги и найти слабые места.</p></div>
-      <div class="card"><h3 style="margin:0 0 6px;font-size:16px">Проверка текстов</h3><p style="margin:0;font-size:14px;color:#d9d0c7">Найти ошибки и переписать понятнее.</p></div>
-    </div>
-  </section>
-
-  <section id="s6">
-    <p class="eyebrow">Шаг 06</p>
-    <h2>Ограничения площадки</h2>
-    <p class="intro">Честно о том, чего ждать не стоит.</p>
-    <div class="card step">
-      <div class="step-head"><div class="num">06</div><h3>Что нужно понимать заранее</h3></div>
-      <p>Это <b>агрегатор</b>: он даёт доступ к моделям на одной площадке, но не заменяет платные подписки с их внутренними функциями.</p>
-      <p>Лимиты запросов могут меняться, отдельные модели иногда перегружены в часы пик. Если модель долго не отвечает — переключись на другую или повтори позже.</p>
-      <div class="warn"><b>Не подходит:</b> для работы с приватными документами и данными, которые нельзя отправлять в сторонние сервисы.</div>
-    </div>
-  </section>
-
-  <section id="s7">
-    <p class="eyebrow">Шаг 07</p>
-    <h2>Если что-то не работает</h2>
-    <p class="intro">Три быстрых проверки, которые решают 90% проблем.</p>
-    <div class="card step">
-      <div class="step-head"><div class="num">07</div><h3>По порядку</h3></div>
-      <p><b>1.</b> Обнови страницу — чаще всего это всё, что нужно.<br>
-         <b>2.</b> Переключи модель: если одна перегружена, другая ответит сразу.<br>
-         <b>3.</b> Проверь интернет и попробуй другой браузер, если страница не грузится.</p>
-      <p>Не помогло — напиши продавцу в чат Playerok, отвечу и помогу разобраться.</p>
-    </div>
-  </section>
-
-  <!-- ФИНАЛ -->
-  <section class="final">
-    <p class="eyebrow">Готово</p>
-    <h2>Теперь попробуй сам</h2>
-    <p class="intro">Открой площадку и задай первый вопрос — дальше пойдёт само.</p>
-    <div style="margin:18px 0 22px">
-      <div class="price">90 ₽</div>
-      <div style="margin-top:6px"><span class="old">125 ₽</span><span class="off">−28%</span></div>
-    </div>
-    <a class="btn" href="#" id="buyBtn">Забрать доступ</a>
-    <p style="margin-top:14px;font-size:13px;color:var(--muted)">Оплата на Playerok, гарантия сделки</p>
+  <section class="sec" style="text-align:center">
+    <h2>Готово. Начинай с простого</h2>
+    <p>Открой площадку, включи Max и задай первый вопрос — дальше разберёшься по ходу.</p>
+    <a class="cta" href="#">Открыть площадку</a>
+    <p class="hint" style="margin-top:14px">Оплата и поддержка — на Playerok</p>
   </section>
 </main>
 
-<footer class="wrap">
-  Nagibatorz · Playerok · 2026<br>
-  <a href="https://playerok.com/" target="_blank" rel="noopener">Мои товары на Playerok</a>
-</footer>
-
-<div class="fab">
-  <button class="top" id="toTop" aria-label="Наверх">↑</button>
-  <button id="liteBtn" aria-label="Убавить эффекты">3D</button>
-</div>
+<footer>Nagibatorz · Playerok · 2026</footer>
+<button class="fx" id="fx">3D: вкл</button>
 
 <script>
 (function(){
-  "use strict";
-
-  /* ---------- 1. Появление секций: скрывает только JS ---------- */
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var weak = (navigator.hardwareConcurrency || 4) < 4;
-  var plain = reduce || weak;
+  var weak = (navigator.hardwareConcurrency || 8) < 4;
+  var fxOn = !reduce && !weak;
 
-  function initReveal(){
-    if (plain) return;
-    var els = document.querySelectorAll('section, .card, .slide, .flip');
-    var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if (e.isIntersecting){
-          e.target.classList.add('anim-in');
-          e.target.classList.remove('anim-hidden');
-          io.unobserve(e.target);
-        }
-      });
-    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08}) : null;
+  /* 1. безопасное появление: скрываем ТОЛЬКО ниже экрана, страховка таймером */
+  var blocks = [].slice.call(document.querySelectorAll('.sec'));
+  function showAll(){ blocks.forEach(function(b){ b.classList.remove('reveal-init'); b.classList.add('reveal-in'); }); }
 
-    if (!io) return;
-
-    els.forEach(function(el){
-      var r = el.getBoundingClientRect();
-      if (r.top > window.innerHeight * 1.1){
-        el.classList.add('anim-hidden');
-        io.observe(el);
-      }
+  if ('IntersectionObserver' in window && fxOn) {
+    var vh = window.innerHeight;
+    blocks.forEach(function(b){
+      if (b.getBoundingClientRect().top > vh * 0.9) b.classList.add('reveal-init');
     });
-
-    // страховка: через 1.5 с показываем всё
-    setTimeout(function(){
-      document.querySelectorAll('.anim-hidden').forEach(function(el){
-        el.classList.add('anim-in');
-        el.classList.remove('anim-hidden');
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('reveal-in'); io.unobserve(e.target); }
       });
-    }, 1500);
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+    blocks.forEach(function(b){ if (b.classList.contains('reveal-init')) io.observe(b); });
   }
-  initReveal();
+  setTimeout(showAll, 1500);
 
-  /* ---------- 2. Прогресс чтения ---------- */
-  var bar = document.getElementById('barFill');
-  var toTop = document.getElementById('toTop');
+  /* 2. прогресс чтения */
+  var bar = document.getElementById('bar');
+  function prog(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }
+
+  /* 3. параллакс сетки */
+  var grid = document.getElementById('grid'), ticking = false;
   function onScroll(){
-    var h = document.documentElement;
-    var max = h.scrollHeight - h.clientHeight;
-    var p = max > 0 ? (h.scrollTop / max) * 100 : 0;
-    if (bar) bar.style.width = p + '%';
-    if (toTop) toTop.classList.toggle('on', h.scrollTop > 500);
+    if (!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        prog();
+        if (fxOn) grid.style.transform = 'perspective(420px) rotateX(62deg) translateY(' + (window.scrollY * 0.07) + 'px)';
+        ticking = false;
+      });
+    }
   }
   window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
-  if (toTop) toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  prog();
 
-  /* ---------- 3. Наклон телефона ---------- */
+  /* 4. наклон телефона за пальцем */
   var phone = document.getElementById('phone');
-  if (phone && !plain){
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
-    function loop(){
-      cx += (tx - cx) * 0.12;
-      cy += (ty - cy) * 0.12;
-      phone.style.transform = 'rotateX(' + (-cy) + 'deg) rotateY(' + cx + 'deg)';
-      if (Math.abs(tx-cx) > 0.05 || Math.abs(ty-cy) > 0.05){
-        raf = requestAnimationFrame(loop);
-      } else { raf = null; }
-    }
-    function kick(){ if (!raf) raf = requestAnimationFrame(loop); }
-
-    window.addEventListener('mousemove', function(e){
-      var w = window.innerWidth, h = window.innerHeight;
-      tx = (e.clientX / w - 0.5) * 18;
-      ty = (e.clientY / h - 0.5) * 14;
-      kick();
-    }, {passive:true});
-
+  if (phone && fxOn){
+    phone.addEventListener('pointermove', function(e){
+      var r = phone.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - .5;
+      var y = (e.clientY - r.top) / r.height - .5;
+      phone.style.transform = 'rotateY(' + (x * 16) + 'deg) rotateX(' + (-y * 12) + 'deg)';
+    });
+    phone.addEventListener('pointerleave', function(){ phone.style.transform = ''; });
     window.addEventListener('deviceorientation', function(e){
       if (e.gamma == null) return;
-      tx = Math.max(-14, Math.min(14, e.gamma));
-      ty = Math.max(-12, Math.min(12, (e.beta || 0) - 45));
-      kick();
+      var g = Math.max(-25, Math.min(25, e.gamma));
+      var b = Math.max(-25, Math.min(25, (e.beta || 0) - 45));
+      phone.style.transform = 'rotateY(' + (g * .55) + 'deg) rotateX(' + (-b * .35) + 'deg)';
+    });
+  }
+
+  /* 5. карусель: точки-индикаторы */
+  var car = document.getElementById('car'), dots = document.getElementById('dots');
+  if (car && dots){
+    var slides = [].slice.call(car.children);
+    slides.forEach(function(_, i){
+      var d = document.createElement('i');
+      if (!i) d.className = 'on';
+      dots.appendChild(d);
+    });
+    car.addEventListener('scroll', function(){
+      var w = car.scrollWidth / slides.length;
+      var idx = Math.round(car.scrollLeft / w);
+      [].slice.call(dots.children).forEach(function(d, i){ d.className = i === idx ? 'on' : ''; });
     }, {passive:true});
-
-    var touch = function(e){
-      var t = e.touches[0]; if (!t) return;
-      tx = (t.clientX / window.innerWidth - 0.5) * 18;
-      ty = (t.clientY / window.innerHeight - 0.5) * 14;
-      kick();
-    };
-    phone.addEventListener('touchmove', touch, {passive:true});
   }
 
-  /* ---------- 4. Карусель ---------- */
-  var data = [
-    {t:'Battle Mode', d:'Две модели отвечают анонимно', tag:'выбор вслепую'},
-    {t:'Agent Mode', d:'Для сложных многошаговых задач', tag:'автономно'},
-    {t:'Side by Side', d:'Сравнить два ответа рядом', tag:'сравнение'},
-    {t:'Direct', d:'Чат с одной моделью — основной режим', tag:'твой выбор'},
-    {t:'Max', d:'Роутер сам подбирает модель', tag:'авто'}
-  ];
-  var track = document.getElementById('track'), dots = document.getElementById('dots');
-  var idx = 0, slides = [];
-
-  if (track){
-    data.forEach(function(item, i){
-      var d = document.createElement('div');
-      d.className = 'slide';
-      d.innerHTML = '<span class="tag">' + item.tag + '</span><b>' + item.t + '</b><span>' + item.d + '</span>';
-      track.appendChild(d);
-      slides.push(d);
-      if (dots){
-        var dot = document.createElement('i');
-        if (i === 0) dot.className = 'on';
-        dots.appendChild(dot);
-      }
-    });
-  }
-
-  function layout(){
-    var radius = 190;
-    slides.forEach(function(s, i){
-      var off = i - idx;
-      var a = off * 22;
-      s.style.transform = 'rotateY(' + (-a) + 'deg) translateZ(' + (radius - Math.abs(off) * 40) + 'px)';
-      s.style.opacity = Math.abs(off) > 2 ? 0 : (off === 0 ? 1 : 0.55);
-      s.style.zIndex = 10 - Math.abs(off);
-      s.classList.toggle('on', off === 0);
-    });
-    if (dots) Array.prototype.forEach.call(dots.children, function(d, i){
-      d.className = i === idx ? 'on' : '';
-    });
-  }
-  function go(n){
-    idx = (n + slides.length) % slides.length;
-    if (track) track.style.transform = 'translateZ(-20px)';
-    layout();
-  }
-  go(0);
-
-  var sx = 0, dragging = false;
-  var carousel = document.getElementById('carousel');
-  if (carousel){
-    carousel.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; dragging = true; }, {passive:true});
-    carousel.addEventListener('touchend', function(e){
-      if (!dragging) return;
-      dragging = false;
-      var dx = e.changedTouches[0].clientX - sx;
-      if (Math.abs(dx) > 34) go(dx < 0 ? idx + 1 : idx - 1);
-    }, {passive:true});
-    carousel.addEventListener('click', function(){ go(idx + 1); });
-  }
-
-  /* ---------- 5. Куб ---------- */
+  /* 6. куб: вращение пальцем + авто */
   var cube = document.getElementById('cube');
-  var rotX = -18, rotY = -24, vx = 0.22, vy = 0.32;
-  var cubeDrag = false, lastX = 0, lastY = 0;
-
-  function spin(){
-    if (!cube) return;
-    if (!cubeDrag){
-      rotY += vy; rotX += vx * 0.4;
-      if (plain) return;
-    }
-    cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
-    requestAnimationFrame(spin);
-  }
-  if (cube){
-    cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
-    if (!plain) requestAnimationFrame(spin);
-    cube.addEventListener('touchstart', function(e){
-      cubeDrag = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
-    }, {passive:true});
-    cube.addEventListener('touchmove', function(e){
-      if (!cubeDrag) return;
-      var t = e.touches[0];
-      rotY += (t.clientX - lastX) * 0.6;
-      rotX -= (t.clientY - lastY) * 0.6;
-      lastX = t.clientX; lastY = t.clientY;
-      cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
-    }, {passive:true});
-    cube.addEventListener('touchend', function(){ cubeDrag = false; }, {passive:true});
-
-    cube.addEventListener('mousedown', function(e){
-      cubeDrag = true; lastX = e.clientX; lastY = e.clientY;
+  if (cube && fxOn){
+    var rx = -18, ry = -24, auto = true, sx = 0, sy = 0, drag = false;
+    cube.addEventListener('pointerdown', function(e){
+      drag = true; auto = false; sx = e.clientX; sy = e.clientY; cube.setPointerCapture(e.pointerId);
     });
-    window.addEventListener('mousemove', function(e){
-      if (!cubeDrag) return;
-      rotY += (e.clientX - lastX) * 0.5;
-      rotX -= (e.clientY - lastY) * 0.5;
-      lastX = e.clientX; lastY = e.clientY;
-      cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+    cube.addEventListener('pointermove', function(e){
+      if (!drag) return;
+      ry += (e.clientX - sx) * .8;
+      rx -= (e.clientY - sy) * .8;
+      sx = e.clientX; sy = e.clientY;
+      cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
     });
-    window.addEventListener('mouseup', function(){ cubeDrag = false; });
+    cube.addEventListener('pointerup', function(){ drag = false; });
+    (function spin(){
+      if (auto){ ry += .25; cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)'; }
+      requestAnimationFrame(spin);
+    })();
   }
 
-  /* ---------- 6. Флип-карточки ---------- */
-  document.querySelectorAll('.flip').forEach(function(f){
+  /* 7. флип-карточки */
+  [].slice.call(document.querySelectorAll('.flip')).forEach(function(f){
     f.addEventListener('click', function(){ f.classList.toggle('on'); });
   });
 
-  /* ---------- 7. Переключатель эффектов ---------- */
-  var liteBtn = document.getElementById('liteBtn');
-  if (liteBtn){
-    liteBtn.addEventListener('click', function(){
-      document.body.classList.toggle('lite');
-      var on = document.body.classList.contains('lite');
-      liteBtn.textContent = on ? '2D' : '3D';
-    });
-  }
+  /* 8. выключатель эффектов */
+  var fx = document.getElementById('fx');
+  if (!fxOn) { fx.textContent = '3D: выкл'; fx.className = 'fx off'; }
+  document.body.classList.toggle('no-fx', !fxOn);
+  fx.addEventListener('click', function(){
+    fxOn = !fxOn;
+    document.body.classList.toggle('no-fx', !fxOn);
+    fx.textContent = fxOn ? '3D: вкл' : '3D: выкл';
+    fx.className = fxOn ? 'fx' : 'fx off';
+    if (!fxOn){
+      grid.style.transform = '';
+      if (phone) phone.style.transform = '';
+    }
+  });
 })();
 </script>
+<style>
+  .shot{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+    background:linear-gradient(170deg,#15140F,#0C0B09);margin:14px 0;min-height:180px}
+  .shot img{position:relative;z-index:2;display:block;width:100%;height:auto}
+  .shot .shot-ph{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;
+    padding:20px;font:600 12px/1.6 system-ui;color:#7C7770;min-height:180px}
+  .shot-ph code{display:block;margin-top:6px;color:var(--acc2);font-size:12px}
+</style>
 </body>
 </html>
