@@ -100,6 +100,14 @@ h1{
 .ph-fallback{color:#6d625a;font-size:12px;text-align:center;padding:0 22px;line-height:1.5}
 .hint{color:var(--mut);font-size:13px;margin:0 0 34px}
 
+/* уменьшенный телефон для скринов внутри шагов */
+.phone.small{width:min(232px,58vw);border-radius:31px;padding:7px}
+.phone.small::after{border-radius:33px}
+.phone.small .notch{width:68px;height:17px;top:12px}
+.phone.small .screen{border-radius:25px}
+.phone.small .ph-fallback{font-size:11px;padding:0 16px}
+.cap2{text-align:center;font-size:12.5px;color:var(--mut);margin:0 0 18px}
+
 /* содержание */
 .toc{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 16px 8px;margin:0 0 34px;
   box-shadow:0 18px 40px -22px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06)}
@@ -140,7 +148,7 @@ h2 .num{
   border-radius:14px;padding:13px 15px;font-size:14px;color:#f1e7db;margin:0 0 14px;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 
-/* картинки-скрины */
+/* картинки-скрины (запасной вариант) */
 .shot{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);
   background:#0d0b0a;margin:0 0 16px;box-shadow:0 22px 44px -26px #000}
 .shot img{width:100%;display:block}
@@ -258,7 +266,7 @@ body.no-fx{scroll-behavior:auto}
     <p class="lead">GPT, Gemini, Grok, Claude, Qwen, DeepSeek, Llama, Mistral и десятки других — <b>без подписок и оплат</b></p>
 
     <div class="phone-wrap">
-      <div class="phone" id="phone">
+      <div class="phone tilt" id="phone">
         <div class="notch"></div>
         <div class="screen">
           <img src="img/Screenshot_20261031-004721.jpg" alt="Главный экран площадки"
@@ -305,12 +313,17 @@ body.no-fx{scroll-behavior:auto}
       </ul>
     </div>
 
-    <div class="shot">
-      <img src="img/Screenshot_20261031-004728.jpg" alt="Меню режимов"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div class="miss" style="display:none">Скриншот режимов<br><code>img/Screenshot_20261031-004728.jpg</code></div>
-      <div class="cap">Меню режимов: Battle, Agent, Side by Side, Direct</div>
+    <div class="phone-wrap">
+      <div class="phone small tilt">
+        <div class="notch"></div>
+        <div class="screen">
+          <img src="img/Screenshot_20261031-004728.jpg" alt="Меню режимов"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <div class="ph-fallback" style="display:none">Скриншот не найден<br>img/Screenshot_20261031-004728.jpg</div>
+        </div>
+      </div>
     </div>
+    <p class="cap2">Меню режимов: Battle, Agent, Side by Side, Direct</p>
 
     <div class="rail" id="rail">
       <article class="mcard">
@@ -361,12 +374,17 @@ body.no-fx{scroll-behavior:auto}
       <p class="muted">Список моделей живой: его обновляют и пополняют, поэтому новые там появляются чаще, чем ты успеваешь их запомнить.</p>
     </div>
 
-    <div class="shot">
-      <img src="img/Screenshot_20261031-004735.jpg" alt="Список моделей"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div class="miss" style="display:none">Список моделей<br><code>img/Screenshot_20261031-004735.jpg</code></div>
-      <div class="cap">Список моделей внутри площадки</div>
+    <div class="phone-wrap">
+      <div class="phone small tilt">
+        <div class="notch"></div>
+        <div class="screen">
+          <img src="img/Screenshot_20261031-004735.jpg" alt="Список моделей"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <div class="ph-fallback" style="display:none">Скриншот не найден<br>img/Screenshot_20261031-004735.jpg</div>
+        </div>
+      </div>
     </div>
+    <p class="cap2">Список моделей внутри площадки</p>
 
     <p class="fliptip">Коснись карточки — перевернётся</p>
     <div class="flips">
@@ -499,23 +517,29 @@ body.no-fx{scroll-behavior:auto}
     items.forEach(function(el){ el.classList.add('in'); });
   }
 
-  /* наклон телефона */
-  var phone = document.getElementById('phone');
+  /* наклон всех телефонов */
+  var phones = [].slice.call(document.querySelectorAll('.phone'));
   var baseY = -9, baseX = 7;
-  if (phone && !noMotion){
+  if (phones.length && !noMotion){
     window.addEventListener('pointermove', function(e){
-      var r = phone.getBoundingClientRect();
-      var cx = r.left + r.width/2, cy = r.top + r.height/2;
-      var dx = (e.clientX - cx) / (r.width || 1);
-      var dy = (e.clientY - cy) / (r.height || 1);
-      phone.style.transform = 'rotateY(' + (baseY + dx * 16) + 'deg) rotateX(' + (baseX - dy * 14) + 'deg)';
+      phones.forEach(function(p){
+        if (body.classList.contains('no-fx')) return;
+        var r = p.getBoundingClientRect();
+        var cx = r.left + r.width/2, cy = r.top + r.height/2;
+        var dx = (e.clientX - cx) / (r.width || 1);
+        var dy = (e.clientY - cy) / (r.height || 1);
+        p.style.transform = 'rotateY(' + (baseY + dx * 16) + 'deg) rotateX(' + (baseX - dy * 14) + 'deg)';
+      });
     }, {passive:true});
 
     window.addEventListener('deviceorientation', function(e){
       if (e.gamma == null || e.beta == null) return;
+      if (body.classList.contains('no-fx')) return;
       var g = Math.max(-30, Math.min(30, e.gamma));
       var b = Math.max(-30, Math.min(30, e.beta - 40));
-      phone.style.transform = 'rotateY(' + (baseY + g * 0.45) + 'deg) rotateX(' + (baseX - b * 0.35) + 'deg)';
+      phones.forEach(function(p){
+        p.style.transform = 'rotateY(' + (baseY + g * 0.45) + 'deg) rotateX(' + (baseX - b * 0.35) + 'deg)';
+      });
     }, {passive:true});
   }
 
@@ -568,7 +592,6 @@ body.no-fx{scroll-behavior:auto}
     }
     function up(){ dragging = false; }
 
-    /* pointer events */
     if (window.PointerEvent){
       stage.addEventListener('pointerdown', function(e){
         down(e.clientX, e.clientY);
@@ -585,7 +608,6 @@ body.no-fx{scroll-behavior:auto}
       stage.addEventListener('pointerleave', up);
     }
 
-    /* фолбэк: мышь и касания */
     stage.addEventListener('mousedown', function(e){ down(e.clientX, e.clientY); e.preventDefault(); });
     window.addEventListener('mousemove', function(e){ move(e.clientX, e.clientY); });
     window.addEventListener('mouseup', up);
@@ -603,7 +625,6 @@ body.no-fx{scroll-behavior:auto}
     stage.addEventListener('touchend', up, {passive:true});
     stage.addEventListener('touchcancel', up, {passive:true});
 
-    /* авто-вращение, когда не трогают */
     if (!noMotion){
       setInterval(function(){
         if (dragging || body.classList.contains('no-fx')) return;
@@ -621,7 +642,7 @@ body.no-fx{scroll-behavior:auto}
       body.classList.toggle('no-fx');
       var off = body.classList.contains('no-fx');
       fx.textContent = off ? '3D: выкл' : '3D: вкл';
-      if (off && phone) phone.style.transform = 'none';
+      if (off){ phones.forEach(function(p){ p.style.transform = 'none'; }); }
     });
     if (noMotion){ fx.textContent = '3D: выкл'; body.classList.add('no-fx'); }
   }
