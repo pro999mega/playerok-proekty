@@ -1,0 +1,5 @@
+Сюда положи четыре скриншота с такими именами (важно, регистр и расширение):
+
+hero.png    — главный экран площадки «What would you like to do?»
+modes.png   — меню режимов: Battle Mode, Agent Mode, Side by Side, Direct
+models.png  — список моделей: Max, glm, qwen, gpt, gemini, grok
