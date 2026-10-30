@@ -130,6 +130,16 @@ h2 .num{
 .card b{color:var(--gold2)}
 .muted{color:var(--mut);font-size:14px}
 
+/* ссылка и плашка-совет */
+.lnk{margin:0 0 10px}
+.lnk code{display:block;background:rgba(0,0,0,.45);border:1px solid var(--line);border-radius:11px;
+  padding:11px 13px;color:var(--gold2);font-size:13.5px;line-height:1.4;word-break:break-all;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.tip{position:relative;background:linear-gradient(170deg,rgba(255,138,43,.16),rgba(255,255,255,.03));
+  border:1px solid rgba(245,181,68,.32);border-left:3px solid var(--acc);
+  border-radius:14px;padding:13px 15px;font-size:14px;color:#f1e7db;margin:0 0 14px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+
 /* картинки-скрины */
 .shot{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);
   background:#0d0b0a;margin:0 0 16px;box-shadow:0 22px 44px -26px #000}
@@ -275,10 +285,11 @@ body.no-fx{scroll-behavior:auto}
     <p class="eyebrow">ШАГ 01</p>
     <h2><span class="num">01</span>Открываем площадку</h2>
     <div class="card">
-      <p>Заходишь на <b>arena.ai</b> с любого устройства — телефон, планшет или компьютер. Нужен только браузер: ничего скачивать и устанавливать не надо.</p>
-      <p>Регистрироваться не нужно — открывается сразу рабочее окно с полем ввода. Один и тот же аккаунт-окно работает где угодно: начал на телефоне, продолжил на ПК.</p>
-      <p>Сверху видно приветствие и кнопку с моделью: она показывает, кто сейчас будет отвечать. Если там стоит <b>Max</b> — всё готово, можно писать запрос.</p>
+      <p>Перейди по ссылке с любого устройства — телефон, планшет, компьютер. Работает в браузере, ничего устанавливать не нужно.</p>
+      <p class="lnk"><code>https://arena.ai/text/direct</code></p>
+      <p>Если площадка попросит войти — авторизируйся удобным способом. Это бесплатно.</p>
     </div>
+    <div class="tip">Сразу добавь страницу в закладки браузера, чтобы не искать ссылку каждый раз.</div>
   </section>
 
   <section class="step rv" id="s2">
