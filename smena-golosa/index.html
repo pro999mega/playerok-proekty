@@ -9,12 +9,13 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#0a0a0c;
+    --bg:#08080b;
     --card:rgba(255,255,255,.045);
-    --card2:rgba(255,255,255,.07);
+    --card2:rgba(255,255,255,.08);
     --line:rgba(255,255,255,.1);
     --orange:#ff7a18;
     --orange2:#ffb347;
+    --ice:#9fd4ff;
     --text:#edeff2;
     --muted:#9aa0aa;
   }
@@ -29,107 +30,259 @@
   }
   body::before{
     content:"";
-    position:fixed;inset:0;
+    position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
-      radial-gradient(700px 420px at 96% 6%, rgba(255,69,0,.12), transparent 60%),
-      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
-    pointer-events:none;z-index:0;
+      radial-gradient(900px 520px at 10% -10%, rgba(255,122,24,.22), transparent 62%),
+      radial-gradient(700px 460px at 98% 4%, rgba(120,190,255,.12), transparent 60%),
+      radial-gradient(900px 560px at 50% 108%, rgba(255,120,0,.1), transparent 62%);
   }
-  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
 
-  .hero{
-    padding:48px 0 34px;
-    text-align:center;
-    border-bottom:1px solid var(--line);
-    margin-bottom:34px;
+  .progress{
+    position:fixed;top:0;left:0;height:3px;width:0;
+    background:linear-gradient(90deg,var(--orange2),var(--orange),#ff4d00);
+    box-shadow:0 0 14px rgba(255,122,24,.7);
+    z-index:90;transition:width .08s linear;
   }
-  .hero .tag{
+
+  .fxbtn{
+    position:fixed;left:14px;bottom:18px;z-index:80;
+    background:rgba(16,16,20,.75);
+    border:1px solid rgba(255,122,24,.4);
+    color:#ffd9b8;
+    font-size:12.5px;font-weight:800;letter-spacing:.6px;
+    padding:10px 14px;border-radius:100px;
+    backdrop-filter:blur(10px);cursor:pointer;
+    box-shadow:0 8px 24px rgba(0,0,0,.45);
+  }
+  .fxbtn:active{transform:scale(.97)}
+
+  .wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 18px 96px}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:44px 0 26px;
+    text-align:center;
+  }
+  .tag{
     display:inline-block;
-    font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
+    font-size:11.5px;letter-spacing:2.6px;text-transform:uppercase;
     color:var(--orange2);
     border:1px solid rgba(255,122,24,.35);
     background:rgba(255,122,24,.08);
     border-radius:100px;
-    padding:6px 16px;margin-bottom:20px;
+    padding:6px 16px;margin-bottom:18px;
   }
   .hero h1{
-    font-size:clamp(27px,7vw,46px);
-    line-height:1.12;
-    font-weight:900;
-    letter-spacing:-.5px;
-    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
+    font-size:clamp(28px,7.4vw,48px);
+    line-height:1.08;
+    font-weight:900;letter-spacing:-.8px;
+    background:linear-gradient(180deg,#fff 0%,#e8ebf0 42%,var(--orange) 132%);
     -webkit-background-clip:text;background-clip:text;
     -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
+    filter:drop-shadow(0 8px 30px rgba(255,122,24,.34));
   }
-  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+  .hero > p{color:var(--muted);margin-top:14px;font-size:15.5px;max-width:560px;margin-left:auto;margin-right:auto}
 
-  .note{
-    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
-    border:1px solid rgba(255,122,24,.28);
-    border-radius:16px;
-    padding:16px 18px;
-    font-size:14.5px;
-    margin-bottom:26px;
-    color:#f3e3d6;
+  /* ---------- 3D SCENE ---------- */
+  .stage{
+    perspective:1200px;
+    margin:34px auto 10px;
+    max-width:400px;
+    position:relative;
+    transform-style:preserve-3d;
+    touch-action:none;
   }
-  .note b{color:var(--orange2)}
+  .tilt{
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .14s ease-out;
+    will-change:transform;
+    padding:12px 0 6px;
+  }
 
-  .searchbox{margin-bottom:26px}
-  .searchbox input{
-    width:100%;
+  .phone{
+    position:relative;
+    width:228px;height:494px;
+    margin:0 auto;
+    border-radius:40px;
+    background:linear-gradient(150deg,#33373d 0%,#15171b 42%,#0b0c0e 100%);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.09),
+      0 0 0 7px #101216,
+      0 26px 60px rgba(0,0,0,.7),
+      0 0 80px rgba(255,122,24,.16);
+    transform-style:preserve-3d;
+    backface-visibility:hidden;
+  }
+  .phone::after{
+    content:"";
+    position:absolute;inset:0;border-radius:40px;pointer-events:none;
+    background:linear-gradient(150deg,rgba(255,255,255,.22),transparent 34%,transparent 68%,rgba(255,255,255,.07));
+    mix-blend-mode:screen;
+  }
+  .btn-side{
+    position:absolute;width:3px;border-radius:3px;
+    background:linear-gradient(180deg,#4a4f56,#21242a);
+  }
+  .btn-side.v{right:-3px;height:66px;top:132px}
+  .btn-side.a{left:-3px;height:34px;top:112px}
+  .btn-side.b{left:-3px;height:34px;top:158px}
+  .notch{
+    position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:86px;height:19px;border-radius:0 0 13px 13px;
+    background:#05060a;z-index:3;
+    box-shadow:inset 0 -1px 0 rgba(255,255,255,.06);
+  }
+  .notch::after{
+    content:"";position:absolute;right:16px;top:6px;
+    width:7px;height:7px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#39414d,#0a0c10);
+  }
+  .screen{
+    position:absolute;inset:7px;border-radius:34px;overflow:hidden;
+    background:
+      radial-gradient(120% 60% at 50% 0%, rgba(255,122,24,.28), transparent 62%),
+      linear-gradient(170deg,#101217,#07080b 70%);
+    display:flex;flex-direction:column;
+    padding:40px 16px 18px;
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .s-top{
+    display:flex;align-items:center;gap:7px;
+    font-size:9.5px;letter-spacing:1.9px;font-weight:800;
+    color:#ffcf9f;
+  }
+  .s-top .dot{
+    width:7px;height:7px;border-radius:50%;background:#ff3b3b;
+    box-shadow:0 0 10px #ff3b3b;
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+
+  .wave{
+    display:flex;align-items:center;justify-content:center;gap:4px;
+    height:96px;margin:14px 0 8px;
+  }
+  .wave i{
+    display:block;width:5px;border-radius:4px;
+    background:linear-gradient(180deg,#ffe3bd,#ff7a18 60%,#ff4d00);
+    box-shadow:0 0 10px rgba(255,122,24,.55);
+    animation:wave 1.15s ease-in-out infinite;
+  }
+  @keyframes wave{
+    0%,100%{height:10px;opacity:.5}
+    50%{height:78px;opacity:1}
+  }
+
+  .s-ring{
+    margin:2px auto 0;
+    width:88px;height:88px;border-radius:50%;
+    display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 30%,rgba(255,122,24,.28),rgba(255,122,24,.06) 70%);
+    border:1px solid rgba(255,122,24,.45);
+    box-shadow:0 0 42px rgba(255,122,24,.35),inset 0 0 26px rgba(255,122,24,.18);
+  }
+  .s-ring span{
+    font-size:17px;font-weight:900;letter-spacing:1.5px;color:#fff;
+    text-shadow:0 0 18px rgba(255,150,60,.9);
+  }
+  .s-tiles{
+    display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:auto;
+  }
+  .s-tiles span{
+    font-size:8.5px;font-weight:800;letter-spacing:.9px;text-align:center;
+    padding:7px 4px;border-radius:8px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.09);
+    color:#cfd6de;
+  }
+  .s-tiles span:first-child{
+    background:rgba(255,122,24,.2);
+    border-color:rgba(255,122,24,.5);
+    color:#ffe1c4;
+  }
+  .s-foot{
+    margin-top:10px;text-align:center;
+    font-size:8px;letter-spacing:1.6px;color:#7d8590;font-weight:700;
+  }
+
+  .chip{
+    position:absolute;
+    padding:8px 13px;border-radius:12px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(9px);
+    font-size:11px;font-weight:800;letter-spacing:.7px;
+    color:#ffe9d6;white-space:nowrap;
+    box-shadow:0 14px 34px rgba(0,0,0,.5);
+    animation:float 5.5s ease-in-out infinite;
+  }
+  .chip b{color:var(--orange2)}
+  .chip1{top:26px;left:-26px;transform:translateZ(70px)}
+  .chip2{top:186px;right:-30px;transform:translateZ(92px);animation-delay:.7s}
+  .chip3{bottom:74px;left:-34px;transform:translateZ(48px);animation-delay:1.3s}
+  @keyframes float{0%,100%{translate:0 0}50%{translate:0 -11px}}
+
+  .stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:9px;
+    margin:26px auto 0;max-width:460px;
+  }
+  .stat{
     background:var(--card);
     border:1px solid var(--line);
     border-radius:14px;
-    padding:14px 18px;
-    color:var(--text);
-    font-size:15.5px;
-    outline:none;
-    transition:.2s;
+    padding:13px 8px;
+    text-align:center;
     backdrop-filter:blur(10px);
+  }
+  .stat b{display:block;font-size:16.5px;font-weight:900;color:#fff;letter-spacing:-.3px}
+  .stat span{font-size:10.5px;color:var(--muted);letter-spacing:.4px}
+
+  /* ---------- CONTENT ---------- */
+  .note{
+    background:linear-gradient(135deg,rgba(255,122,24,.14),rgba(255,122,24,.03));
+    border:1px solid rgba(255,122,24,.3);
+    border-radius:16px;padding:16px 18px;
+    font-size:14.5px;margin:34px 0 22px;color:#f3e3d6;
+  }
+  .note b{color:var(--orange2)}
+
+  .searchbox{margin-bottom:20px}
+  .searchbox input{
+    width:100%;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:14px 18px;color:var(--text);
+    font-size:15.5px;outline:none;transition:.2s;backdrop-filter:blur(10px);
   }
   .searchbox input:focus{border-color:rgba(255,122,24,.55);background:var(--card2)}
   .searchbox input::placeholder{color:#6d737d}
 
   .toc{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:8px;
-    margin-bottom:38px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:8px;margin-bottom:34px;
     backdrop-filter:blur(12px);
   }
   .toc-title{
-    font-size:12px;letter-spacing:1.8px;text-transform:uppercase;
-    color:var(--muted);padding:12px 16px 8px;font-weight:700;
+    font-size:11.5px;letter-spacing:1.9px;text-transform:uppercase;
+    color:var(--muted);padding:12px 16px 8px;font-weight:800;
   }
   .toc a{
     display:flex;align-items:center;gap:12px;
-    padding:12px 16px;
-    border-radius:12px;
-    color:var(--text);
-    text-decoration:none;
-    font-size:15px;
-    font-weight:600;
-    transition:.15s;
+    padding:12px 16px;border-radius:12px;
+    color:var(--text);text-decoration:none;
+    font-size:15px;font-weight:600;transition:.15s;
   }
   .toc a:hover{background:rgba(255,122,24,.1);color:#fff}
   .toc a .ico{
-    width:26px;height:26px;flex:0 0 26px;
-    display:grid;place-items:center;
-    border-radius:8px;
-    background:rgba(255,122,24,.15);
-    font-size:13px;
+    width:27px;height:27px;flex:0 0 27px;
+    display:grid;place-items:center;border-radius:9px;
+    background:rgba(255,122,24,.16);font-size:13px;
   }
 
   .part{
-    margin:52px 0 24px;
-    font-size:clamp(22px,5.5vw,30px);
-    font-weight:900;
-    letter-spacing:-.3px;
-    padding-bottom:12px;
-    border-bottom:1px solid var(--line);
+    margin:52px 0 20px;
+    font-size:clamp(21px,5.4vw,30px);
+    font-weight:900;letter-spacing:-.4px;
+    padding-bottom:12px;border-bottom:1px solid var(--line);
     scroll-margin-top:18px;
   }
   .part span{
@@ -143,24 +296,22 @@
     border:1px solid var(--line);
     border-radius:18px;
     padding:20px 20px 22px;
-    margin-bottom:14px;
+    margin-bottom:13px;
     backdrop-filter:blur(10px);
     scroll-margin-top:18px;
+    transition:border-color .2s, transform .2s;
   }
+  .step:hover{border-color:rgba(255,122,24,.3)}
   .step h3{
-    font-size:17.5px;
-    font-weight:800;
-    margin-bottom:12px;
-    display:flex;gap:11px;align-items:flex-start;
-    letter-spacing:-.2px;
+    font-size:17.5px;font-weight:800;margin-bottom:12px;
+    display:flex;gap:11px;align-items:flex-start;letter-spacing:-.2px;
   }
   .num{
-    flex:0 0 28px;height:28px;
-    display:grid;place-items:center;
+    flex:0 0 28px;height:28px;display:grid;place-items:center;
     border-radius:9px;
     background:linear-gradient(150deg,var(--orange),#d95a00);
     color:#fff;font-size:13.5px;font-weight:900;
-    box-shadow:0 4px 14px rgba(255,122,24,.35);
+    box-shadow:0 5px 16px rgba(255,122,24,.4);
   }
   .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
   .step p:last-child{margin-bottom:0}
@@ -169,172 +320,270 @@
   .step li::marker{color:var(--orange)}
 
   kbd{
-    display:inline-block;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.18);
-    border-bottom-width:2px;
-    border-radius:6px;
-    padding:1px 7px;
+    display:inline-block;background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.18);border-bottom-width:2px;
+    border-radius:6px;padding:1px 7px;
     font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    color:#fff;
-    white-space:nowrap;
+    font-size:13px;color:#fff;white-space:nowrap;
   }
   code{
     font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    background:rgba(255,122,24,.12);
-    color:var(--orange2);
-    padding:2px 7px;border-radius:6px;
-    word-break:break-all;
+    font-size:13px;background:rgba(255,122,24,.12);
+    color:var(--orange2);padding:2px 7px;border-radius:6px;word-break:break-all;
   }
   .path{
-    display:block;
-    background:rgba(0,0,0,.4);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:11px 14px;
-    margin:10px 0;
+    display:block;background:rgba(0,0,0,.45);
+    border:1px solid var(--line);border-radius:10px;
+    padding:11px 14px;margin:10px 0;
     font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12.5px;
-    color:#ffcf9a;
-    overflow-x:auto;
-    white-space:nowrap;
+    font-size:12.5px;color:#ffcf9a;overflow-x:auto;white-space:nowrap;
   }
 
   .warn{
     background:rgba(255,60,60,.09);
-    border:1px solid rgba(255,80,80,.32);
+    border:1px solid rgba(255,80,80,.3);
     border-left:3px solid #ff4d4d;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#ffc9c9;
+    border-radius:12px;padding:13px 16px;margin:14px 0 0;
+    font-size:14px;color:#ffc9c9;
   }
   .warn b{color:#ff8f8f}
-
   .tip{
     background:rgba(70,200,120,.08);
     border:1px solid rgba(70,200,120,.25);
     border-left:3px solid #37c97a;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#c3f0d8;
+    border-radius:12px;padding:13px 16px;margin:14px 0 0;
+    font-size:14px;color:#c3f0d8;
   }
 
-  .tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
+  .tbl-wrap{overflow-x:auto;margin-top:10px}
+  .tbl{width:100%;border-collapse:collapse;font-size:14.5px}
   .tbl th{
-    text-align:left;padding:10px 12px;
-    color:var(--muted);font-size:12px;
-    text-transform:uppercase;letter-spacing:1.2px;
+    text-align:left;padding:10px 12px;color:var(--muted);
+    font-size:11.5px;text-transform:uppercase;letter-spacing:1.2px;
     border-bottom:1px solid var(--line);
   }
   .tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
   .tbl tr:last-child td{border-bottom:none}
   .tbl td:first-child{font-weight:600;color:#fff}
-  .tbl-wrap{overflow-x:auto}
 
   .check{list-style:none;margin:0;padding:0}
   .check li{
     display:flex;gap:11px;align-items:flex-start;
     padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);
-    font-size:15px;color:#cfd4db;
+    font-size:15px;color:#cfd4db;cursor:pointer;
+    transition:color .18s;
   }
   .check li:last-child{border-bottom:none}
   .check li::before{
-    content:"☐";
-    color:var(--orange);
-    font-size:18px;
-    line-height:1.2;
-    flex:0 0 auto;
+    content:"☐";color:var(--orange);
+    font-size:18px;line-height:1.2;flex:0 0 auto;
   }
+  .check li.done{color:#8fe0b0}
+  .check li.done::before{content:"☑";color:#37c97a}
 
-  .bonus{
-    margin-top:56px;
-    background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
-    border:1px solid rgba(255,122,24,.35);
-    border-radius:22px;
-    padding:28px 24px;
+  /* ---------- SHOP ---------- */
+  .shop{
+    position:relative;
+    margin-top:58px;
+    padding:30px 22px 26px;
+    border-radius:24px;
     text-align:center;
+    background:
+      linear-gradient(160deg,rgba(255,198,110,.14),rgba(255,122,24,.05) 46%,rgba(0,0,0,.4));
+    border:1px solid transparent;
+    background-clip:padding-box;
+    box-shadow:0 0 0 1px rgba(255,190,110,.5),0 24px 70px rgba(255,140,0,.16);
     scroll-margin-top:18px;
   }
-  .bonus h2{
-    font-size:24px;font-weight:900;margin-bottom:10px;
-    background:linear-gradient(90deg,#fff,var(--orange2));
+  .shop::before{
+    content:"";
+    position:absolute;inset:-1px;border-radius:25px;z-index:-1;
+    background:linear-gradient(135deg,#ffd48a,#ff8a1e 40%,#7a3c00 100%);
+    opacity:.55;
+  }
+  .shop-badge{
+    display:inline-block;
+    font-size:10px;letter-spacing:2.6px;font-weight:900;
+    color:#3a1c00;
+    background:linear-gradient(180deg,#ffe1a8,#ffb347);
+    padding:5px 14px;border-radius:100px;margin-bottom:12px;
+  }
+  .crown{font-size:34px;line-height:1;margin-bottom:6px;filter:drop-shadow(0 6px 18px rgba(255,170,50,.6))}
+  .shop h2{
+    font-size:24px;font-weight:900;letter-spacing:-.4px;margin-bottom:6px;
+    background:linear-gradient(90deg,#fff,#ffcf8a);
     -webkit-background-clip:text;background-clip:text;
     -webkit-text-fill-color:transparent;
   }
-  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
+  .shop-sub{color:#f0dcc6;font-size:14px;margin-bottom:16px}
+  .shop ul{list-style:none;margin:0 auto 20px;max-width:400px;text-align:left}
+  .shop ul li{
+    font-size:14.5px;color:#f3e6d8;padding:7px 0 7px 24px;position:relative;
+  }
+  .shop ul li::before{
+    content:"✦";position:absolute;left:0;top:6px;
+    color:var(--orange2);font-size:13px;
+  }
   .btn{
     display:inline-block;
     background:linear-gradient(150deg,var(--orange),#d95a00);
     color:#fff;text-decoration:none;
     font-weight:800;font-size:15.5px;
-    padding:15px 34px;border-radius:14px;
-    box-shadow:0 10px 30px rgba(255,122,24,.35);
-    transition:.18s;
+    padding:15px 30px;border-radius:14px;
+    box-shadow:0 12px 34px rgba(255,122,24,.38);
+    transition:.18s;margin:5px 4px 0;
   }
   .btn:active{transform:scale(.97)}
+  .btn.ghost{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:none;color:#ffe9d6;
+  }
+  .shop-by{
+    margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px;
+    font-size:13px;color:#cbbfae;
+  }
+  .ava{
+    width:32px;height:32px;border-radius:50%;
+    display:grid;place-items:center;
+    background:linear-gradient(150deg,#232833,#0d0f13);
+    border:1px solid rgba(255,190,110,.5);
+    font-size:13px;font-weight:900;color:#ffcf8a;
+  }
+  .shop-by b{color:#fff}
 
   footer{
-    margin-top:54px;
-    padding-top:26px;
+    margin-top:46px;padding-top:24px;
     border-top:1px solid var(--line);
-    text-align:center;
-    color:var(--muted);
-    font-size:13.5px;
+    text-align:center;color:var(--muted);font-size:13px;
   }
   footer b{color:var(--text)}
+  footer .pro{
+    display:inline-block;margin-top:8px;font-size:10px;
+    letter-spacing:3px;color:rgba(255,180,90,.65);font-weight:900;
+  }
 
   .top{
-    position:fixed;
-    right:16px;bottom:18px;
-    width:46px;height:46px;
-    border-radius:50%;
-    background:rgba(255,122,24,.9);
-    color:#fff;border:none;
-    font-size:19px;
-    display:grid;place-items:center;
-    box-shadow:0 8px 24px rgba(255,122,24,.4);
-    cursor:pointer;
-    opacity:0;pointer-events:none;
-    transition:.25s;
-    z-index:50;
+    position:fixed;right:16px;bottom:18px;
+    width:46px;height:46px;border-radius:50%;
+    background:rgba(255,122,24,.92);color:#fff;border:none;
+    font-size:19px;display:grid;place-items:center;
+    box-shadow:0 10px 26px rgba(255,122,24,.42);
+    cursor:pointer;opacity:0;pointer-events:none;
+    transition:.25s;z-index:80;
   }
   .top.show{opacity:1;pointer-events:auto}
 
   .hide{display:none!important}
 
+  body.no-fx .tilt{transform:none!important}
+  body.no-fx .wave i,
+  body.no-fx .chip,
+  body.no-fx .s-top .dot{animation:none!important}
+  body.no-fx .wave i{height:34px}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+  }
+
   @media(max-width:430px){
-    .wrap{padding:0 14px 84px}
-    .hero{padding:34px 0 26px}
+    .wrap{padding:0 14px 92px}
+    .hero{padding:32px 0 18px}
+    .stage{max-width:340px}
+    .phone{width:196px;height:424px;border-radius:34px}
+    .screen{padding:36px 13px 15px;border-radius:29px}
+    .notch{width:74px;height:17px}
+    .wave{height:82px}
+    @keyframes wave{0%,100%{height:8px;opacity:.5}50%{height:64px;opacity:1}}
+    .s-ring{width:74px;height:74px}
+    .chip{font-size:10px;padding:7px 11px}
+    .chip1{left:-10px;top:18px}
+    .chip2{right:-12px;top:160px}
+    .chip3{left:-14px;bottom:56px}
     .step{padding:17px 15px 19px;border-radius:16px}
     .step h3{font-size:16.5px}
     .step p,.step li{font-size:14.5px}
+    .shop{padding:26px 16px 22px}
   }
 </style>
 </head>
 <body>
+
+<div class="progress" id="prg"></div>
+<button class="fxbtn" id="fxBtn" aria-label="Переключить 3D">3D: вкл</button>
+
 <div class="wrap">
 
-  <div class="hero">
+  <header class="hero">
     <div class="tag">Nagibatorz · гайд</div>
-    <h1>Смена голоса в&nbsp;реальном времени</h1>
-    <p>Настройка на компьютере, Samsung, iPhone и&nbsp;Redmi — по&nbsp;шагам, текстом</p>
-  </div>
+    <h1>Смена голоса<br>в реальном времени</h1>
+    <p>Компьютер, Samsung, iPhone и Redmi — по шагам, без воды и лишних ссылок</p>
+
+    <div class="stage" id="stage">
+      <div class="tilt" id="tilt">
+
+        <div class="phone">
+          <div class="btn-side a"></div>
+          <div class="btn-side b"></div>
+          <div class="btn-side v"></div>
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="s-top"><span class="dot"></span> ГОЛОС В ЭФИРЕ</div>
+
+            <div class="wave" aria-hidden="true">
+              <i style="animation-delay:0s"></i>
+              <i style="animation-delay:.09s"></i>
+              <i style="animation-delay:.18s"></i>
+              <i style="animation-delay:.27s"></i>
+              <i style="animation-delay:.36s"></i>
+              <i style="animation-delay:.45s"></i>
+              <i style="animation-delay:.54s"></i>
+              <i style="animation-delay:.63s"></i>
+              <i style="animation-delay:.72s"></i>
+              <i style="animation-delay:.81s"></i>
+              <i style="animation-delay:.9s"></i>
+              <i style="animation-delay:.99s"></i>
+              <i style="animation-delay:1.08s"></i>
+              <i style="animation-delay:1.17s"></i>
+            </div>
+
+            <div class="s-ring"><span>ON</span></div>
+
+            <div class="s-tiles">
+              <span>РОБОТ</span>
+              <span>ДЕВУШКА</span>
+              <span>МОНСТР</span>
+              <span>ЭХО</span>
+            </div>
+
+            <div class="s-foot">ЗАДЕРЖКА 0 МС · 48 КГЦ</div>
+          </div>
+        </div>
+
+        <div class="chip chip1">🎙️ <b>МИКРОФОН</b></div>
+        <div class="chip chip2">⚡ <b>1 КЛИК</b></div>
+        <div class="chip chip3">🔒 БЕЗ ROOT</div>
+
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>1 клик</b><span>смена голоса</span></div>
+      <div class="stat"><b>0 root</b><span>и джейлбрейка</span></div>
+      <div class="stat"><b>4</b><span>устройства</span></div>
+    </div>
+  </header>
 
   <div class="note">
-    <b>Как пользоваться:</b> найди свой раздел ниже и&nbsp;проходи шаги сверху вниз. Никаких видео и&nbsp;сторонних ссылок не&nbsp;нужно — всё описано словами. Где стоит <b>⚠️</b> — шаг важный, не&nbsp;пропускай.
+    <b>Как пользоваться:</b> найди свой раздел ниже и проходи шаги сверху вниз.
+    Всё описано словами — никаких видео и сторонних ссылок. Где стоит <b>⚠️</b> — шаг важный, не пропускай.
   </div>
 
   <div class="searchbox">
     <input type="text" id="q" placeholder="Поиск по гайду — например «наушники» или «AltStore»" autocomplete="off">
   </div>
 
-  <div class="toc">
+  <nav class="toc">
     <div class="toc-title">Содержание</div>
     <a href="#pc"><span class="ico">💻</span> Компьютер — простой вариант</a>
     <a href="#samsung"><span class="ico">📱</span> Samsung</a>
@@ -343,63 +592,63 @@
     <a href="#prob"><span class="ico">🛠️</span> Если что-то не работает</a>
     <a href="#limits"><span class="ico">ℹ️</span> Что важно знать</a>
     <a href="#check"><span class="ico">✅</span> Чек-лист</a>
-  </div>
+  </nav>
 
   <h2 class="part"><span>Раздел 1 — Компьютер</span></h2>
 
   <div class="step" id="pc">
     <h3><span class="num">1</span> Ставим программу-войсченджер</h3>
-    <p>На компьютере смена голоса делается через отдельную программу. Она создаёт «виртуальный микрофон», который слышат игры и&nbsp;мессенджеры.</p>
+    <p>На компьютере смена голоса делается через отдельную программу. Она создаёт «виртуальный микрофон», который слышат игры и мессенджеры.</p>
     <p><b>Варианты:</b></p>
     <ul>
-      <li><b>Voicemod</b> — самый простой, есть бесплатная версия, набор голосов меняется в&nbsp;один клик</li>
+      <li><b>Voicemod</b> — самый простой, есть бесплатная версия, голоса меняются в один клик</li>
       <li><b>Clownfish</b> — полностью бесплатный, без регистрации, голосов меньше</li>
-      <li><b>MorphVOX</b> — старый и&nbsp;надёжный, есть платная и&nbsp;бесплатная версии</li>
+      <li><b>MorphVOX</b> — старый и надёжный, есть платная и бесплатная версии</li>
     </ul>
-    <div class="warn">⚠️ Скачивай <b>только с официального сайта программы</b>. Сборки с торрентов и&nbsp;«бесплатные кряки» часто идут с&nbsp;майнером или кражей паролей.</div>
+    <div class="warn">⚠️ Скачивай <b>только с официального сайта программы</b>. Сборки с торрентов и «бесплатные кряки» часто идут с майнером или кражей паролей.</div>
   </div>
 
   <div class="step" id="pc2">
     <h3><span class="num">2</span> Установка и доступ к микрофону</h3>
     <ol>
-      <li>Запусти установщик и&nbsp;пройди обычную установку</li>
-      <li>При первом запуске программа попросит доступ к&nbsp;микрофону — <b>разреши</b></li>
-      <li>Если окно не&nbsp;появилось, а&nbsp;голос не&nbsp;меняется: Параметры Windows → <b>Конфиденциальность</b> → <b>Микрофон</b> → включи доступ для приложений и&nbsp;разреши этой программе</li>
+      <li>Запусти установщик и пройди обычную установку</li>
+      <li>При первом запуске программа попросит доступ к микрофону — <b>разреши</b></li>
+      <li>Если окно не появилось, а голос не меняется: Параметры Windows → <b>Конфиденциальность</b> → <b>Микрофон</b> → включи доступ для приложений и разреши этой программе</li>
     </ol>
   </div>
 
   <div class="step" id="pc3">
     <h3><span class="num">3</span> Надень наушники</h3>
-    <div class="warn">⚠️ <b>Это не мелочь.</b> Если звук идёт из колонок, микрофон слышит изменённый голос и&nbsp;перерабатывает его заново — получается эхо, свист и&nbsp;«робот». В&nbsp;наушниках этого нет.</div>
+    <div class="warn">⚠️ <b>Это не мелочь.</b> Если звук идёт из колонок, микрофон слышит изменённый голос и перерабатывает его заново — получается эхо, свист и «робот». В наушниках этого нет.</div>
   </div>
 
   <div class="step" id="pc4">
     <h3><span class="num">4</span> Выбираем голос</h3>
-    <p>В&nbsp;окне программы открой список голосов и&nbsp;тапни по&nbsp;тому, что нравится. Обычно есть робот, ребёнок, девушка, мужчина, монстр, эхо.</p>
-    <p>Не&nbsp;торопись: включи предпросмотр и&nbsp;скажи пару фраз — сразу услышишь, как звучит.</p>
+    <p>В окне программы открой список голосов и нажми на тот, что нравится. Обычно есть робот, ребёнок, девушка, мужчина, монстр, эхо.</p>
+    <p>Не торопись: включи предпросмотр и скажи пару фраз — сразу услышишь, как звучит.</p>
   </div>
 
   <div class="step" id="pc5">
     <h3><span class="num">5</span> Включаем смену голоса</h3>
     <p>Нажми крупный переключатель <b>«Смена голоса» / «Voice Changer»</b> — он должен подсветиться. Пока он выключен, микрофон работает как обычный.</p>
-    <div class="tip">В Voicemod это большая кнопка внизу окна. В Clownfish — пункт в&nbsp;меню у&nbsp;значка в&nbsp;трее.</div>
+    <div class="tip">В Voicemod это большая кнопка внизу окна. В Clownfish — пункт в меню у значка в трее.</div>
   </div>
 
   <div class="step" id="pc6">
     <h3><span class="num">6</span> Находим виртуальный микрофон</h3>
-    <p>После включения программа создаёт второй микрофон в&nbsp;системе. Называется примерно так:</p>
+    <p>После включения программа создаёт второй микрофон в системе. Называется примерно так:</p>
     <span class="path">Voicemod Virtual Audio Device</span>
     <span class="path">Clownfish Voice Changer</span>
-    <p>Если его не&nbsp;видно — перезапусти программу или перезагрузи компьютер, устройство появится в&nbsp;списке.</p>
+    <p>Если его не видно — перезапусти программу или перезагрузи компьютер, устройство появится в списке.</p>
   </div>
 
   <div class="step" id="pc7">
     <h3><span class="num">7</span> Выбираем его в игре или мессенджере</h3>
-    <p>Теперь нужно сказать программе, где звук, а&nbsp;приложению — откуда брать микрофон.</p>
-    <p><b>Discord:</b> Настройки пользователя → <b>Голос и&nbsp;видео</b> → Устройство ввода → выбрать виртуальный микрофон.</p>
+    <p>Теперь нужно сказать программе, где звук, а приложению — откуда брать микрофон.</p>
+    <p><b>Discord:</b> Настройки пользователя → <b>Голос и видео</b> → Устройство ввода → выбрать виртуальный микрофон.</p>
     <p><b>Telegram:</b> Настройки → <b>Продвинутые</b> → Микрофон → выбрать то же устройство.</p>
     <p><b>Игра:</b> Настройки → <b>Звук</b> → Устройство ввода микрофона → выбрать виртуальный.</p>
-    <div class="tip">Проверка за&nbsp;10 секунд: в&nbsp;Discord или Telegram есть тест микрофона — нажми и&nbsp;скажи фразу. Если слышишь изменённый голос, всё настроено.</div>
+    <div class="tip">Проверка за 10 секунд: в Discord или Telegram есть тест микрофона — нажми и скажи фразу. Если слышишь изменённый голос, всё настроено.</div>
   </div>
 
   <h2 class="part"><span>Раздел 2 — Телефон</span></h2>
@@ -407,48 +656,48 @@
   <div class="step" id="samsung">
     <h3><span class="num">2.1</span> Samsung</h3>
     <ol>
-      <li>Открой <b>Play Маркет</b> и&nbsp;найди приложение для смены голоса (в&nbsp;поиске «voice changer»). Разреши ему доступ к&nbsp;микрофону при&nbsp;запуске.</li>
-      <li>Выбери эффект в&nbsp;списке голосов — должен быть режим реального времени, а&nbsp;не&nbsp;только запись.</li>
-      <li>Запиши 5&nbsp;секунд теста и&nbsp;послушай. Так ты сразу поймёшь, как звучит выбранный голос.</li>
+      <li>Открой <b>Play Маркет</b> и найди приложение для смены голоса (в поиске «voice changer»). Разреши ему доступ к микрофону при запуске.</li>
+      <li>Выбери эффект в списке голосов — должен быть режим реального времени, а не только запись.</li>
+      <li>Запиши 5 секунд теста и послушай. Так ты сразу поймёшь, как звучит выбранный голос.</li>
       <li>Настройки → <b>Приложения</b> → найди это приложение → <b>Батарея</b> → <b>«Без ограничений»</b>.</li>
-      <li>Открой список недавних приложений → удерживай карточку программы → <b>«Закрепить»</b>, чтобы система её не&nbsp;выгружала.</li>
-      <li>Запусти программу и&nbsp;включи смену голоса — теперь проверь в&nbsp;звонке или игре.</li>
+      <li>Открой список недавних приложений → удерживай карточку программы → <b>«Закрепить»</b>, чтобы система её не выгружала.</li>
+      <li>Запусти программу и включи смену голоса — теперь проверь в звонке или игре.</li>
     </ol>
-    <div class="warn">⚠️ <b>Ограничение Android.</b> Система не&nbsp;позволяет одной программе подменить микрофон для всех остальных приложений. Поэтому голос меняется внутри приложения, а&nbsp;в&nbsp;играх и&nbsp;звонках стабильно работает связка «компьютер + гарнитура» из&nbsp;раздела&nbsp;1.</div>
+    <div class="warn">⚠️ <b>Ограничение Android.</b> Система не позволяет одной программе подменить микрофон для всех остальных приложений. Поэтому голос меняется внутри приложения, а в играх и звонках стабильно работает связка «компьютер + гарнитура» из раздела 1.</div>
   </div>
 
   <div class="step" id="iphone">
     <h3><span class="num">2.2</span> iPhone</h3>
     <p><b>Вариант А — App Store.</b> Быстрее всего.</p>
     <ol>
-      <li>Открой App Store и&nbsp;найди приложение для смены голоса (например, Voice Changer Plus или VoiceFX).</li>
-      <li>Разреши доступ к&nbsp;микрофону при&nbsp;первом запуске.</li>
-      <li>Выбери эффект и&nbsp;проверь на&nbsp;записи.</li>
+      <li>Открой App Store и найди приложение для смены голоса (например, Voice Changer Plus или VoiceFX).</li>
+      <li>Разреши доступ к микрофону при первом запуске.</li>
+      <li>Выбери эффект и проверь на записи.</li>
     </ol>
     <p style="margin-top:14px"><b>Вариант Б — AltStore.</b> Нужен компьютер.</p>
     <ol>
-      <li>На&nbsp;компьютер установи <b>AltServer</b> с&nbsp;официального сайта <code>altstore.io</code>.</li>
-      <li>Подключи iPhone к&nbsp;компьютеру кабелем и&nbsp;доверь устройство.</li>
-      <li>Через AltServer установи <b>AltStore</b> на&nbsp;телефон.</li>
-      <li>Открой AltStore → <b>My Apps</b> → плюс в&nbsp;углу → выбери файл <code>.ipa</code>.</li>
-      <li>Если приложение не&nbsp;запускается: Настройки → <b>Основные</b> → <b>VPN и&nbsp;управление устройством</b> → выбери разработчика → <b>«Доверять»</b>.</li>
-      <li>Раз в&nbsp;7&nbsp;дней подпись истекает — обнови её через AltServer, пока телефон в&nbsp;одной сети с&nbsp;компьютером.</li>
+      <li>На компьютер установи <b>AltServer</b> с официального сайта <code>altstore.io</code>.</li>
+      <li>Подключи iPhone к компьютеру кабелем и доверь устройство.</li>
+      <li>Через AltServer установи <b>AltStore</b> на телефон.</li>
+      <li>Открой AltStore → <b>My Apps</b> → плюс в углу → выбери файл <code>.ipa</code>.</li>
+      <li>Если приложение не запускается: Настройки → <b>Основные</b> → <b>VPN и управление устройством</b> → выбери разработчика → <b>«Доверять»</b>.</li>
+      <li>Раз в 7 дней подпись истекает — обнови её через AltServer, пока телефон в одной сети с компьютером.</li>
     </ol>
-    <div class="warn">⚠️ Без компьютера установить приложение со&nbsp;стороны на&nbsp;iPhone нельзя — это ограничение Apple, а&nbsp;не&nbsp;ошибка. Если компьютера нет, остаётся вариант&nbsp;А из&nbsp;App Store.</div>
+    <div class="warn">⚠️ Без компьютера установить приложение со стороны на iPhone нельзя — это ограничение Apple, а не ошибка. Если компьютера нет, остаётся вариант А из App Store.</div>
   </div>
 
   <div class="step" id="redmi">
     <h3><span class="num">2.3</span> Redmi</h3>
     <ol>
-      <li>Открой <b>Play Маркет</b> и&nbsp;установи приложение для смены голоса.</li>
+      <li>Открой <b>Play Маркет</b> и установи приложение для смены голоса.</li>
       <li>Настройки → <b>Приложения</b> → <b>Все</b> → найди программу → <b>Разрешения</b> → <b>Микрофон</b> → <b>«Всегда разрешать»</b>.</li>
-      <li>Открой встроенное приложение <b>«Безопасность»</b> → <b>Разрешения</b> → <b>Автозапуск</b> → включи переключатель для программы. Без этого шага MIUI выгружает её из&nbsp;памяти и&nbsp;голос пропадает.</li>
+      <li>Открой встроенное приложение <b>«Безопасность»</b> → <b>Разрешения</b> → <b>Автозапуск</b> → включи переключатель для программы. Без этого шага MIUI выгружает её из памяти и голос пропадает.</li>
       <li>Настройки → <b>Батарея</b> → <b>Экономия заряда приложений</b> → найди программу → <b>«Без ограничений»</b>.</li>
       <li>Настройки → <b>Приложения</b> → программа → <b>Другие разрешения</b> → <b>«Показывать поверх других приложений»</b> → разрешить.</li>
       <li>Список недавних → удерживай карточку → <b>«Закрепить»</b>.</li>
-      <li>Запусти приложение, выбери голос и&nbsp;проверь на&nbsp;записи.</li>
+      <li>Запусти приложение, выбери голос и проверь на записи.</li>
     </ol>
-    <div class="tip">Если названия пунктов чуть отличаются — ищи по&nbsp;смыслу: <b>Автозапуск</b> и&nbsp;<b>Батарея</b> есть на&nbsp;всех прошивках MIUI и&nbsp;HyperOS.</div>
+    <div class="tip">Если названия пунктов чуть отличаются — ищи по смыслу: <b>Автозапуск</b> и <b>Батарея</b> есть на всех прошивках MIUI и HyperOS.</div>
   </div>
 
   <h2 class="part"><span>Если что-то не работает</span></h2>
@@ -472,16 +721,16 @@
     <h3><span class="num">i</span> Что важно знать — честно</h3>
     <ul>
       <li><b>Root и джейлбрейк не нужны.</b> Всё настраивается обычными средствами.</li>
-      <li>На&nbsp;Android и&nbsp;iOS система не&nbsp;даёт подменить микрофон для других приложений. Стабильный голос в&nbsp;играх и&nbsp;звонках — только связка «компьютер + гарнитура».</li>
+      <li>На Android и iOS система не даёт подменить микрофон для других приложений. Стабильный голос в играх и звонках — только связка «компьютер + гарнитура».</li>
       <li>Бесплатные версии программ часто ограничивают набор голосов. Это нормально, для проверки хватает.</li>
-      <li>Не&nbsp;ставь «взломанные» версии — они чаще всего идут с&nbsp;вирусами и&nbsp;кражей аккаунтов.</li>
-      <li>Никто не&nbsp;должен просить у&nbsp;тебя пароли, коды или доступ к&nbsp;телефону — даже если представляется поддержкой.</li>
+      <li>Не ставь «взломанные» версии — они чаще всего идут с вирусами и кражей аккаунтов.</li>
+      <li>Никто не должен просить у тебя пароли, коды или доступ к телефону — даже если представляется поддержкой.</li>
     </ul>
   </div>
 
   <div class="step" id="check">
     <h3><span class="num">✓</span> Чек-лист перед проверкой</h3>
-    <ul class="check">
+    <ul class="check" id="chk">
       <li>Программа скачана с официального сайта или магазина</li>
       <li>Доступ к микрофону разрешён</li>
       <li>Наушники надеты</li>
@@ -493,15 +742,28 @@
     </ul>
   </div>
 
-  <div class="bonus" id="bonus">
-    <h2>🎁 Твой подарок</h2>
-    <p>Пакет из 100 гайдов по играм: раскладки, фарм, промокоды, настройки под конкретные игры.</p>
-    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">Забрать бонус</a>
-  </div>
+  <section class="shop" id="bonus">
+    <div class="shop-badge">ПРЕМИУМ</div>
+    <div class="crown">👑</div>
+    <h2>Магазин Nagibatorz</h2>
+    <p class="shop-sub">Гайды и настройки, которые реально работают</p>
+    <ul>
+      <li>Пакет из 100 гайдов по играм — в подарок</li>
+      <li>Раскладки, фарм, промокоды и настройки под конкретные игры</li>
+      <li>Не получилось — пиши в чат, разберём вместе</li>
+    </ul>
+    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">🎁 Забрать бонус</a>
+    <a class="btn ghost" href="https://playerok.com/profile/Nagibatorz/products">Перейти в магазин →</a>
+    <div class="shop-by">
+      <span class="ava">N</span>
+      <span><b>Nagibatorz</b> · на Playerok</span>
+    </div>
+  </section>
 
   <footer>
     <b>Nagibatorz</b> · Playerok<br>
     Что-то не получилось — напиши в чат, разберём вместе.
+    <div class="pro">PRO SETUP</div>
   </footer>
 
 </div>
@@ -509,40 +771,98 @@
 <button class="top" id="toTop" aria-label="Наверх">↑</button>
 
 <script>
-  var btn = document.getElementById('toTop');
-  window.addEventListener('scroll', function(){
-    if (window.scrollY > 500) btn.classList.add('show');
-    else btn.classList.remove('show');
+(function(){
+  var fxCtl = { on: true };
+  var stage = document.getElementById('stage');
+  var tilt = document.getElementById('tilt');
+  var btnFx = document.getElementById('fxBtn');
+
+  function setTilt(rx, ry){
+    if(!fxCtl.on) return;
+    tilt.style.transform = 'rotateY(' + rx.toFixed(2) + 'deg) rotateX(' + ry.toFixed(2) + 'deg)';
+  }
+
+  if(window.DeviceOrientationEvent){
+    window.addEventListener('deviceorientation', function(e){
+      if(!fxCtl.on || e.gamma === null || e.gamma === undefined) return;
+      var g = Math.max(-22, Math.min(22, e.gamma));
+      var b = (e.beta === null || e.beta === undefined) ? 0 : Math.max(-22, Math.min(22, e.beta - 40));
+      setTilt(g, b * 0.6);
+    }, true);
+  }
+
+  document.addEventListener('pointermove', function(e){
+    if(!fxCtl.on) return;
+    var r = stage.getBoundingClientRect();
+    if(!r.width) return;
+    var dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+    var dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+    setTilt(dx * 18, dy * -14);
   });
+
+  btnFx.addEventListener('click', function(){
+    fxCtl.on = !fxCtl.on;
+    document.body.classList.toggle('no-fx', !fxCtl.on);
+    btnFx.textContent = fxCtl.on ? '3D: вкл' : '3D: выкл';
+    if(!fxCtl.on) tilt.style.transform = 'none';
+  });
+
+  var prg = document.getElementById('prg');
+  var btn = document.getElementById('toTop');
+
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+    prg.style.width = p + '%';
+    if(window.scrollY > 500) btn.classList.add('show');
+    else btn.classList.remove('show');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   btn.addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   var q = document.getElementById('q');
+  var toc = document.querySelector('.toc');
+  var parts = document.querySelectorAll('.part');
+
   q.addEventListener('input', function(){
     var v = this.value.trim().toLowerCase();
     var items = document.querySelectorAll('.step');
-    if (!v) {
+
+    if(!v){
       items.forEach(function(el){ el.classList.remove('hide'); });
-      document.querySelector('.toc').style.display = '';
-      document.querySelectorAll('.part').forEach(function(el){ el.style.display = ''; });
+      toc.style.display = '';
+      parts.forEach(function(el){ el.style.display = ''; });
       return;
     }
-    document.querySelector('.toc').style.display = 'none';
+
+    toc.style.display = 'none';
     items.forEach(function(el){
-      if (el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
+      if(el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
       else el.classList.add('hide');
     });
-    document.querySelectorAll('.part').forEach(function(part){
+
+    parts.forEach(function(part){
       var next = part.nextElementSibling, has = false;
-      while (next && !next.classList.contains('part')) {
-        if (next.classList.contains('step') && !next.classList.contains('hide')) has = true;
-        if (next.classList.contains('bonus')) break;
+      while(next && !next.classList.contains('part') && !next.classList.contains('shop')){
+        if(next.classList.contains('step') && !next.classList.contains('hide')) has = true;
         next = next.nextElementSibling;
       }
       part.style.display = has ? '' : 'none';
     });
   });
+
+  var chk = document.getElementById('chk');
+  chk.addEventListener('click', function(e){
+    var li = e.target.closest ? e.target.closest('li') : null;
+    if(li) li.classList.toggle('done');
+  });
+
+  tilt.style.transform = 'rotateY(0deg) rotateX(0deg)';
+})();
 </script>
 </body>
 </html>
