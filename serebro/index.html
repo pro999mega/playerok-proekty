@@ -1,900 +1,541 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<meta name="referrer" content="no-referrer">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Серебро в Standoff 2 — фарм и бонус · Nagibatorz</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --bg:#0a0a0c;
-    --card:rgba(255,255,255,.045);
-    --card2:rgba(255,255,255,.07);
-    --line:rgba(255,255,255,.1);
-    --orange:#ff7a18;
-    --orange2:#ffb347;
-    --text:#edeff2;
-    --muted:#9aa0aa;
-  }
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:"";
-    position:fixed;inset:0;
-    background:
-      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
-      radial-gradient(700px 420px at 96% 6%, rgba(255,69,0,.12), transparent 60%),
-      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
-    pointer-events:none;z-index:0;
-  }
-  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
+:root{
+  --bg1:#f2ece4; --bg2:#ded7cd; --bg3:#cec6bb;
+  --ink:#2b2e33; --ink2:#4a4e55; --muted:#787c83;
+  --glass:rgba(255,255,255,.74); --glass2:rgba(255,255,255,.5);
+  --line:rgba(60,62,70,.13); --line2:rgba(60,62,70,.22);
+  --silver:#c9ced4; --gold:#b4914f; --red:#b4544d; --green:#5f8a67; --blue:#5c7d96;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink); line-height:1.62; -webkit-font-smoothing:antialiased;
+  background:linear-gradient(180deg,var(--bg1) 0%,#e8e1d8 38%,var(--bg2) 72%,var(--bg3) 100%);
+  background-attachment:fixed;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px 70px}
 
-  .prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--orange2));box-shadow:0 0 14px rgba(255,122,24,.85);z-index:100;transition:width .1s linear}
+/* ============ HERO ============ */
+.hero{position:relative;padding:40px 0 26px;text-align:center;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;top:-110px;left:50%;transform:translateX(-50%);
+  width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(255,255,255,.55) 34%,rgba(255,255,255,0) 68%);
+  pointer-events:none;z-index:0;
+}
+.hero>*{position:relative;z-index:1}
+.brand{
+  display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);padding:7px 16px;border-radius:999px;
+  background:var(--glass2);border:1px solid var(--line);margin-bottom:20px;
+}
+h1{
+  font-size:clamp(30px,8.4vw,44px);line-height:1.06;letter-spacing:-.02em;font-weight:800;
+  background:linear-gradient(180deg,#3d4148 0%,#22252a 42%,#6b7078 88%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(255,255,255,.55)) drop-shadow(0 8px 14px rgba(60,62,70,.22));
+  margin-bottom:12px;
+}
+.sub{font-size:15px;color:var(--ink2);max-width:420px;margin:0 auto 6px}
+.sub b{color:var(--ink)}
 
-  .hero{
-    padding:40px 0 30px;
-    text-align:center;
-    border-bottom:1px solid var(--line);
-    margin-bottom:32px;
-  }
-  .hero .tag{
-    display:inline-block;
-    font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
-    color:var(--orange2);
-    border:1px solid rgba(255,122,24,.35);
-    background:rgba(255,122,24,.08);
-    border-radius:100px;
-    padding:6px 16px;margin-bottom:20px;
-  }
-  .hero h1{
-    font-size:clamp(28px,7.5vw,48px);
-    line-height:1.12;
-    font-weight:900;
-    letter-spacing:-.5px;
-    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
-  }
-  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+/* ============ 3D STAGE ============ */
+.stage{
+  perspective:1200px;perspective-origin:50% 44%;
+  height:340px;margin:14px auto 6px;position:relative;width:100%;max-width:400px;
+}
+.scene{
+  position:relative;width:100%;height:100%;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.3,1);
+}
+.pedestal{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%) rotateX(66deg);
+  width:250px;height:110px;border-radius:50%;
+  background:radial-gradient(ellipse at 40% 35%,#f6f2ec,#d6cfc4 62%,#bdb4a8);
+  box-shadow:0 26px 34px rgba(70,64,56,.26),inset 0 0 0 2px rgba(255,255,255,.55);
+}
+.pedestal::after{
+  content:"5–500 СЕРЕБРА";position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  font-size:8.5px;letter-spacing:.34em;color:#8b8578;white-space:nowrap;
+}
+.phone{
+  position:absolute;left:50%;bottom:64px;width:158px;height:300px;
+  transform:translateX(-50%) rotateY(-16deg) rotateX(7deg) rotateZ(-2deg);
+  transform-style:preserve-3d;
+  border-radius:26px;padding:7px;
+  background:linear-gradient(150deg,#4a4e55,#23262b 46%,#3a3e44);
+  box-shadow:0 22px 34px rgba(50,46,40,.34),inset 0 0 0 1px rgba(255,255,255,.16);
+  animation:float 7s ease-in-out infinite;
+}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -8px}}
+.screen{
+  width:100%;height:100%;border-radius:20px;overflow:hidden;position:relative;
+  background:linear-gradient(170deg,#1f2226,#2c3036 55%,#1a1d21);
+  display:flex;flex-direction:column;padding:10px 9px;
+}
+.s-top{display:flex;justify-content:space-between;align-items:center;font-size:7px;color:#c9cdd3;letter-spacing:.06em;margin-bottom:9px}
+.s-bal{display:flex;align-items:center;gap:3px}
+.s-coin{width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#f2f4f6,#a9b0b8 70%,#7d848d)}
+.s-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}
+.slot{
+  border-radius:8px;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;
+}
+.cry{width:22px;height:26px;clip-path:polygon(50% 0,100% 34%,78% 100%,22% 100%,0 34%);
+  background:linear-gradient(160deg,#f0f3f6,#a9b1ba 52%,#767d86);}
+.s-btns{display:flex;gap:5px;margin-top:8px}
+.s-btns span{flex:1;text-align:center;font-size:6.5px;letter-spacing:.12em;color:#dfe3e8;
+  border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 0;background:rgba(255,255,255,.06)}
+.toast{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  font-size:7px;color:#20313b;background:rgba(190,230,245,.9);
+  border-radius:6px;padding:3px 8px;white-space:nowrap;letter-spacing:.06em;
+}
+.ingot{
+  position:absolute;right:4px;bottom:96px;width:92px;height:40px;
+  transform:rotateY(-22deg) rotateX(12deg) rotateZ(-6deg);
+  transform-style:preserve-3d;
+  background:linear-gradient(165deg,#f4f6f8 0%,#c2c8cf 30%,#8f969f 58%,#dfe3e8 100%);
+  clip-path:polygon(10% 0,100% 0,90% 100%,0 100%);
+  box-shadow:0 14px 22px rgba(60,56,50,.28);
+  animation:levit 5.4s ease-in-out infinite;
+}
+.ingot::after{
+  content:"";position:absolute;inset:0;clip-path:polygon(10% 0,100% 0,90% 100%,0 100%);
+  background:linear-gradient(105deg,transparent 34%,rgba(255,255,255,.85) 48%,transparent 62%);
+  animation:shine 3.6s ease-in-out infinite;
+}
+@keyframes levit{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -10px;rotate:-3deg}}
+@keyframes shine{0%,100%{opacity:.15}50%{opacity:.8}}
+.cube{
+  position:absolute;left:2px;bottom:118px;width:52px;height:52px;
+  transform-style:preserve-3d;animation:spin 14s linear infinite;
+}
+@keyframes spin{from{transform:rotateX(-18deg) rotateY(0)}to{transform:rotateX(-18deg) rotateY(360deg)}}
+.cube i{
+  position:absolute;inset:0;border:1px solid rgba(255,255,255,.85);border-radius:5px;
+  background:linear-gradient(160deg,rgba(255,255,255,.36),rgba(255,255,255,.08));
+  box-shadow:inset 0 0 14px rgba(255,255,255,.4);
+}
+.cube i:nth-child(1){transform:translateZ(26px)}
+.cube i:nth-child(2){transform:rotateY(90deg) translateZ(26px)}
+.cube i:nth-child(3){transform:rotateX(90deg) translateZ(26px)}
+.coin{position:absolute;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fbfcfd,#c3c9d0 58%,#8e959e);
+  box-shadow:0 5px 9px rgba(60,56,50,.22),inset 0 0 0 1px rgba(255,255,255,.7)}
+.coin.c1{width:26px;height:26px;left:26px;bottom:70px}
+.coin.c2{width:19px;height:19px;left:52px;bottom:56px}
+.coin.c3{width:15px;height:15px;right:70px;bottom:60px}
 
-  /* ---------- 3D телефон: реальные пропорции 9:19.5 ---------- */
-  .stage{position:relative;perspective:1400px;display:flex;justify-content:center;margin:38px 0 10px}
-  .stage::after{
-    content:"";position:absolute;left:50%;bottom:-26px;
-    width:min(280px,78vw);height:44px;transform:translateX(-50%);
-    background:radial-gradient(ellipse at center,rgba(255,122,24,.42),rgba(255,122,24,0) 72%);
-    filter:blur(12px);pointer-events:none;
-  }
-  .phone{
-    position:relative;
-    display:flex;
-    width:min(300px,80vw);
-    aspect-ratio:9 / 19.5;
-    padding:9px;
-    border-radius:46px;
-    background:
-      linear-gradient(150deg,#54412c 0%,#261c11 16%,#0f0b07 50%,#302517 82%,#54412c 100%);
-    border:1px solid rgba(255,180,100,.3);
-    box-shadow:
-      0 40px 90px rgba(0,0,0,.8),
-      0 0 80px rgba(255,122,24,.24),
-      inset 0 1px 0 rgba(255,255,255,.22),
-      inset 0 -1px 0 rgba(0,0,0,.65);
-    transform-style:preserve-3d;
-    transform:rotateX(6deg) rotateY(-14deg);
-    will-change:transform;
-    transition:transform .16s ease-out;
-  }
-  /* торцы корпуса — видимая толщина */
-  .phone .edge{
-    position:absolute;top:14px;bottom:14px;width:22px;border-radius:20px;
-    background:linear-gradient(90deg,#0b0805,#3f2f1e 42%,#1a1209);
-    transform:translateZ(-11px);
-  }
-  .phone .edge-l{left:-1px}
-  .phone .edge-r{right:-1px;background:linear-gradient(270deg,#0b0805,#3f2f1e 42%,#1a1209)}
-  /* боковые кнопки */
-  .phone .btn-side{
-    position:absolute;border-radius:3px;
-    background:linear-gradient(180deg,#4a3a28,#1a1209);
-    box-shadow:0 0 6px rgba(0,0,0,.85);
-    transform:translateZ(1px);
-  }
-  .phone .btn-power{right:-4px;top:24%;width:4px;height:58px}
-  .phone .btn-vol1{left:-4px;top:17%;width:4px;height:38px}
-  .phone .btn-vol2{left:-4px;top:29%;width:4px;height:58px}
-  /* блик по стеклу */
-  .phone::after{
-    content:"";position:absolute;inset:0;border-radius:46px;pointer-events:none;
-    background:linear-gradient(122deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 68%,rgba(255,255,255,.11) 100%);
-    transform:translateZ(13px);
-  }
-  .notch{
-    position:absolute;left:50%;top:15px;
-    transform:translateX(-50%) translateZ(14px);
-    width:82px;height:22px;border-radius:13px;
-    background:#07070a;z-index:3;
-    border:1px solid rgba(255,255,255,.09);
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.9);
-  }
-  .screen{
-    position:relative;
-    flex:1;
-    display:flex;flex-direction:column;
-    border-radius:38px;overflow:hidden;
-    background:linear-gradient(180deg,#191320,#09070b 64%);
-    padding:34px 18px 20px;
-    transform:translateZ(7px);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.05), inset 0 2px 22px rgba(0,0,0,.85);
-  }
-  .scr-top{text-align:center;font-size:9.5px;letter-spacing:2.6px;text-transform:uppercase;color:#8e8478;font-weight:800;margin-top:6px}
-  .scr-big{
-    text-align:center;margin-top:16px;font-size:clamp(42px,12vw,52px);font-weight:900;line-height:1;letter-spacing:-1.5px;
-    background:linear-gradient(180deg,#fff,#ffb347);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 4px 20px rgba(255,140,30,.55));
-  }
-  .scr-sub{text-align:center;font-size:10.5px;letter-spacing:1.7px;text-transform:uppercase;color:#9a8f80;margin-top:10px}
-  .scr-bars{margin-top:auto;display:grid;gap:14px}
-  .scr-bar{height:8px;border-radius:100px;background:rgba(255,255,255,.07);overflow:hidden}
-  .scr-bar i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--orange),var(--orange2));box-shadow:0 0 12px rgba(255,140,30,.6)}
-  .scr-lab{display:flex;justify-content:space-between;font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:#7d746a;margin-bottom:5px}
-  .scr-btn{
-    margin-top:18px;text-align:center;font-size:11.5px;font-weight:900;letter-spacing:1.8px;color:#241304;
-    padding:15px;border-radius:14px;background:linear-gradient(150deg,#ffd9a4,var(--orange));
-    box-shadow:0 8px 22px rgba(255,122,24,.45);
-    animation:pulseBtn 2.6s ease-in-out infinite;
-  }
-  @keyframes pulseBtn{0%,100%{box-shadow:0 8px 22px rgba(255,122,24,.35)}50%{box-shadow:0 10px 34px rgba(255,150,40,.7)}}
-  .stage-cap{text-align:center;font-size:12.5px;color:#7b8089;margin:22px 0 0}
+.btn3d{
+  display:inline-flex;align-items:center;gap:8px;margin-top:8px;
+  font:inherit;font-size:13px;font-weight:600;color:var(--ink);
+  padding:10px 20px;border-radius:999px;cursor:pointer;
+  background:var(--glass);border:1px solid var(--line2);
+  box-shadow:0 6px 16px rgba(70,64,56,.12);transition:.25s;
+}
+.btn3d:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(70,64,56,.18)}
+.btn3d.on{background:linear-gradient(180deg,#3d4148,#23262b);color:#f4f2ee;border-color:#23262b}
+.dot{width:7px;height:7px;border-radius:50%;background:#b9bdb3;transition:.25s}
+.btn3d.on .dot{background:#9fe0a8;box-shadow:0 0 8px #9fe0a8}
 
-  .mets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0 0;perspective:900px}
-  .met{
-    background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:15px 8px;text-align:center;transform-style:preserve-3d;
-    transition:transform .18s ease-out;will-change:transform;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
-  }
-  .met b{
-    display:block;font-size:19px;font-weight:900;letter-spacing:-.3px;
-    background:linear-gradient(180deg,#fff,var(--orange2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  }
-  .met span{display:block;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-top:5px}
+/* ============ STATS ============ */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 8px}
+.stat{
+  background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:14px 10px;text-align:center;
+  box-shadow:0 6px 18px rgba(70,64,56,.07);
+}
+.stat b{display:block;font-size:17px;letter-spacing:-.01em}
+.stat span{font-size:10.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
 
-  .note{
-    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
-    border:1px solid rgba(255,122,24,.28);
-    border-radius:16px;
-    padding:16px 18px;
-    font-size:14.5px;
-    margin:26px 0;
-    color:#f3e3d6;
-  }
-  .note b{color:var(--orange2)}
+/* ============ CARDS ============ */
+.card{
+  background:var(--glass);border:1px solid var(--line);border-radius:24px;
+  padding:24px 22px;margin:16px 0;box-shadow:0 10px 30px rgba(70,64,56,.08);
+  transition:transform .35s cubic-bezier(.2,.7,.3,1),box-shadow .35s;
+  transform-style:preserve-3d;
+}
+.tilt .card:hover{box-shadow:0 20px 46px rgba(70,64,56,.16)}
+h2{font-size:21px;letter-spacing:-.01em;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-weight:800}
+.num{
+  flex:0 0 auto;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  font-size:14px;font-weight:800;color:#f3f1ed;
+  background:linear-gradient(160deg,#4a4e55,#24272c);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 5px 12px rgba(50,46,40,.24);
+}
+h3{font-size:15px;margin:20px 0 10px;letter-spacing:.01em;font-weight:700;color:var(--ink)}
+h3:first-of-type{margin-top:4px}
+.sub-num{
+  display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;margin-right:8px;
+  font-size:11px;background:rgba(60,62,70,.1);color:var(--ink2);
+}
+ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+li{position:relative;padding-left:20px;font-size:15px;color:var(--ink2)}
+li::before{content:"▸";position:absolute;left:2px;top:0;color:#9aa0a8;font-size:13px}
+ol{counter-reset:s;list-style:none;display:flex;flex-direction:column;gap:10px}
+ol li{counter-increment:s;padding-left:30px;counter-reset:none}
+ol li::before{
+  content:counter(s);position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;
+  display:grid;place-items:center;font-size:11px;font-weight:700;color:#f3f1ed;
+  background:linear-gradient(160deg,#5a5f67,#33373d);
+}
+li b{color:var(--ink);font-weight:700}
 
-  .searchbox{margin-bottom:26px}
-  .searchbox input{
-    width:100%;
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:14px 18px;
-    color:var(--text);
-    font-size:15.5px;
-    outline:none;
-    transition:.2s;
-    backdrop-filter:blur(10px);
-  }
-  .searchbox input:focus{border-color:rgba(255,122,24,.55);background:var(--card2)}
-  .searchbox input::placeholder{color:#6d737d}
+.note{border-radius:14px;padding:13px 15px;font-size:13.5px;margin:14px 0;color:var(--ink2);
+  border-left:3px solid #a7ada4;background:rgba(255,255,255,.55)}
+.warn{border-left-color:var(--red);background:rgba(180,84,77,.08)}
+.tip{border-left-color:var(--green);background:rgba(95,138,103,.09)}
+.info{border-left-color:var(--blue);background:rgba(92,125,150,.09)}
 
-  .toc{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:8px;
-    margin-bottom:38px;
-    backdrop-filter:blur(12px);
-  }
-  .toc-title{
-    font-size:12px;letter-spacing:1.8px;text-transform:uppercase;
-    color:var(--muted);padding:12px 16px 8px;font-weight:700;
-  }
-  .toc a{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 16px;
-    border-radius:12px;
-    color:var(--text);
-    text-decoration:none;
-    font-size:15px;
-    font-weight:600;
-    transition:.15s;
-  }
-  .toc a:hover{background:rgba(255,122,24,.1);color:#fff}
-  .toc a .ico{
-    width:26px;height:26px;flex:0 0 26px;
-    display:grid;place-items:center;
-    border-radius:8px;
-    background:rgba(255,122,24,.15);
-    font-size:13px;
-  }
+/* ============ TOC ============ */
+.toc{display:flex;flex-direction:column;gap:8px}
+.toc a{
+  display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink2);font-size:14px;
+  padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.55);border:1px solid var(--line);
+  transition:.2s;
+}
+.toc a:hover{background:#fff;transform:translateX(3px)}
+.toc a span{color:#9aa0a8;font-size:12px}
 
-  .part{
-    margin:52px 0 24px;
-    font-size:clamp(22px,5.5vw,30px);
-    font-weight:900;
-    letter-spacing:-.3px;
-    padding-bottom:12px;
-    border-bottom:1px solid var(--line);
-    scroll-margin-top:18px;
-  }
-  .part span{
-    background:linear-gradient(90deg,var(--orange2),var(--orange));
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
+/* ============ TABLE ============ */
+.tw{overflow-x:auto;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.6)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:460px}
+th{background:rgba(60,62,70,.08);text-align:left;padding:12px 14px;font-weight:700;font-size:12px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td:first-child{font-weight:600;color:var(--ink);width:38%}
 
-  .step{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:20px 20px 22px;
-    margin-bottom:14px;
-    backdrop-filter:blur(10px);
-    scroll-margin-top:18px;
-  }
-  .step h3{
-    font-size:17.5px;
-    font-weight:800;
-    margin-bottom:12px;
-    display:flex;gap:11px;align-items:flex-start;
-    letter-spacing:-.2px;
-  }
-  .num{
-    flex:0 0 28px;height:28px;
-    display:grid;place-items:center;
-    border-radius:9px;
-    background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;font-size:13.5px;font-weight:900;
-    box-shadow:0 4px 14px rgba(255,122,24,.35);
-  }
-  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
-  .step p:last-child{margin-bottom:0}
-  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
-  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
-  .step li::marker{color:var(--orange)}
+/* ============ CHECKLIST ============ */
+.check{display:flex;flex-direction:column;gap:9px}
+.check div{position:relative;padding-left:26px;font-size:14.5px;color:var(--ink2)}
+.check div::before{content:"✦";position:absolute;left:2px;top:0;color:#9aa0a8;font-size:12px}
 
-  kbd{
-    display:inline-block;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.18);
-    border-bottom-width:2px;
-    border-radius:6px;
-    padding:1px 7px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    color:#fff;
-    white-space:nowrap;
-  }
-  code{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    background:rgba(255,122,24,.12);
-    color:var(--orange2);
-    padding:2px 7px;border-radius:6px;
-    word-break:break-all;
-  }
-  .path{
-    display:block;
-    background:rgba(0,0,0,.4);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:11px 14px;
-    margin:10px 0;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12.5px;
-    color:#ffcf9a;
-    overflow-x:auto;
-    white-space:nowrap;
-  }
+/* ============ CALC ============ */
+.calc{margin-top:6px}
+.calc-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;font-size:13px;color:var(--muted)}
+.calc-head b{font-size:20px;color:var(--ink)}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;outline:none;
+  background:linear-gradient(90deg,#8f959e,#cfd4da);margin:10px 0 4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(160deg,#fdfefe,#c6ccd3 60%,#8f959e);border:1px solid #fff;
+  box-shadow:0 4px 10px rgba(60,56,50,.3);cursor:pointer}
+.out{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.out div{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.out b{display:block;font-size:22px;letter-spacing:-.02em}
+.out span{font-size:10.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
 
-  .warn{
-    background:rgba(255,60,60,.09);
-    border:1px solid rgba(255,80,80,.32);
-    border-left:3px solid #ff4d4d;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#ffc9c9;
-  }
-  .warn b{color:#ff8f8f}
+/* ============ PREMIUM FOOTER ============ */
+.premium{
+  margin-top:26px;border-radius:26px;padding:28px 24px;color:#efece6;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#2b2f35,#191c20 62%,#24272c);
+  box-shadow:0 20px 44px rgba(40,36,32,.3);
+}
+.premium::before{
+  content:"";position:absolute;top:-70px;right:-50px;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,170,110,.32),transparent 68%);
+}
+.premium>*{position:relative}
+.premium .crown{font-size:20px;color:#d8bd7e;letter-spacing:.2em}
+.premium h3{color:#f6f3ec;font-size:20px;margin:8px 0 6px}
+.premium p{font-size:13.5px;color:#a9a69f;margin-bottom:16px}
+.premium ul{gap:8px;margin-bottom:20px}
+.premium li{color:#c8c5be;font-size:13.5px}
+.premium li::before{color:#d8bd7e}
+.premium .go{
+  display:inline-block;text-decoration:none;font-size:14px;font-weight:700;color:#23262b;
+  background:linear-gradient(180deg,#f0ead9,#cfc4a8);padding:12px 24px;border-radius:999px;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+.premium .url{display:block;margin-top:14px;font-size:11.5px;color:#7d7a74;letter-spacing:.04em}
+.foot{margin-top:28px;text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.04em}
 
-  .tip{
-    background:rgba(70,200,120,.08);
-    border:1px solid rgba(70,200,120,.25);
-    border-left:3px solid #37c97a;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#c3f0d8;
-  }
-
-  .tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
-  .tbl th{
-    text-align:left;padding:10px 12px;
-    color:var(--muted);font-size:12px;
-    text-transform:uppercase;letter-spacing:1.2px;
-    border-bottom:1px solid var(--line);
-  }
-  .tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
-  .tbl tr:last-child td{border-bottom:none}
-  .tbl td:first-child{font-weight:600;color:#fff}
-
-  /* ---------- калькулятор ---------- */
-  .calc-wrap{margin:56px 0 0;perspective:1200px}
-  .calc{
-    position:relative;overflow:hidden;
-    background:linear-gradient(160deg,rgba(255,122,24,.14),rgba(255,255,255,.035) 42%,rgba(255,255,255,.02));
-    border:1px solid rgba(255,168,80,.3);
-    border-radius:24px;padding:26px 22px 24px;
-    box-shadow:0 26px 66px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.1);
-    transform-style:preserve-3d;transition:transform .18s ease-out;will-change:transform;
-  }
-  .calc::before{
-    content:"";position:absolute;top:0;left:0;right:0;height:1px;
-    background:linear-gradient(90deg,transparent,rgba(255,200,140,.8),transparent);
-  }
-  .kicker{font-size:11.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--orange2);font-weight:800;text-align:center}
-  .calc h2{
-    font-size:clamp(20px,5vw,26px);font-weight:900;letter-spacing:-.4px;text-align:center;margin-top:8px;
-    background:linear-gradient(180deg,#fff,#ffd0a0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  }
-  .calc-sub{text-align:center;font-size:13.5px;color:var(--muted);margin-top:8px}
-  .calc-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:20px;font-size:14px;color:#cfd4db}
-  .calc-row b{font-size:22px;font-weight:900;color:#fff}
-  input[type=range]{
-    -webkit-appearance:none;appearance:none;width:100%;height:40px;background:transparent;margin-top:2px;
-  }
-  input[type=range]::-webkit-slider-runnable-track{
-    height:8px;border-radius:100px;
-    background:linear-gradient(90deg,rgba(255,122,24,.85),rgba(255,180,70,.5) var(--p,50%),rgba(255,255,255,.1) var(--p,50%));
-  }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;margin-top:-9px;
-    background:linear-gradient(160deg,#ffe0b8,var(--orange));
-    border:2px solid #2a1a0e;
-    box-shadow:0 4px 16px rgba(255,122,24,.6);
-  }
-  input[type=range]::-moz-range-track{height:8px;border-radius:100px;background:rgba(255,255,255,.12)}
-  input[type=range]::-moz-range-progress{height:8px;border-radius:100px;background:linear-gradient(90deg,var(--orange),var(--orange2))}
-  input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #2a1a0e;border-radius:50%;background:linear-gradient(160deg,#ffe0b8,var(--orange))}
-  .calc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
-  .calc-out>div{
-    background:rgba(0,0,0,.34);border:1px solid var(--line);border-radius:16px;padding:16px 10px;text-align:center;
-  }
-  .calc-big{font-size:24px;font-weight:900;color:#fff;letter-spacing:-.5px}
-  .calc-big.acc{
-    background:linear-gradient(180deg,#fff,var(--orange2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  }
-  .calc-lbl{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-top:5px}
-  .calc-hint{margin-top:16px;font-size:12.5px;color:var(--muted);text-align:center;line-height:1.55}
-
-  /* ---------- премиальная карточка магазина ---------- */
-  .promo-wrap{position:relative;margin-top:58px;perspective:1200px}
-  .promo-glow{
-    position:absolute;inset:-50px -14px -30px;
-    background:radial-gradient(58% 58% at 50% 42%,rgba(255,150,40,.26),transparent 72%);
-    filter:blur(22px);pointer-events:none;
-  }
-  .promo-frame{
-    position:relative;padding:1px;border-radius:27px;
-    background:linear-gradient(140deg,#ffd89a,#ff8a2b 34%,#5c3a12 64%,#ffb347);
-    box-shadow:0 34px 90px rgba(255,120,20,.2);
-  }
-  .promo{
-    position:relative;overflow:hidden;border-radius:26px;
-    padding:26px 22px 24px;
-    background:
-      radial-gradient(120% 90% at 12% 0%,rgba(255,170,60,.16),transparent 55%),
-      linear-gradient(165deg,#231708 0%,#191108 40%,#100b07 100%);
-  }
-  .promo::before{
-    content:"";position:absolute;top:0;left:0;right:0;height:1px;
-    background:linear-gradient(90deg,transparent,rgba(255,225,180,.85),transparent);
-  }
-  .promo-shine{
-    position:absolute;top:-60%;left:-40%;width:60%;height:220%;
-    background:linear-gradient(100deg,transparent,rgba(255,235,200,.13),transparent);
-    transform:rotate(14deg);pointer-events:none;
-    animation:shine 7s ease-in-out infinite;
-  }
-  @keyframes shine{0%,70%{left:-60%}100%{left:130%}}
-  .promo-top{display:flex;align-items:center;gap:12px;position:relative}
-  .promo-ava{
-    width:50px;height:50px;flex:0 0 50px;border-radius:14px;
-    display:grid;place-items:center;
-    font-size:22px;font-weight:900;color:#2a1704;
-    background:linear-gradient(160deg,#ffe1b4,#ffa53a);
-    box-shadow:0 8px 24px rgba(255,150,40,.45),inset 0 1px 0 rgba(255,255,255,.6);
-  }
-  .promo-id{flex:1;min-width:0}
-  .promo-name{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:900;letter-spacing:-.2px;color:#fff}
-  .promo-badge{
-    font-size:8.5px;letter-spacing:1.6px;text-transform:uppercase;font-weight:900;color:#2a1704;
-    padding:3px 7px;border-radius:5px;
-    background:linear-gradient(150deg,#ffe1b4,#ffa53a);
-  }
-  .promo-sub{font-size:12px;color:#b7a894;margin-top:2px}
-  .promo-crown{
-    font-size:24px;color:#ffc978;line-height:1;
-    filter:drop-shadow(0 0 14px rgba(255,180,70,.7));
-  }
-  .promo h2{
-    position:relative;margin-top:20px;font-size:clamp(22px,5.6vw,28px);font-weight:900;letter-spacing:-.5px;line-height:1.15;
-    background:linear-gradient(180deg,#fff 0%,#ffe6c4 55%,#ffa53a 120%);
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 4px 20px rgba(255,140,30,.35));
-  }
-  .promo-text{position:relative;font-size:14px;color:#ddd2c4;margin-top:10px;line-height:1.6}
-  .promo-list{position:relative;display:grid;gap:8px;margin-top:16px}
-  .promo-item{
-    display:flex;align-items:center;gap:10px;
-    background:rgba(255,255,255,.045);
-    border:1px solid rgba(255,190,110,.18);
-    border-radius:12px;padding:11px 13px;
-    font-size:13.5px;color:#f0e6da;
-  }
-  .promo-item i{
-    width:7px;height:7px;flex:0 0 7px;transform:rotate(45deg);
-    background:linear-gradient(150deg,#ffe1b4,#ffa53a);
-    box-shadow:0 0 10px rgba(255,170,60,.8);
-  }
-  .promo-btn{
-    position:relative;display:flex;align-items:center;justify-content:center;gap:10px;
-    margin-top:20px;padding:17px 20px;border-radius:15px;
-    text-decoration:none;font-weight:900;font-size:15.5px;letter-spacing:.2px;
-    color:#2a1704;
-    background:linear-gradient(160deg,#ffdca8,#ff9a2e 55%,#ec7a10);
-    box-shadow:0 14px 38px rgba(255,130,20,.42),inset 0 1px 0 rgba(255,255,255,.65),inset 0 -2px 0 rgba(150,70,0,.35);
-    overflow:hidden;transition:transform .15s;
-  }
-  .promo-btn:active{transform:scale(.98)}
-  .promo-btn::after{
-    content:"";position:absolute;top:-40%;left:-30%;width:40%;height:200%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
-    transform:rotate(16deg);animation:shine 4.5s ease-in-out infinite;
-  }
-  .promo-btn span{font-size:19px;line-height:1}
-  .promo-note{position:relative;text-align:center;font-size:11px;letter-spacing:.6px;color:#8d8073;margin-top:12px;word-break:break-all}
-
-  footer{
-    margin-top:54px;
-    padding-top:26px;
-    border-top:1px solid var(--line);
-    text-align:center;
-    color:var(--muted);
-    font-size:13.5px;
-  }
-  footer b{color:var(--text)}
-
-  .top{
-    position:fixed;
-    right:16px;bottom:18px;
-    width:46px;height:46px;
-    border-radius:50%;
-    background:rgba(255,122,24,.9);
-    color:#fff;border:none;
-    font-size:19px;
-    display:grid;place-items:center;
-    box-shadow:0 8px 24px rgba(255,122,24,.4);
-    cursor:pointer;
-    opacity:0;pointer-events:none;
-    transition:.25s;
-    z-index:50;
-  }
-  .top.show{opacity:1;pointer-events:auto}
-
-  .fx{
-    position:fixed;left:14px;bottom:18px;z-index:60;
-    background:rgba(18,12,7,.9);
-    border:1px solid rgba(255,168,80,.35);
-    color:#ffcf9a;font-size:11.5px;font-weight:900;letter-spacing:1.3px;
-    padding:10px 15px;border-radius:100px;
-    backdrop-filter:blur(10px);cursor:pointer;
-  }
-
-  .hide{display:none!important}
-
-  body.no-fx .phone,body.no-fx .met,body.no-fx .calc{transform:none!important;transition:none!important}
-  body.no-fx .scr-btn,body.no-fx .promo-btn::after,body.no-fx .promo-shine{animation:none!important}
-
-  @media(prefers-reduced-motion:reduce){
-    .phone,.met,.calc{transition:none!important}
-    .scr-btn,.promo-btn::after,.promo-shine{animation:none!important}
-  }
-
-  @media(max-width:430px){
-    .wrap{padding:0 14px 84px}
-    .hero{padding:30px 0 24px}
-    .step{padding:17px 15px 19px;border-radius:16px}
-    .step h3{font-size:16.5px}
-    .step p,.step li{font-size:14.5px}
-    .calc{padding:22px 16px 20px;border-radius:20px}
-    .promo{padding:22px 16px 20px;border-radius:22px}
-    .met b{font-size:17px}
-    .met span{font-size:9px;letter-spacing:.9px}
-    .screen{padding:32px 15px 18px}
-  }
+@media(max-width:400px){
+  .stage{height:310px}
+  .phone{width:142px;height:272px;bottom:58px}
+  .ingot{width:78px;height:34px;right:0}
+  .cube{width:44px;height:44px;left:0}
+  .cube i:nth-child(1){transform:translateZ(22px)}
+  .cube i:nth-child(2){transform:rotateY(90deg) translateZ(22px)}
+  .cube i:nth-child(3){transform:rotateX(90deg) translateZ(22px)}
+  .stats{grid-template-columns:1fr;gap:8px}
+  .stat{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;text-align:left}
+}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
 </style>
 </head>
 <body>
-<div class="prog" id="prog"></div>
 <div class="wrap">
 
-  <div class="hero">
-    <div class="tag">Nagibatorz · гайд</div>
-    <h1>Серебро в&nbsp;Standoff&nbsp;2</h1>
-    <p>Схема фарма через напарники + бонус за катку</p>
+  <header class="hero">
+    <div class="brand">Nagibatorz · гайд</div>
+    <h1>Серебро в Standoff 2</h1>
+    <p class="sub">Схема фарма через напарники <b>+ бонус за катку</b></p>
 
-    <div class="stage">
-      <div class="phone" id="phone">
-        <div class="edge edge-l"></div>
-        <div class="edge edge-r"></div>
-        <div class="btn-side btn-power"></div>
-        <div class="btn-side btn-vol1"></div>
-        <div class="btn-side btn-vol2"></div>
-        <div class="notch"></div>
-        <div class="screen">
-          <div class="scr-top">матч завершён</div>
-          <div class="scr-big">5–500</div>
-          <div class="scr-sub">серебра за бонус</div>
-          <div class="scr-bars">
-            <div>
-              <div class="scr-lab"><span>катка</span><span>✓ засчитана</span></div>
-              <div class="scr-bar"><i style="width:62%"></i></div>
+    <div class="stage" id="stage">
+      <div class="scene" id="scene">
+        <div class="pedestal"></div>
+        <div class="phone">
+          <div class="screen">
+            <div class="s-top"><span class="s-bal"><i class="s-coin"></i> Balance</span><span>◍ 0</span></div>
+            <div class="toast">матч завершён · Get Bonus 5–500</div>
+            <div class="s-grid">
+              <div class="slot"><i class="cry"></i></div>
+              <div class="slot"><i class="cry"></i></div>
+              <div class="slot"><i class="cry"></i></div>
+              <div class="slot"><i class="cry"></i></div>
+              <div class="slot"><i class="cry"></i></div>
+              <div class="slot"><i class="cry"></i></div>
             </div>
-            <div>
-              <div class="scr-lab"><span>get bonus</span><span>5–500</span></div>
-              <div class="scr-bar"><i style="width:88%"></i></div>
-            </div>
+            <div class="s-btns"><span>Купить</span><span>Продать</span></div>
           </div>
-          <div class="scr-btn">GET BONUS</div>
         </div>
+        <div class="ingot"></div>
+        <div class="cube"><i></i><i></i><i></i></div>
+        <div class="coin c1"></div>
+        <div class="coin c2"></div>
+        <div class="coin c3"></div>
       </div>
     </div>
-    <div class="stage-cap">Поверни телефон — экран наклонится</div>
 
-    <div class="mets">
-      <div class="met" data-tilt><b>≈2 мин</b><span>цикл матча</span></div>
-      <div class="met" data-tilt><b>5–500</b><span>бонус</span></div>
-      <div class="met" data-tilt><b>0 ₽</b><span>вложений</span></div>
+    <button class="btn3d" id="btn3d"><span class="dot"></span><span id="btn3dtext">3D: выкл</span></button>
+
+    <div class="stats">
+      <div class="stat"><b>≈2 мин</b><span>цикл матча</span></div>
+      <div class="stat"><b>5–500</b><span>бонус</span></div>
+      <div class="stat"><b>0 ₽</b><span>вложений</span></div>
     </div>
-  </div>
 
-  <div class="note">
-    <b>Суть в двух строках:</b> играешь напарники со вторым аккаунтом, быстро сдаёшься, забираешь серебро за матч и жмёшь <b>Get Bonus</b> в конце. Повторяешь столько раз, сколько нужно.
-  </div>
+    <p class="note info" style="text-align:left;margin-top:18px">
+      <b>Суть в двух строках:</b> играешь напарники со вторым аккаунтом, быстро сдаёшься, забираешь серебро за матч и жмёшь Get Bonus в конце. Повторяешь столько раз, сколько нужно.
+    </p>
+  </header>
 
-  <div class="searchbox">
-    <input type="text" id="q" placeholder="Поиск по гайду — например «Get Bonus» или «твинк»" autocomplete="off">
-  </div>
+  <section class="card reveal">
+    <h2>Содержание</h2>
+    <nav class="toc">
+      <a href="#need"><span>01</span> Что понадобится</a>
+      <a href="#scheme"><span>02</span> Схема — по шагам</a>
+      <a href="#bonus"><span>03</span> Get Bonus — где нажать</a>
+      <a href="#speed"><span>04</span> Как ускорить процесс</a>
+      <a href="#problems"><span>05</span> Если серебро не идёт</a>
+      <a href="#limits"><span>06</span> Честно про ограничения</a>
+      <a href="#check"><span>07</span> Чек-лист</a>
+    </nav>
+  </section>
 
-  <div class="toc">
-    <div class="toc-title">Содержание</div>
-    <a href="#s1"><span class="ico">🎒</span> Что понадобится</a>
-    <a href="#s2"><span class="ico">🎮</span> Схема — по шагам</a>
-    <a href="#s3"><span class="ico">💎</span> Get Bonus — где нажать</a>
-    <a href="#s4"><span class="ico">🔁</span> Как ускорить процесс</a>
-    <a href="#s5"><span class="ico">🧩</span> Если серебро не идёт</a>
-    <a href="#s6"><span class="ico">⚠️</span> Честно про ограничения</a>
-    <a href="#s7"><span class="ico">✅</span> Чек-лист</a>
-  </div>
-
-  <h2 class="part"><span>Что понадобится</span></h2>
-
-  <div class="step" id="s1">
-    <h3><span class="num">1</span> Подготовка за минуту</h3>
+  <section class="card reveal" id="need">
+    <h2><span class="num">01</span> Что понадобится</h2>
+    <h3><span class="sub-num">1</span>Подготовка за минуту</h3>
     <ul>
       <li><b>Второй аккаунт</b> — другое устройство, второй телефон, эмулятор или друг, который согласится посидеть в лобби</li>
-      <li>Оба аккаунта <b>в друзьях</b> друг у друга — иначе приглашение не отправить</li>
-      <li>Оба <b>онлайн</b> одновременно</li>
+      <li>Оба аккаунта <b>в друзьях друг у друга</b> — иначе приглашение не отправить</li>
+      <li>Оба <b>онлайн одновременно</b></li>
       <li>Основной аккаунт — тот, на который копишь серебро</li>
     </ul>
-    <div class="tip">Если играешь с другом — договорись заранее: он сдаётся вместе с тобой, а серебро за матч всё равно получит каждый за свой аккаунт.</div>
-  </div>
+    <div class="note tip">Если играешь с другом — договорись заранее: он сдаётся вместе с тобой, а серебро за матч всё равно получит каждый за свой аккаунт.</div>
+  </section>
 
-  <h2 class="part"><span>Схема — по шагам</span></h2>
+  <section class="card reveal" id="scheme">
+    <h2><span class="num">02</span> Схема — по шагам</h2>
 
-  <div class="step" id="s2">
-    <h3><span class="num">1</span> Собираем лобби</h3>
+    <h3><span class="sub-num">1</span>Собираем лобби</h3>
     <ol>
       <li>Запусти Standoff 2 на основном аккаунте</li>
-      <li>На главном экране выбери режим <b>«Напарники»</b></li>
-      <li>Нажми <b>«Пригласить»</b> и отправь приглашение второму аккаунту</li>
+      <li>На главном экране выбери режим «Напарники»</li>
+      <li>Нажми «Пригласить» и отправь приглашение второму аккаунту</li>
       <li>Дождись, пока он войдёт в лобби — рядом с ником появится отметка</li>
     </ol>
-    <p>Если приглашение не уходит — проверь, что второй аккаунт у тебя в друзьях и находится в сети.</p>
-  </div>
+    <div class="note">Если приглашение не уходит — проверь, что второй аккаунт у тебя в друзьях и находится в сети.</div>
 
-  <div class="step" id="s2b">
-    <h3><span class="num">2</span> Запускаем матч</h3>
-    <p>Жми <b>«В бой»</b>. Поиск в напарниках обычно быстрый — соперников находит за несколько секунд.</p>
-    <p>Если поиск висит дольше минуты, отмени и запусти заново: иногда лобби «залипает».</p>
-  </div>
+    <h3><span class="sub-num">2</span>Запускаем матч</h3>
+    <ol>
+      <li>Жми «В бой». Поиск в напарниках обычно быстрый — соперников находит за несколько секунд.</li>
+    </ol>
+    <div class="note">Если поиск висит дольше минуты, отмени и запусти заново: иногда лобби «залипает».</div>
 
-  <div class="step" id="s2c">
-    <h3><span class="num">3</span> Сдаёмся</h3>
-    <p>Как только матч загрузился и появился игровой экран — открой меню и нажми <b>«Сдаться»</b> (в напарниках это доступно с первого раунда).</p>
-    <p>Матч закрывается сразу, ждать конца раундов не нужно.</p>
-    <div class="tip">Сдача — обычная функция игры, за неё не банят. Это тот же выход из матча, только через меню.</div>
-  </div>
+    <h3><span class="sub-num">3</span>Сдаёмся</h3>
+    <ol>
+      <li>Как только матч загрузился и появился игровой экран — открой меню и нажми «Сдаться» (в напарниках это доступно с первого раунда).</li>
+      <li>Матч закрывается сразу, ждать конца раундов не нужно.</li>
+    </ol>
+    <div class="note tip">Сдача — обычная функция игры, за неё не банят. Это тот же выход из матча, только через меню.</div>
 
-  <div class="step" id="s2d">
-    <h3><span class="num">4</span> Забираем серебро</h3>
-    <p>После матча открывается экран результатов. Там начисляется серебро за участие и удачу в игре — сумма зависит от матча и начисления игры.</p>
-    <p>Не закрывай экран сразу: именно на нём появляется кнопка бонуса (следующий раздел).</p>
-  </div>
+    <h3><span class="sub-num">4</span>Забираем серебро</h3>
+    <ol>
+      <li>После матча открывается экран результатов. Там начисляется серебро за участие и удачу в игре — сумма зависит от матча и начисления игры.</li>
+      <li>Не закрывай экран сразу: именно на нём появляется кнопка бонуса (следующий раздел).</li>
+    </ol>
 
-  <div class="step" id="s2e">
-    <h3><span class="num">5</span> Повторяем цикл</h3>
-    <p>Лобби после матча не распадается — сразу жми <b>«В бой»</b> снова. Так один цикл занимает меньше времени, чем полноценная катка.</p>
-    <p>Сделай так 10–15 раз и сравни, сколько серебра прибавилось. Так поймёшь реальную скорость именно на своём аккаунте.</p>
-  </div>
+    <h3><span class="sub-num">5</span>Повторяем цикл</h3>
+    <ol>
+      <li>Лобби после матча не распадается — сразу жми «В бой» снова. Так один цикл занимает меньше времени, чем полноценная катка.</li>
+      <li>Сделай так 10–15 раз и сравни, сколько серебра прибавилось. Так поймёшь реальную скорость именно на своём аккаунте.</li>
+    </ol>
+  </section>
 
-  <h2 class="part"><span>Get Bonus</span></h2>
-
-  <div class="step" id="s3">
-    <h3><span class="num">★</span> Бонус за просмотр</h3>
-    <p>В конце каждой катки, на экране результатов, есть кнопка <b>Get Bonus</b>. Она даёт <b>от 5 до 500 серебра</b> за просмотр короткого ролика.</p>
-    <p><b>Как забрать:</b></p>
+  <section class="card reveal" id="bonus">
+    <h2><span class="num">03</span> Get Bonus</h2>
+    <h3><span class="sub-num">★</span>Бонус за просмотр</h3>
+    <p style="color:var(--ink2);font-size:15px;margin-bottom:12px">В конце каждой катки, на экране результатов, есть кнопка <b>Get Bonus</b>. Она даёт от <b>5 до 500 серебра</b> за просмотр короткого ролика.</p>
+    <h3>Как забрать</h3>
     <ol>
       <li>Дождись экрана с итогами матча</li>
-      <li>Найди кнопку <b>Get Bonus</b> (обычно рядом с итоговой наградой)</li>
+      <li>Найди кнопку Get Bonus (обычно рядом с итоговой наградой)</li>
       <li>Нажми и досмотри ролик до конца — если закрыть раньше, серебро не засчитают</li>
       <li>Серебро придёт сразу, иногда с небольшой задержкой до пары секунд</li>
     </ol>
-    <div class="warn">⚠️ <b>Кнопка появляется не всегда.</b> Игра показывает её с ограничением — сколько раз в день её дают, зависит от аккаунта и региона. Жми каждый раз, когда она есть.</div>
-  </div>
+    <div class="note warn">Кнопка появляется не всегда. Игра показывает её с ограничением — сколько раз в день её дают, зависит от аккаунта и региона. Жми каждый раз, когда она есть.</div>
+  </section>
 
-  <h2 class="part"><span>Как ускорить</span></h2>
-
-  <div class="step" id="s4">
-    <h3><span class="num">1</span> Три вещи, которые реально экономят время</h3>
+  <section class="card reveal" id="speed">
+    <h2><span class="num">04</span> Как ускорить</h2>
+    <h3><span class="sub-num">1</span>Три вещи, которые реально экономят время</h3>
     <ul>
       <li><b>Не выходи в меню между катками.</b> Всё делается прямо из лобби — «В бой» → матч → сдача → «В бой»</li>
       <li><b>Проверь, что телефон не выгружает игру.</b> В настройках батареи поставь Standoff 2 «Без ограничений», иначе загрузка будет дольше и приложение может перезапускаться</li>
       <li><b>Играй в наушниках и с выключенными уведомлениями.</b> Мелочь, но всплывающее окно в момент загрузки матча иногда роняет приложение</li>
     </ul>
-  </div>
 
-  <div class="step" id="s4b">
-    <h3><span class="num">2</span> Сколько реально выходит</h3>
-    <p>Точную цифру назвать нельзя: игра сама решает, сколько дать за матч, а бонус выдаёт случайную сумму в диапазоне.</p>
-    <p>Что понятно наверняка: <b>основной доход здесь идёт от Get Bonus</b>, а не от самих матчей. Поэтому жми бонус каждый раз, когда он появился — пропущенный бонус это потерянный бонус.</p>
-    <div class="warn">⚠️ Если кто-то обещает «1000+ серебра за час» — не верь. Скорость зависит от лимитов игры и удачи, а не от схемы.</div>
-  </div>
+    <h3><span class="sub-num">2</span>Сколько реально выходит</h3>
+    <p style="color:var(--ink2);font-size:15px">Точную цифру назвать нельзя: игра сама решает, сколько дать за матч, а бонус выдаёт случайную сумму в диапазоне.</p>
+    <p style="color:var(--ink2);font-size:15px;margin-top:10px">Что понятно наверняка: основной доход здесь идёт от <b>Get Bonus</b>, а не от самих матчей. Поэтому жми бонус каждый раз, когда он появился — пропущенный бонус это потерянный бонус.</p>
+    <div class="note warn">Если кто-то обещает «1000+ серебра за час» — не верь. Скорость зависит от лимитов игры и удачи, а не от схемы.</div>
+  </section>
 
-  <h2 class="part"><span>Если серебро не идёт</span></h2>
+  <section class="card reveal" id="problems">
+    <h2><span class="num">05</span> Если серебро не идёт</h2>
+    <h3><span class="sub-num">?</span>Частые проблемы</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Что происходит</th><th>Причина и решение</th></tr></thead>
+        <tbody>
+          <tr><td>Приглашение не уходит</td><td>Второй аккаунт не в друзьях или оффлайн. Добавь в друзья, дождись захода</td></tr>
+          <tr><td>Кнопки Get Bonus нет</td><td>Лимит на сегодня исчерпан или бонус не показывают в этом регионе. Жми в следующих катках</td></tr>
+          <tr><td>Ролик не доиграл — бонуса нет</td><td>Досматривай до конца, не закрывай рекламу крестиком</td></tr>
+          <tr><td>Серебро пришло меньше</td><td>Игра начисляет за матч случайно. На большой дистанции это выравнивается</td></tr>
+          <tr><td>Сдаться не получается</td><td>В некоторых режимах сдача блокируется до первого раунда. Просто играй напарники</td></tr>
+          <tr><td>Серебро не пришло вовсе</td><td>Перезайди в аккаунт, проверь баланс в профиле. Если пусто — пиши в чат, разберёмся</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  <div class="step" id="s5">
-    <h3><span class="num">?</span> Частые проблемы</h3>
-    <table class="tbl">
-      <tr><th>Что происходит</th><th>Причина и решение</th></tr>
-      <tr><td>Приглашение не уходит</td><td>Второй аккаунт не в друзьях или оффлайн. Добавь в друзья, дождись захода</td></tr>
-      <tr><td>Кнопки Get Bonus нет</td><td>Лимит на сегодня исчерпан или бонус не показывают в этом регионе. Жми в следующих катках</td></tr>
-      <tr><td>Ролик не доиграл — бонуса нет</td><td>Досматривай до конца, не закрывай рекламу крестиком</td></tr>
-      <tr><td>Серебро пришло меньше</td><td>Игра начисляет за матч случайно. На большой дистанции это выравнивается</td></tr>
-      <tr><td>Сдаться не получается</td><td>В некоторых режимах сдача блокируется до первого раунда. Просто играй напарники</td></tr>
-      <tr><td>Серебро не пришло вовсе</td><td>Перезайди в аккаунт, проверь баланс в профиле. Если пусто — пиши в чат, разберёмся</td></tr>
-    </table>
-  </div>
-
-  <h2 class="part"><span>Честно про ограничения</span></h2>
-
-  <div class="step" id="s6">
-    <h3><span class="num">!</span> Что важно знать заранее</h3>
+  <section class="card reveal" id="limits">
+    <h2><span class="num">06</span> Честно про ограничения</h2>
+    <h3><span class="sub-num">!</span>Что важно знать заранее</h3>
     <ul>
       <li><b>Это не взлом.</b> Ты используешь обычные функции игры: напарники, сдачу и бонус за рекламу. Ничего не меняется в файлах игры</li>
       <li><b>Бана не будет.</b> Сдача в матче — штатная кнопка в меню игры</li>
-      <li><b>Серебро — не донат-валюта.</b> Оно копится постепенно и тратится на обычные покупки, это небезлимит</li>
+      <li><b>Серебро — не донат-валюта.</b> Оно копится постепенно и тратится на обычные покупки, это не безлимит</li>
       <li><b>Лимиты игры могут меняться.</b> Если бонус перестал давать больше серебра или сумма уменьшилась — это не поломка, а решение игры</li>
       <li><b>Второй аккаунт за это не наказывают.</b> Но не стоит использовать один твинк в конкурсах или ивентах, где это запрещено правилами</li>
     </ul>
-    <div class="tip">Совет напоследок: включай схему, когда всё равно сидишь в телефоне. Сдача в матче занимает пару минут, и серебро копится само.</div>
-  </div>
+    <div class="note tip">Совет напоследок: включай схему, когда всё равно сидишь в телефоне. Сдача в матче занимает пару минут, и серебро копится само.</div>
+  </section>
 
-  <h2 class="part"><span>Чек-лист</span></h2>
+  <section class="card reveal" id="check">
+    <h2><span class="num">07</span> Чек-лист</h2>
+    <h3><span class="sub-num">✓</span>Проверь перед стартом</h3>
+    <div class="check">
+      <div>Второй аккаунт добавлен в друзья</div>
+      <div>Оба устройства онлайн</div>
+      <div>Выбран режим «Напарники»</div>
+      <div>Лобби собрано, приглашение принято</div>
+      <div>Знаю, где кнопка «Сдаться»</div>
+      <div>Экран результатов не закрываю сразу</div>
+      <div>Жму Get Bonus каждый раз, когда он есть</div>
+      <div>Батарея для игры — «Без ограничений»</div>
+    </div>
+  </section>
 
-  <div class="step" id="s7">
-    <h3><span class="num">✓</span> Проверь перед стартом</h3>
+  <section class="card reveal">
+    <h2>Сколько выходит за вечер</h2>
+    <div class="calc">
+      <div class="calc-head"><span>Каток за вечер</span><b id="gv">10</b></div>
+      <input type="range" id="games" min="1" max="50" value="10">
+      <div class="out">
+        <div><b id="mn">50</b><span>минимум серебра</span></div>
+        <div><b id="mx">5 000</b><span>максимум серебра</span></div>
+      </div>
+      <div class="note info" style="margin-bottom:0">Бонус даёт от 5 до 500 серебра. Столько выйдет, если Get Bonus появляется после каждой катки — на деле кнопка бывает не всегда.</div>
+    </div>
+  </section>
+
+  <section class="premium reveal">
+    <div class="crown">♛</div>
+    <h3>Nagibatorz · премиум</h3>
+    <p>Ещё больше полезного — гайды, настройки, фарм и прицелы в одном магазине.</p>
     <ul>
-      <li>Второй аккаунт добавлен в друзья</li>
-      <li>Оба устройства онлайн</li>
-      <li>Выбран режим «Напарники»</li>
-      <li>Лобби собрано, приглашение принято</li>
-      <li>Знаю, где кнопка «Сдаться»</li>
-      <li>Экран результатов не закрываю сразу</li>
-      <li>Жму Get Bonus каждый раз, когда он есть</li>
-      <li>Батарея для игры — «Без ограничений»</li>
+      <li>Проверенные гайды и настройки</li>
+      <li>Авто-выдача 24/7</li>
+      <li>Ответы на вопросы в чате</li>
     </ul>
-  </div>
+    <a class="go" href="https://playerok.com/profile/Nagibatorz/products">Перейти в магазин →</a>
+    <span class="url">playerok.com/profile/Nagibatorz</span>
+  </section>
 
-  <div class="calc-wrap">
-    <div class="calc" id="calcCard">
-      <div class="kicker">интерактив</div>
-      <h2>Сколько выходит за вечер</h2>
-      <p class="calc-sub">Двигай ползунок — покажу диапазон с бонусов.</p>
-      <div class="calc-row"><span>Каток за вечер</span><b id="calcN">10</b></div>
-      <input type="range" id="rng" min="1" max="20" value="10" step="1">
-      <div class="calc-out">
-        <div>
-          <div class="calc-big" id="calcMin">50</div>
-          <div class="calc-lbl">минимум серебра</div>
-        </div>
-        <div>
-          <div class="calc-big acc" id="calcMax">5 000</div>
-          <div class="calc-lbl">максимум серебра</div>
-        </div>
-      </div>
-      <div class="calc-hint">Бонус даёт от 5 до 500 серебра. Столько выйдет, если <b>Get Bonus</b> появляется после каждой катки — на деле кнопка бывает не всегда.</div>
-    </div>
-  </div>
-
-  <div class="promo-wrap">
-    <div class="promo-glow"></div>
-    <div class="promo-frame">
-      <div class="promo">
-        <div class="promo-shine"></div>
-        <div class="promo-top">
-          <div class="promo-ava">N</div>
-          <div class="promo-id">
-            <div class="promo-name">Nagibatorz <span class="promo-badge">премиум</span></div>
-            <div class="promo-sub">магазин на Playerok</div>
-          </div>
-          <div class="promo-crown">♛</div>
-        </div>
-        <h2>Ещё больше полезного</h2>
-        <p class="promo-text">Гайды по Standoff 2, настройки телефона, фарм и прицелы — всё в одном месте, с авто-выдачей сразу после покупки.</p>
-        <div class="promo-list">
-          <div class="promo-item"><i></i>Проверенные гайды и настройки</div>
-          <div class="promo-item"><i></i>Авто-выдача 24/7</div>
-          <div class="promo-item"><i></i>Ответы на вопросы в чате</div>
-        </div>
-        <a class="promo-btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Перейти в магазин <span>→</span></a>
-        <div class="promo-note">playerok.com/profile/Nagibatorz</div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <b>Nagibatorz</b> · Playerok<br>
-    Не заработало или появилась ошибка — напиши в чат, помогу разобраться.
-  </footer>
-
+  <div class="foot">Standoff 2 — товарные знаки соответствующих правообладателей. Гайд не связан с разработчиками игры.</div>
 </div>
 
-<button class="top" id="toTop" aria-label="Наверх">↑</button>
-<button class="fx" id="fx">3D: вкл</button>
-
 <script>
-  /* прогресс чтения */
-  var prog = document.getElementById('prog');
-  window.addEventListener('scroll', function(){
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    prog.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
-  }, {passive:true});
-
-  /* наверх */
-  var btn = document.getElementById('toTop');
-  window.addEventListener('scroll', function(){
-    if (window.scrollY > 500) btn.classList.add('show');
-    else btn.classList.remove('show');
-  }, {passive:true});
-  btn.addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
+// --- 3D toggle ---
+var on=false, scene=document.getElementById('scene'), stage=document.getElementById('stage');
+var btn=document.getElementById('btn3d'), txt=document.getElementById('btn3dtext');
+function tilt(x,y){
+  var rx=(-y*8).toFixed(2), ry=(x*12).toFixed(2);
+  scene.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';
+  document.querySelectorAll('.card').forEach(function(c){
+    c.style.transform='translateY(-3px) rotateX('+(rx*0.35)+'deg) rotateY('+(ry*0.35)+'deg)';
   });
+}
+function reset(){
+  scene.style.transform='';
+  document.querySelectorAll('.card').forEach(function(c){c.style.transform='';});
+}
+btn.addEventListener('click',function(){
+  on=!on;
+  btn.classList.toggle('on',on);
+  txt.textContent=on?'3D: вкл':'3D: выкл';
+  document.body.classList.toggle('tilt',on);
+  if(!on)reset();
+});
+stage.addEventListener('pointermove',function(e){
+  if(!on)return;
+  var r=stage.getBoundingClientRect();
+  tilt((e.clientX-r.left)/r.width-0.5,(e.clientY-r.top)/r.height-0.5);
+});
+stage.addEventListener('pointerleave',function(){ if(on)reset(); });
+window.addEventListener('deviceorientation',function(e){
+  if(!on)return;
+  if(e.gamma==null||e.beta==null)return;
+  tilt(Math.max(-0.5,Math.min(0.5,e.gamma/60)),Math.max(-0.5,Math.min(0.5,(e.beta-45)/60)));
+});
 
-  /* 3D наклон */
-  var phone = document.getElementById('phone');
-  var metCards = [].slice.call(document.querySelectorAll('[data-tilt]'));
-  var calcCard = document.getElementById('calcCard');
-  var fxOn = true;
-  var BASE_X = 6, BASE_Y = -14;
+// --- reveal ---
+var io=new IntersectionObserver(function(en){
+  en.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target);} });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 
-  function setTilt(el, rx, ry){
-    if (!fxOn || !el) return;
-    el.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
-  }
-
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', function(e){
-      if (!fxOn) return;
-      var b = Math.max(-1, Math.min(1, (e.beta || 0) / 45));
-      var g = Math.max(-1, Math.min(1, (e.gamma || 0) / 45));
-      setTilt(phone, BASE_X - b * 7, BASE_Y + g * 9);
-      setTilt(calcCard, -b * 3, g * 4);
-      metCards.forEach(function(m, i){
-        var k = (i % 2 === 0) ? 1 : -1;
-        setTilt(m, -b * 4, g * 5 * k);
-      });
-    }, {passive:true});
-  }
-
-  window.addEventListener('pointermove', function(e){
-    if (!fxOn || !phone) return;
-    var r = phone.getBoundingClientRect();
-    var dx = (e.clientX - (r.left + r.width / 2)) / (r.width || 1);
-    var dy = (e.clientY - (r.top + r.height / 2)) / (r.height || 1);
-    if (Math.abs(dx) < 1.8 && Math.abs(dy) < 1.8) {
-      setTilt(phone, BASE_X - dy * 8, BASE_Y + dx * 12);
-    }
-  }, {passive:true});
-
-  /* калькулятор */
-  var rng = document.getElementById('rng');
-  var calcN = document.getElementById('calcN');
-  var calcMin = document.getElementById('calcMin');
-  var calcMax = document.getElementById('calcMax');
-
-  function fmt(n){
-    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  }
-  function updCalc(){
-    var n = +rng.value;
-    calcN.textContent = n;
-    calcMin.textContent = fmt(5 * n);
-    calcMax.textContent = fmt(500 * n);
-    var p = ((n - 1) / 19) * 100;
-    rng.style.setProperty('--p', p + '%');
-  }
-  rng.addEventListener('input', updCalc);
-  updCalc();
-
-  /* 3D вкл/выкл */
-  var fx = document.getElementById('fx');
-  fx.addEventListener('click', function(){
-    fxOn = !fxOn;
-    document.body.classList.toggle('no-fx', !fxOn);
-    fx.textContent = fxOn ? '3D: вкл' : '3D: выкл';
-    if (!fxOn) {
-      [phone, calcCard].concat(metCards).forEach(function(el){
-        if (el) el.style.transform = '';
-      });
-    } else {
-      if (phone) phone.style.transform = 'rotateX(' + BASE_X + 'deg) rotateY(' + BASE_Y + 'deg)';
-    }
-  });
-
-  /* поиск */
-  var q = document.getElementById('q');
-  q.addEventListener('input', function(){
-    var v = this.value.trim().toLowerCase();
-    var items = document.querySelectorAll('.step');
-    if (!v) {
-      items.forEach(function(el){ el.classList.remove('hide'); });
-      document.querySelector('.toc').style.display = '';
-      document.querySelectorAll('.part').forEach(function(el){ el.style.display = ''; });
-      return;
-    }
-    document.querySelector('.toc').style.display = 'none';
-    items.forEach(function(el){
-      if (el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
-      else el.classList.add('hide');
-    });
-    document.querySelectorAll('.part').forEach(function(el){ el.style.display = 'none'; });
-  });
+// --- calculator ---
+var r=document.getElementById('games'), gv=document.getElementById('gv'),
+    mn=document.getElementById('mn'), mx=document.getElementById('mx');
+function fmt(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');}
+function upd(){
+  var n=+r.value;
+  gv.textContent=n;
+  mn.textContent=fmt(n*5);
+  mx.textContent=fmt(n*500);
+}
+r.addEventListener('input',upd);
+upd();
 </script>
-
 </body>
 </html>
