@@ -250,6 +250,45 @@
   .filebtn b{display:block;font-size:16px;font-weight:800;margin-bottom:2px}
   .filebtn span{display:block;font-size:13px;color:var(--muted)}
 
+  .phonegrid{display:grid;gap:20px;margin-top:14px}
+  .phonecard{
+    background:linear-gradient(150deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px 14px 14px;
+    text-align:center;
+    backdrop-filter:blur(10px);
+  }
+  .phone{position:relative;perspective:900px;max-width:360px;margin:0 auto 12px}
+  .phone::before{content:"";display:block;padding-top:54%}
+  .ph-screen{
+    position:absolute;inset:0;
+    border-radius:14px;
+    border:5px solid #16171b;
+    background:#000;
+    overflow:hidden;
+    transform:rotateY(-13deg) rotateX(5deg);
+    transform-style:preserve-3d;
+    backface-visibility:hidden;
+    box-shadow:0 18px 34px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.07);
+    transition:transform .35s;
+  }
+  .phonecard:active .ph-screen{transform:rotateY(-5deg) rotateX(2deg)}
+  .ph-screen img{width:100%;height:100%;object-fit:cover;display:block}
+  .ph-label{font-weight:800;font-size:15.5px;color:#fff;margin-bottom:9px}
+  .ph-link{
+    display:block;
+    font-size:13.5px;
+    color:var(--orange2);
+    text-decoration:none;
+    border:1px solid rgba(255,122,24,.35);
+    border-radius:11px;
+    padding:10px 12px;
+    background:rgba(255,122,24,.08);
+    transition:.18s;
+  }
+  .ph-link:active{transform:scale(.98)}
+
   .bonus{
     margin-top:56px;
     background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
@@ -312,6 +351,8 @@
     .step{padding:17px 15px 19px;border-radius:16px}
     .step h3{font-size:16.5px}
     .step p,.step li{font-size:14.5px}
+    .phone{max-width:100%}
+    .phonecard{padding:14px 11px 12px}
   }
 </style>
 </head>
@@ -336,6 +377,7 @@
     <div class="toc-title">Содержание</div>
     <a href="#s1"><span class="ico">📥</span> Твои три раскладки</a>
     <a href="#s2"><span class="ico">⚙️</span> Как перенести на свой телефон</a>
+    <a href="#screens"><span class="ico">🖼️</span> Как выглядят раскладки</a>
     <a href="#s3"><span class="ico">✋</span> Схема на 3 пальца</a>
     <a href="#s4"><span class="ico">🤚</span> Схема на 4 пальца</a>
     <a href="#s5"><span class="ico">🖐️</span> Схема на 5 пальцев</a>
@@ -385,6 +427,43 @@
     </ol>
     <div class="warn">⚠️ <b>Не нажимай «Сброс»</b> — он стирает все твои кнопки и возвращает стандарт. Если что-то пошло не так, просто выйди из редактора без сохранения.</div>
     <div class="tip">В редакторе есть кнопка <b>«Скопировать»</b> — ей можно перенести готовую раскладку из TPP в FPP, чтобы не расставлять всё дважды.</div>
+  </div>
+
+  <h2 class="part"><span>Как выглядят раскладки</span></h2>
+
+  <div class="step" id="screens">
+    <h3>Реальные скрины из игры</h3>
+    <p>В каждом телефоне — настоящий скриншот раскладки, а не нарисованная схема. Под телефоном есть кнопка на полный скрин в исходном размере: по нему видно точное положение каждой кнопки.</p>
+
+    <div class="phonegrid">
+
+      <div class="phonecard">
+        <div class="phone"><div class="ph-screen">
+          <img src="img/Screenshot_437.png" alt="Раскладка PUBG Mobile на 3 пальца — скрин из игры" loading="lazy">
+        </div></div>
+        <div class="ph-label">Схема на 3 пальца</div>
+        <a class="ph-link" href="https://disk.yandex.ru/i/zVHeWHsAxuYoag" target="_blank" rel="noopener">Открыть полный скрин ↗</a>
+      </div>
+
+      <div class="phonecard">
+        <div class="phone"><div class="ph-screen">
+          <img src="img/SUwHdPqutQY-1024x473.jpg" alt="Раскладка PUBG Mobile на 4 пальца — скрин из игры" loading="lazy">
+        </div></div>
+        <div class="ph-label">Схема на 4 пальца</div>
+        <a class="ph-link" href="https://disk.yandex.ru/i/uw9uUnXxRYz6Jg" target="_blank" rel="noopener">Открыть полный скрин ↗</a>
+      </div>
+
+      <div class="phonecard">
+        <div class="phone"><div class="ph-screen">
+          <img src="img/W_kcytq6wUw-1024x473.jpg" alt="Раскладка PUBG Mobile на 5 пальцев — скрин из игры" loading="lazy">
+        </div></div>
+        <div class="ph-label">Схема на 5 пальцев</div>
+        <a class="ph-link" href="https://disk.yandex.ru/i/pC9it_40aibvjQ" target="_blank" rel="noopener">Открыть полный скрин ↗</a>
+      </div>
+
+    </div>
+
+    <div class="tip">Скрины горизонтальные, поэтому телефоны повёрнуты боком — так видно всю раскладку целиком, ничего не обрезано.</div>
   </div>
 
   <h2 class="part"><span>Как играть</span></h2>
