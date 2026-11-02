@@ -1,614 +1,481 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<title>Раскладки в 3, 4 и 5 пальцев · PUBG Mobile</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Раскладки PUBG Mobile — 3 · 4 · 5 пальцев</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --bg:#0a0a0c;
-    --card:rgba(255,255,255,.045);
-    --card2:rgba(255,255,255,.07);
-    --line:rgba(255,255,255,.1);
-    --orange:#ff7a18;
-    --orange2:#ffb347;
-    --text:#edeff2;
-    --muted:#9aa0aa;
-  }
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:"";
-    position:fixed;inset:0;
-    background:
-      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
-      radial-gradient(700px 420px at 96% 6%, rgba(255,69,0,.12), transparent 60%),
-      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
-    pointer-events:none;z-index:0;
-  }
-  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
+:root{
+  --bg1:#f4eee4;
+  --bg2:#dcd4c7;
+  --ink:#26272b;
+  --muted:#6b6c72;
+  --line:rgba(38,39,43,.12);
+  --card:rgba(255,255,255,.74);
+  --gold:#a2803f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink);
+  line-height:1.55;
+  background:radial-gradient(120% 75% at 50% 0%,#faf6ee 0%,var(--bg1) 42%,var(--bg2) 100%);
+  background-attachment:fixed;
+  padding:16px 14px 42px;
+}
+.wrap{max-width:520px;margin:0 auto}
 
-  .hero{
-    padding:48px 0 34px;
-    text-align:center;
-    border-bottom:1px solid var(--line);
-    margin-bottom:34px;
-  }
-  .hero .tag{
-    display:inline-block;
-    font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
-    color:var(--orange2);
-    border:1px solid rgba(255,122,24,.35);
-    background:rgba(255,122,24,.08);
-    border-radius:100px;
-    padding:6px 16px;margin-bottom:20px;
-  }
-  .hero h1{
-    font-size:clamp(28px,7.5vw,48px);
-    line-height:1.12;
-    font-weight:900;
-    letter-spacing:-.5px;
-    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
-  }
-  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+/* ---------- шапка ---------- */
+.hero{
+  text-align:center;
+  padding:14px 0 4px;
+}
+.kicker{
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:700;
+  margin-bottom:12px;
+}
+h1{
+  margin:0;
+  font-size:clamp(30px,9.4vw,40px);
+  line-height:1.02;
+  letter-spacing:-.02em;
+  font-weight:800;
+  background:linear-gradient(180deg,#3a3b40 0%,#1f2024 55%,#44454b 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 1px 0 rgba(255,255,255,.5);
+}
+.sub{
+  margin-top:8px;
+  font-size:12px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:#7d7e84;
+  font-weight:700;
+}
+.rule{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:14px 0 6px;color:#9a8a6a;font-size:12px;letter-spacing:.3em;
+}
+.rule::before,.rule::after{
+  content:"";height:1px;flex:1;max-width:90px;
+  background:linear-gradient(90deg,transparent,rgba(162,128,63,.55));
+}
+.rule::after{background:linear-gradient(90deg,rgba(162,128,63,.55),transparent)}
 
-  .note{
-    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
-    border:1px solid rgba(255,122,24,.28);
-    border-radius:16px;
-    padding:16px 18px;
-    font-size:14.5px;
-    margin-bottom:26px;
-    color:#f3e3d6;
-  }
-  .note b{color:var(--orange2)}
+/* ---------- 3D сцена ---------- */
+.scene{
+  position:relative;
+  height:330px;
+  margin:6px 0 10px;
+  perspective:1000px;
+  touch-action:none;
+  display:flex;align-items:center;justify-content:center;
+}
+.scene-inner{
+  position:relative;
+  width:100%;height:100%;
+  transform-style:preserve-3d;
+  transition:transform .9s cubic-bezier(.2,.7,.2,1);
+}
+body.on .scene-inner{transform:rotateX(6deg) rotateY(-8deg)}
 
-  .searchbox{margin-bottom:26px}
-  .searchbox input{
-    width:100%;
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:14px 18px;
-    color:var(--text);
-    font-size:15.5px;
-    outline:none;
-    transition:.2s;
-    backdrop-filter:blur(10px);
-  }
-  .searchbox input:focus{border-color:rgba(255,122,24,.55);background:var(--card2)}
-  .searchbox input::placeholder{color:#6d737d}
+.herophone{
+  position:absolute;
+  left:50%;top:50%;
+  width:min(58%,236px);
+  margin-left:-29%;
+  margin-top:-58px;
+  transform:translateZ(10px) rotateY(-15deg) rotateX(5deg);
+  transform-style:preserve-3d;
+  transition:transform .9s cubic-bezier(.2,.7,.2,1);
+}
+body.on .herophone{transform:translateZ(40px) rotateY(-22deg) rotateX(2deg)}
+.herophone .frame{
+  position:relative;
+  border-radius:16px;
+  border:6px solid #1b1c20;
+  background:#0b0c0e;
+  overflow:hidden;
+  box-shadow:0 26px 44px -18px rgba(26,27,31,.55),0 0 0 1px rgba(255,255,255,.35) inset;
+}
+.herophone .frame::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 42%);
+  pointer-events:none;
+}
+.herophone .frame::before{padding-top:0}
+.herophone img{width:100%;display:block}
 
-  .toc{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:8px;
-    margin-bottom:38px;
-    backdrop-filter:blur(12px);
-  }
-  .toc-title{
-    font-size:12px;letter-spacing:1.8px;text-transform:uppercase;
-    color:var(--muted);padding:12px 16px 8px;font-weight:700;
-  }
-  .toc a{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 16px;
-    border-radius:12px;
-    color:var(--text);
-    text-decoration:none;
-    font-size:15px;
-    font-weight:600;
-    transition:.15s;
-  }
-  .toc a:hover{background:rgba(255,122,24,.1);color:#fff}
-  .toc a .ico{
-    width:26px;height:26px;flex:0 0 26px;
-    display:grid;place-items:center;
-    border-radius:8px;
-    background:rgba(255,122,24,.15);
-    font-size:13px;
-  }
+.cube-wrap{
+  position:absolute;
+  right:4%;top:8%;
+  width:76px;height:76px;
+  transform:translateZ(60px);
+  perspective:600px;
+}
+.cube{
+  width:100%;height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  animation:spin 16s linear infinite;
+}
+body.on .cube{animation-duration:9s}
+.cube div{
+  position:absolute;inset:0;
+  border:1px solid rgba(255,255,255,.75);
+  background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(210,204,192,.28));
+  backdrop-filter:blur(3px);
+  border-radius:3px;
+  backface-visibility:hidden;
+}
+.cube .f{transform:translateZ(38px)}
+.cube .b{transform:rotateY(180deg) translateZ(38px)}
+.cube .r{transform:rotateY(90deg) translateZ(38px)}
+.cube .l{transform:rotateY(-90deg) translateZ(38px)}
+.cube .t{transform:rotateX(90deg) translateZ(38px)}
+.cube .bt{transform:rotateX(-90deg) translateZ(38px)}
+@keyframes spin{
+  from{transform:rotateX(-18deg) rotateY(0deg)}
+  to{transform:rotateX(-18deg) rotateY(360deg)}
+}
 
-  .part{
-    margin:52px 0 24px;
-    font-size:clamp(22px,5.5vw,30px);
-    font-weight:900;
-    letter-spacing:-.3px;
-    padding-bottom:12px;
-    border-bottom:1px solid var(--line);
-    scroll-margin-top:18px;
-  }
-  .part span{
-    background:linear-gradient(90deg,var(--orange2),var(--orange));
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
+.slab{
+  position:absolute;
+  left:2%;bottom:16%;
+  width:74px;height:44px;
+  border-radius:6px;
+  background:linear-gradient(155deg,#f7f4ee,#c9c2b4 55%,#ece7dd);
+  box-shadow:0 12px 20px -10px rgba(26,27,31,.5),0 0 0 1px rgba(255,255,255,.8) inset;
+  transform:rotateY(18deg) rotateX(8deg) translateZ(30px);
+}
 
-  .step{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:20px 20px 22px;
-    margin-bottom:14px;
-    backdrop-filter:blur(10px);
-    scroll-margin-top:18px;
-  }
-  .step h3{
-    font-size:17.5px;
-    font-weight:800;
-    margin-bottom:12px;
-    display:flex;gap:11px;align-items:flex-start;
-    letter-spacing:-.2px;
-  }
-  .num{
-    flex:0 0 28px;height:28px;
-    display:grid;place-items:center;
-    border-radius:9px;
-    background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;font-size:13.5px;font-weight:900;
-    box-shadow:0 4px 14px rgba(255,122,24,.35);
-  }
-  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
-  .step p:last-child{margin-bottom:0}
-  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
-  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
-  .step li::marker{color:var(--orange)}
+/* ---------- кнопка 3D ---------- */
+.scene-btn{
+  display:block;
+  margin:0 auto 22px;
+  padding:11px 22px;
+  border-radius:999px;
+  border:1px solid rgba(38,39,43,.18);
+  background:rgba(255,255,255,.7);
+  color:#313237;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.04em;
+  cursor:pointer;
+  box-shadow:0 10px 22px -14px rgba(26,27,31,.6);
+}
+.scene-btn:active{transform:scale(.97)}
+.scene-btn.on{background:#2b2c31;color:#fff;border-color:#2b2c31}
 
-  kbd{
-    display:inline-block;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.18);
-    border-bottom-width:2px;
-    border-radius:6px;
-    padding:1px 7px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    color:#fff;
-    white-space:nowrap;
-  }
-  code{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    background:rgba(255,122,24,.12);
-    color:var(--orange2);
-    padding:2px 7px;border-radius:6px;
-    word-break:break-all;
-  }
-  .path{
-    display:block;
-    background:rgba(0,0,0,.4);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:11px 14px;
-    margin:10px 0;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12.5px;
-    color:#ffcf9a;
-    overflow-x:auto;
-    white-space:nowrap;
-  }
+/* ---------- секции ---------- */
+.section{margin:26px 0 0}
+h2{
+  font-size:19px;
+  margin:0 0 14px;
+  letter-spacing:-.01em;
+  font-weight:800;
+  display:flex;align-items:center;gap:10px;
+}
+h2::before{
+  content:"";width:6px;height:18px;border-radius:2px;
+  background:linear-gradient(180deg,#b39457,#8a6d34);
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px 16px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 18px 34px -26px rgba(26,27,31,.7);
+  transition:transform .5s cubic-bezier(.2,.7,.2,1);
+}
+body.on .card{transform:translateZ(0)}
 
-  .warn{
-    background:rgba(255,60,60,.09);
-    border:1px solid rgba(255,80,80,.32);
-    border-left:3px solid #ff4d4d;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#ffc9c9;
-  }
-  .warn b{color:#ff8f8f}
+/* ---------- телефоны со скринами ---------- */
+.phonegrid{display:grid;gap:18px}
+.phonecard{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  text-align:center;
+  backdrop-filter:blur(10px);
+  box-shadow:0 18px 34px -26px rgba(26,27,31,.7);
+}
+.phone{
+  position:relative;
+  perspective:900px;
+  margin:0 auto 12px;
+}
+.phone .frame{
+  position:relative;
+  border-radius:14px;
+  border:6px solid #1b1c20;
+  background:#0b0c0e;
+  overflow:hidden;
+  transform:rotateY(-13deg) rotateX(5deg);
+  transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1);
+  box-shadow:0 20px 34px -18px rgba(26,27,31,.62),0 0 0 1px rgba(255,255,255,.32) inset;
+}
+body.on .phone .frame{transform:rotateY(-20deg) rotateX(2deg) translateZ(24px)}
+.phone .frame::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(120deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,0) 45%);
+  pointer-events:none;
+}
+.phone img{width:100%;display:block}
+.ph-label{
+  font-weight:800;
+  font-size:15px;
+  letter-spacing:.01em;
+}
+.ph-note{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-top:3px;
+}
 
-  .tip{
-    background:rgba(70,200,120,.08);
-    border:1px solid rgba(70,200,120,.25);
-    border-left:3px solid #37c97a;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#c3f0d8;
-  }
+/* ---------- шаги ---------- */
+.steps{counter-reset:s;display:grid;gap:12px}
+.step{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px 14px 14px 54px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 18px 34px -28px rgba(26,27,31,.7);
+}
+.step::before{
+  counter-increment:s;
+  content:counter(s,decimal-leading-zero);
+  position:absolute;
+  left:14px;top:13px;
+  width:28px;height:28px;
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;
+  color:#fff;
+  background:linear-gradient(160deg,#3a3b40,#202126);
+  box-shadow:0 6px 14px -8px rgba(26,27,31,.9);
+}
+.step b{display:block;font-size:14.5px;margin-bottom:3px}
+.step span{font-size:13.5px;color:var(--muted)}
 
-  .tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
-  .tbl th{
-    text-align:left;padding:10px 12px;
-    color:var(--muted);font-size:12px;
-    text-transform:uppercase;letter-spacing:1.2px;
-    border-bottom:1px solid var(--line);
-  }
-  .tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
-  .tbl tr:last-child td{border-bottom:none}
-  .tbl td:first-child{font-weight:600;color:#fff}
+/* ---------- списки ---------- */
+.list{display:grid;gap:9px;margin:0;padding:0;list-style:none}
+.list li{
+  position:relative;
+  padding-left:24px;
+  font-size:14px;
+}
+.list li::before{
+  content:"";position:absolute;left:4px;top:8px;
+  width:7px;height:7px;border-radius:2px;
+  background:linear-gradient(150deg,#b39457,#8a6d34);
+  transform:rotate(45deg);
+}
 
-  .filebtn{
-    display:block;
-    text-decoration:none;
-    background:linear-gradient(135deg,rgba(255,122,24,.16),rgba(255,122,24,.05));
-    border:1px solid rgba(255,122,24,.38);
-    border-radius:14px;
-    padding:14px 18px;
-    margin-top:12px;
-    color:#fff;
-    transition:.18s;
-  }
-  .filebtn:active{transform:scale(.985)}
-  .filebtn b{display:block;font-size:16px;font-weight:800;margin-bottom:2px}
-  .filebtn span{display:block;font-size:13px;color:var(--muted)}
-
-  .phonegrid{display:grid;gap:20px;margin-top:14px}
-  .phonecard{
-    background:linear-gradient(150deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:16px 14px 14px;
-    text-align:center;
-    backdrop-filter:blur(10px);
-  }
-  .phone{position:relative;perspective:900px;max-width:360px;margin:0 auto 12px}
-  .phone::before{content:"";display:block;padding-top:54%}
-  .ph-screen{
-    position:absolute;inset:0;
-    border-radius:14px;
-    border:5px solid #16171b;
-    background:#000;
-    overflow:hidden;
-    transform:rotateY(-13deg) rotateX(5deg);
-    transform-style:preserve-3d;
-    backface-visibility:hidden;
-    box-shadow:0 18px 34px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.07);
-    transition:transform .35s;
-  }
-  .phonecard:active .ph-screen{transform:rotateY(-5deg) rotateX(2deg)}
-  .ph-screen img{width:100%;height:100%;object-fit:cover;display:block}
-  .ph-label{font-weight:800;font-size:15.5px;color:#fff;margin-bottom:9px}
-  .ph-link{
-    display:block;
-    font-size:13.5px;
-    color:var(--orange2);
-    text-decoration:none;
-    border:1px solid rgba(255,122,24,.35);
-    border-radius:11px;
-    padding:10px 12px;
-    background:rgba(255,122,24,.08);
-    transition:.18s;
-  }
-  .ph-link:active{transform:scale(.98)}
-
-  .bonus{
-    margin-top:56px;
-    background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
-    border:1px solid rgba(255,122,24,.35);
-    border-radius:22px;
-    padding:28px 24px;
-    text-align:center;
-    scroll-margin-top:18px;
-  }
-  .bonus h2{
-    font-size:24px;font-weight:900;margin-bottom:10px;
-    background:linear-gradient(90deg,#fff,var(--orange2));
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
-  .btn{
-    display:inline-block;
-    background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;text-decoration:none;
-    font-weight:800;font-size:15.5px;
-    padding:15px 34px;border-radius:14px;
-    box-shadow:0 10px 30px rgba(255,122,24,.35);
-    transition:.18s;
-  }
-  .btn:active{transform:scale(.97)}
-
-  footer{
-    margin-top:54px;
-    padding-top:26px;
-    border-top:1px solid var(--line);
-    text-align:center;
-    color:var(--muted);
-    font-size:13.5px;
-  }
-  footer b{color:var(--text)}
-
-  .top{
-    position:fixed;
-    right:16px;bottom:18px;
-    width:46px;height:46px;
-    border-radius:50%;
-    background:rgba(255,122,24,.9);
-    color:#fff;border:none;
-    font-size:19px;
-    display:grid;place-items:center;
-    box-shadow:0 8px 24px rgba(255,122,24,.4);
-    cursor:pointer;
-    opacity:0;pointer-events:none;
-    transition:.25s;
-    z-index:50;
-  }
-  .top.show{opacity:1;pointer-events:auto}
-
-  .hide{display:none!important}
-
-  @media(max-width:430px){
-    .wrap{padding:0 14px 84px}
-    .hero{padding:34px 0 26px}
-    .step{padding:17px 15px 19px;border-radius:16px}
-    .step h3{font-size:16.5px}
-    .step p,.step li{font-size:14.5px}
-    .phone{max-width:100%}
-    .phonecard{padding:14px 11px 12px}
-  }
+/* ---------- премиум карточка магазина ---------- */
+.shop{
+  margin-top:26px;
+  border-radius:20px;
+  padding:20px 18px;
+  text-align:center;
+  color:#f5f1e8;
+  background:
+    radial-gradient(120% 100% at 50% 0%,rgba(179,148,87,.34),transparent 62%),
+    linear-gradient(160deg,#232429,#141519 60%,#1d1e23);
+  border:1px solid rgba(179,148,87,.55);
+  box-shadow:0 26px 44px -28px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.05) inset;
+}
+.shop .crown{font-size:20px;letter-spacing:.2em;color:#c9a75f}
+.shop h3{
+  margin:8px 0 4px;
+  font-size:19px;
+  letter-spacing:.01em;
+  font-weight:800;
+}
+.shop p{margin:0 0 14px;font-size:13px;color:#b9b4a8}
+.shop a{
+  display:inline-block;
+  padding:11px 22px;
+  border-radius:999px;
+  background:linear-gradient(160deg,#c9a75f,#9a7c3c);
+  color:#1a1b1f;
+  font-weight:800;
+  font-size:13.5px;
+  text-decoration:none;
+  box-shadow:0 12px 24px -14px rgba(0,0,0,.9);
+}
+.shop a:active{transform:scale(.97)}
+.foot{
+  margin-top:22px;
+  text-align:center;
+  font-size:12px;
+  color:#8a8b90;
+  letter-spacing:.06em;
+}
+@media(max-width:430px){
+  body{padding:12px 11px 34px}
+  .scene{height:290px}
+  .herophone{width:62%;margin-left:-31%;margin-top:-50px}
+  .cube-wrap{width:62px;height:62px}
+  .cube .f,.cube .b,.cube .r,.cube .l,.cube .t,.cube .bt{}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="hero">
-    <div class="tag">Nagibatorz · PUBG Mobile</div>
-    <h1>Раскладки в&nbsp;3, 4 и&nbsp;5&nbsp;пальцев</h1>
-    <p>Три готовые схемы управления и&nbsp;простой способ перенести их&nbsp;на&nbsp;свой экран</p>
+    <div class="kicker">PUBG MOBILE</div>
+    <h1>РАСКЛАДКИ<br>PUBG MOBILE</h1>
+    <div class="rule">3 · 4 · 5</div>
+    <div class="sub">пальцев</div>
   </div>
 
-  <div class="note">
-    <b>С чего начать:</b> если раньше играл двумя пальцами — бери схему <b>на 3 пальца</b>. Освоишь её — переходи на 4, потом на 5. Прыгать сразу на пять не стоит: рука не привыкла, будешь промахиваться и злиться.
+  <div class="scene">
+    <div class="scene-inner">
+      <div class="herophone">
+        <div class="frame">
+          <img src="img/W_kcytq6wUw-1024x473.jpg" alt="Раскладка управления PUBG Mobile">
+        </div>
+      </div>
+      <div class="cube-wrap">
+        <div class="cube">
+          <div class="f"></div><div class="b"></div><div class="r"></div>
+          <div class="l"></div><div class="t"></div><div class="bt"></div>
+        </div>
+      </div>
+      <div class="slab"></div>
+    </div>
   </div>
 
-  <div class="searchbox">
-    <input type="text" id="q" placeholder="Поиск по гайду — например «Сброс» или «5 пальцев»" autocomplete="off">
+  <button class="scene-btn" id="sceneBtn" type="button">3D: вкл</button>
+
+  <div class="section">
+    <div class="card">
+      <ul class="list">
+        <li>Пальцы путаются, целиться и двигаться одновременно не выходит?</li>
+        <li>Готовые схемы управления — выбираешь свою и играешь увереннее.</li>
+        <li>Три раскладки: на 3, 4 и 5 пальцев.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="toc">
-    <div class="toc-title">Содержание</div>
-    <a href="#s1"><span class="ico">📥</span> Твои три раскладки</a>
-    <a href="#s2"><span class="ico">⚙️</span> Как перенести на свой телефон</a>
-    <a href="#screens"><span class="ico">🖼️</span> Как выглядят раскладки</a>
-    <a href="#s3"><span class="ico">✋</span> Схема на 3 пальца</a>
-    <a href="#s4"><span class="ico">🤚</span> Схема на 4 пальца</a>
-    <a href="#s5"><span class="ico">🖐️</span> Схема на 5 пальцев</a>
-    <a href="#s6"><span class="ico">📈</span> План привыкания</a>
-    <a href="#s7"><span class="ico">🧩</span> Частые проблемы</a>
-    <a href="#s8"><span class="ico">⚠️</span> Важно знать</a>
-    <a href="#s9"><span class="ico">✅</span> Чек-лист</a>
-  </div>
-
-  <h2 class="part"><span>Твои раскладки</span></h2>
-
-  <div class="step" id="s1">
-    <h3><span class="num">1</span> Три файла — по количеству пальцев</h3>
-    <p>В каждом файле — <b>фотография экрана</b> с уже расставленными кнопками. Ты открываешь её и переносишь расположение в игру. Это не готовый файл, который вставляется одной кнопкой, и ниже объясню почему.</p>
-
-    <a class="filebtn" href="https://disk.yandex.ru/i/zVHeWHsAxuYoag" target="_blank" rel="noopener">
-      <b>🎮 Раскладка в 3 пальца</b>
-      <span>Начать с этой, если раньше не пробовал</span>
-    </a>
-
-    <a class="filebtn" href="https://disk.yandex.ru/i/uw9uUnXxRYz6Jg" target="_blank" rel="noopener">
-      <b>🎮 Раскладка в 4 пальца</b>
-      <span>Баланс скорости и удобства</span>
-    </a>
-
-    <a class="filebtn" href="https://disk.yandex.ru/i/pC9it_40aibvjQ" target="_blank" rel="noopener">
-      <b>🎮 Раскладка в 5 пальцев</b>
-      <span>Максимум действий, нужна привычка</span>
-    </a>
-
-    <div class="tip">Скачай все три сразу — потом не придётся искать. Файлы небольшие.</div>
-  </div>
-
-  <div class="step" id="s2">
-    <h3><span class="num">2</span> Как перенести раскладку на свой телефон</h3>
-    <p><b>Почему не «одной кнопкой»:</b> экраны у всех разные — у кого-то 6,1 дюйма, у кого-то 6,8. Одна и та же расстановка на другом телефоне съедет: кнопки наложатся друг на друга или уедут под палец. Поэтому расположение переносится по образцу, и это занимает 5–10 минут один раз.</p>
-    <ol>
-      <li><b>Сначала сфотографируй свою раскладку.</b> Настройки → Управление → «Настроить» → скриншот. Это страховка: если новая не понравится, вернёшь всё как было.</li>
-      <li><b>Открой фото раскладки на другом устройстве.</b> Второй телефон, планшет или компьютер — так удобнее: образец перед глазами, а игровой экран свободен.</li>
-      <li>Запусти PUBG Mobile → <b>Настройки</b> → вкладка <b>Управление</b>.</li>
-      <li>Нажми <b>«Настроить»</b> — откроется редактор кнопок.</li>
-      <li>Вверху выбери режим: <b>Классический</b> и <b>TPP</b> (вид от третьего лица).</li>
-      <li>Переключись на <b>Схема 2</b> — твоя старая раскладка останется в «Схеме 1» нетронутой.</li>
-      <li><b>Расставь кнопки по образцу.</b> Начни с четырёх главных: джойстик движения, зона обзора справа, кнопка огня, прицел. Потом добавь прыжок, присед, смену оружия и аптечку.</li>
-      <li><b>Подгони под свою руку.</b> Главным кнопкам — размер 80–100% и прозрачность 70–80%, второстепенным — 60–70%. Двигай плавно, не спеши.</li>
-      <li>Нажми <b>«Сохранить»</b> — жёлтая кнопка справа сверху. И сделай скриншот того, что получилось.</li>
-    </ol>
-    <div class="warn">⚠️ <b>Не нажимай «Сброс»</b> — он стирает все твои кнопки и возвращает стандарт. Если что-то пошло не так, просто выйди из редактора без сохранения.</div>
-    <div class="tip">В редакторе есть кнопка <b>«Скопировать»</b> — ей можно перенести готовую раскладку из TPP в FPP, чтобы не расставлять всё дважды.</div>
-  </div>
-
-  <h2 class="part"><span>Как выглядят раскладки</span></h2>
-
-  <div class="step" id="screens">
-    <h3>Реальные скрины из игры</h3>
-    <p>В каждом телефоне — настоящий скриншот раскладки, а не нарисованная схема. Под телефоном есть кнопка на полный скрин в исходном размере: по нему видно точное положение каждой кнопки.</p>
-
+  <div class="section">
+    <h2>Как выглядят раскладки</h2>
     <div class="phonegrid">
 
       <div class="phonecard">
-        <div class="phone"><div class="ph-screen">
-          <img src="img/Screenshot_437.png" alt="Раскладка PUBG Mobile на 3 пальца — скрин из игры" loading="lazy">
-        </div></div>
+        <div class="phone">
+          <div class="frame"><img src="img/Screenshot_437.png" alt="Раскладка на 3 пальца"></div>
+        </div>
         <div class="ph-label">Схема на 3 пальца</div>
-        <a class="ph-link" href="https://disk.yandex.ru/i/zVHeWHsAxuYoag" target="_blank" rel="noopener">Открыть полный скрин ↗</a>
+        <div class="ph-note">простой вход, две руки, минимум кнопок</div>
       </div>
 
       <div class="phonecard">
-        <div class="phone"><div class="ph-screen">
-          <img src="img/SUwHdPqutQY-1024x473.jpg" alt="Раскладка PUBG Mobile на 4 пальца — скрин из игры" loading="lazy">
-        </div></div>
+        <div class="phone">
+          <div class="frame"><img src="img/SUwHdPqutQY-1024x473.jpg" alt="Раскладка на 4 пальца"></div>
+        </div>
         <div class="ph-label">Схема на 4 пальца</div>
-        <a class="ph-link" href="https://disk.yandex.ru/i/uw9uUnXxRYz6Jg" target="_blank" rel="noopener">Открыть полный скрин ↗</a>
+        <div class="ph-note">больше контроля, стрельба и движение не мешают</div>
       </div>
 
       <div class="phonecard">
-        <div class="phone"><div class="ph-screen">
-          <img src="img/W_kcytq6wUw-1024x473.jpg" alt="Раскладка PUBG Mobile на 5 пальцев — скрин из игры" loading="lazy">
-        </div></div>
+        <div class="phone">
+          <div class="frame"><img src="img/W_kcytq6wUw-1024x473.jpg" alt="Раскладка на 5 пальцев"></div>
+        </div>
         <div class="ph-label">Схема на 5 пальцев</div>
-        <a class="ph-link" href="https://disk.yandex.ru/i/pC9it_40aibvjQ" target="_blank" rel="noopener">Открыть полный скрин ↗</a>
+        <div class="ph-note">максимальный контроль без лимитов</div>
       </div>
 
     </div>
-
-    <div class="tip">Скрины горизонтальные, поэтому телефоны повёрнуты боком — так видно всю раскладку целиком, ничего не обрезано.</div>
   </div>
 
-  <h2 class="part"><span>Как играть</span></h2>
-
-  <div class="step" id="s3">
-    <h3><span class="num">3</span> Схема на 3 пальца</h3>
-    <p>Самый мягкий переход с двух пальцев. Левая рука держит движение, правая — прицел, а указательный палец добавляет стрельбу и дополнительные действия.</p>
-    <p><b>Кому подойдёт:</b></p>
-    <ul>
-      <li>Тем, кто играет двумя пальцами и хочет больше контроля</li>
-      <li>На телефонах с небольшим экраном</li>
-      <li>Если играешь лёжа или в дороге, где неудобно держать телефон на весу</li>
-    </ul>
-    <p><b>Что даёт:</b> можно двигаться и стрелять одновременно, не отпуская джойстик. Появляется быстрый присед и прыжок.</p>
-    <div class="tip">Плюс: привыкание занимает пару дней. Минус: на сложные действия вроде прыжка с одновременным прицелом пальцев не хватает.</div>
+  <div class="section">
+    <h2>Что ты получаешь</h2>
+    <div class="card">
+      <ul class="list">
+        <li>Раскладка в 3 пальца — для старта и простого управления</li>
+        <li>Раскладка в 4 пальца — больше контроля, больше преимуществ</li>
+        <li>Раскладка в 5 пальцев — максимальный контроль</li>
+        <li>Все три схемы сразу — пробуй и выбирай свою</li>
+        <li>Помощь в чате, если что-то не заладилось</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="step" id="s4">
-    <h3><span class="num">4</span> Схема на 4 пальца</h3>
-    <p>Золотая середина для большинства игроков. Телефон лежит на указательных и средних пальцах, большие работают по экрану.</p>
-    <p><b>Кому подойдёт:</b></p>
-    <ul>
-      <li>Тем, кто уже освоил 3 пальца и хочет быстрее</li>
-      <li>Если часто играешь в классику и рейтинг</li>
-      <li>На экранах от 6 дюймов</li>
-    </ul>
-    <p><b>Что даёт:</b> прыжок, присед и стрельба разнесены по разным пальцам — можно делать всё сразу. Это главный прирост в скорости реакции.</p>
-    <div class="warn">⚠️ Первые дни будет <b>хуже</b>, чем на 3 пальцах. Это нормально: рука переучивается. Не возвращайся назад раньше, чем отыграешь 15–20 каток.</div>
+  <div class="section">
+    <h2>Как перенести раскладку</h2>
+    <div class="steps">
+      <div class="step">
+        <b>Открой настройки управления</b>
+        <span>В игре: Настройки → Управление → Настроить</span>
+      </div>
+      <div class="step">
+        <b>Выбери режим</b>
+        <span>Классический, 3-е лицо — как на скринах выше</span>
+      </div>
+      <div class="step">
+        <b>Переключись на нужную схему</b>
+        <span>Схема 1, Схема 2 — под свою раскладку</span>
+      </div>
+      <div class="step">
+        <b>Подгони размер кнопок</b>
+        <span>Ползунок «Размер кнопки» и «Прозрачность» под свою руку</span>
+      </div>
+      <div class="step">
+        <b>Сохрани</b>
+        <span>Нажми «Сохранить» — схема применится сразу</span>
+      </div>
+    </div>
   </div>
 
-  <div class="step" id="s5">
-    <h3><span class="num">5</span> Схема на 5 пальцев</h3>
-    <p>Максимум управления: все ключевые действия распределены так, что ни одно не мешает другому. Так играют те, кто гонится за турнирами.</p>
-    <p><b>Кому подойдёт:</b></p>
-    <ul>
-      <li>Тем, кто уже стабильно играет на 4 пальцах</li>
-      <li>На больших экранах — от 6,5 дюйма</li>
-      <li>Если готов тренироваться неделю без результата</li>
-    </ul>
-    <p><b>Что даёт:</b> быстрый джамп-шот, присед-шот, смена оружия без задержки.</p>
-    <div class="warn">⚠️ На 5 пальцах телефон приходится держать <b>на весу</b> — руки устают быстрее. Играть лёжа или в дороге будет неудобно.</div>
+  <div class="section">
+    <h2>Что даёт раскладка</h2>
+    <div class="card">
+      <ul class="list">
+        <li>Целишься и двигаешься одновременно</li>
+        <li>Стрельба в прыжке и на бегу без потери прицела</li>
+        <li>Схема под твой стиль игры — от новичка до уверенного боя</li>
+        <li>Привычное положение пальцев — рука не устаёт</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="step" id="s6">
-    <h3><span class="num">6</span> План привыкания на неделю</h3>
-    <p>Новая раскладка — это как новая походка. Мозгу нужно время, и его нельзя ускорить.</p>
-    <ol>
-      <li><b>День 1–2.</b> Только режим тренировки, 15–20 минут. Цель — попадать по кнопкам не глядя.</li>
-      <li><b>День 3–4.</b> Тренировка + 5 каток в обычной классике без рейтинга.</li>
-      <li><b>День 5–6.</b> Полноценные матчи. Можно в рейтинг, но не переживай за очки.</li>
-      <li><b>День 7.</b> Оценивай: стало удобнее или нет. Если за неделю не легче — вернись на шаг назад.</li>
-    </ol>
-    <div class="tip">Не меняй схему каждую катку. Одна раскладка на неделю — только так рука запомнит.</div>
+  <div class="shop">
+    <div class="crown">♛</div>
+    <h3>Nagibatorz</h3>
+    <p>Больше товаров для мобильных игр в профиле магазина</p>
+    <a href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Открыть магазин</a>
   </div>
 
-  <h2 class="part"><span>Разбор проблем</span></h2>
-
-  <div class="step" id="s7">
-    <h3><span class="num">7</span> Что делать, если не получается</h3>
-    <table class="tbl">
-      <tr><th>Проблема</th><th>Решение</th></tr>
-      <tr><td>Кнопка не нажимается</td><td>Её перекрывает другая кнопка — разведи их в редакторе</td></tr>
-      <tr><td>Случайные нажатия</td><td>Уменьши размер и прозрачность кнопок, сдвинь от края</td></tr>
-      <tr><td>Кнопки съехали после сохранения</td><td>Значит, стояли слишком близко к краю экрана — сдвинь внутрь</td></tr>
-      <tr><td>Палец соскальзывает</td><td>Протри экран, сними чехол, играй на столе или подложке</td></tr>
-      <tr><td>Прицел дёргается</td><td>Сбрось чувствительность под новую раскладку</td></tr>
-      <tr><td>Раскладка сбилась</td><td>Верни из «Схемы 1» или восстанови по своему скриншоту</td></tr>
-      <tr><td>Руки устают</td><td>Подложи подушечку под телефон, делай перерывы каждые 3 катки</td></tr>
-      <tr><td>Не совпадает с фото</td><td>Это нормально: у тебя другой экран и другая рука — подгоняй под себя</td></tr>
-    </table>
-  </div>
-
-  <div class="step" id="s8">
-    <h3><span class="num">8</span> Важно знать</h3>
-    <ul>
-      <li><b>Раскладка не делает скилл.</b> Она убирает потолок, но aim и позиционирование тренируются только игрой.</li>
-      <li><b>Это не читы и не скрипты.</b> Ты просто расставляешь кнопки в штатном редакторе игры — бана за это нет.</li>
-      <li><b>Привыкание занимает 3–7 дней.</b> Если через два дня кажется, что стало хуже — это нормальный этап.</li>
-      <li><b>Схема зависит от телефона.</b> На маленьком экране 5 пальцев будут мешать друг другу.</li>
-      <li><b>Файлы лежат на Яндекс.Диске.</b> Если ссылка не открылась — напиши в чат, пришлю заново.</li>
-    </ul>
-  </div>
-
-  <div class="step" id="s9">
-    <h3><span class="num">9</span> Чек-лист на старт</h3>
-    <ul>
-      <li>Скачал файл под своё количество пальцев</li>
-      <li>Сделал скриншот старой раскладки</li>
-      <li>Открыл фото раскладки на втором устройстве</li>
-      <li>Поставил новую в «Схему 2» и сохранил</li>
-      <li>Проверил в режиме тренировки, что все кнопки нажимаются</li>
-      <li>Подогнал размер и прозрачность кнопок под руку</li>
-    </ul>
-  </div>
-
-  <div class="bonus" id="bonus">
-    <h2>🎁 Твой подарок</h2>
-    <p>Пакет из 100 гайдов по играм: раскладки, фарм, промокоды, настройки под конкретные игры.</p>
-    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">Забрать бонус</a>
-  </div>
-
-  <footer>
-    <b>Nagibatorz</b> · Playerok<br>
-    Не открылась ссылка или что-то непонятно — напиши в чат, разберёмся.
-  </footer>
+  <div class="foot">АВТО-ВЫДАЧА · ПОДДЕРЖКА В ЧАТЕ</div>
 
 </div>
 
-<button class="top" id="toTop" aria-label="Наверх">↑</button>
-
 <script>
-  var btn = document.getElementById('toTop');
-  window.addEventListener('scroll', function(){
-    if (window.scrollY > 500) btn.classList.add('show');
-    else btn.classList.remove('show');
-  });
+(function(){
+  var btn = document.getElementById('sceneBtn');
+  if(!btn) return;
   btn.addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
+    var on = document.body.classList.toggle('on');
+    btn.classList.toggle('on', on);
+    btn.textContent = on ? '3D: выкл' : '3D: вкл';
   });
-
-  var q = document.getElementById('q');
-  q.addEventListener('input', function(){
-    var v = this.value.trim().toLowerCase();
-    var items = document.querySelectorAll('.step');
-    if (!v) {
-      items.forEach(function(el){ el.classList.remove('hide'); });
-      document.querySelector('.toc').style.display = '';
-      document.querySelectorAll('.part').forEach(function(el){ el.style.display = ''; });
-      return;
-    }
-    document.querySelector('.toc').style.display = 'none';
-    items.forEach(function(el){
-      if (el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
-      else el.classList.add('hide');
-    });
-    document.querySelectorAll('.part').forEach(function(part){
-      var next = part.nextElementSibling, has = false;
-      while (next && !next.classList.contains('part')) {
-        if (next.classList.contains('step') && !next.classList.contains('hide')) has = true;
-        if (next.classList.contains('bonus')) break;
-        next = next.nextElementSibling;
-      }
-      part.style.display = has ? '' : 'none';
-    });
-  });
+})();
 </script>
 </body>
 </html>
