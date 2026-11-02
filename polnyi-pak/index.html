@@ -7,103 +7,213 @@
 <meta name="description" content="Прицел и его цвет, 3 набора чувствительности, раскладки на 2, 3 и 4 пальца, настройки графики для слабых телефонов. Пошаговая инструкция по установке.">
 <style>
 :root{
-  --bg:#0b0b12;--bg2:#11111c;--panel:#161623;--panel2:#1d1d2e;
-  --line:#2a2a3f;--txt:#ececf5;--muted:#9a9ab0;--accent:#ff8a00;--accent2:#ffb347;
-  --green:#38c97b;--red:#ff4d5e;--blue:#4aa8ff;
+  --bg:#08080c;
+  --bg2:#0d0d14;
+  --panel:rgba(255,255,255,.045);
+  --panel2:rgba(255,255,255,.02);
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(255,255,255,.16);
+  --txt:#eceaf3;
+  --silver:#b9b7c6;
+  --muted:#8d8a9c;
+  --gold:#f0c583;
+  --gold2:#d99a45;
+  --green:#63d69a;
+  --red:#ff7a86;
+  --blue:#8fc4ff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   background:
-    radial-gradient(900px 500px at 80% -10%, rgba(255,138,0,.10), transparent 60%),
-    radial-gradient(700px 400px at 0% 10%, rgba(74,168,255,.06), transparent 60%),
+    radial-gradient(900px 520px at 78% -8%, rgba(240,197,131,.10), transparent 62%),
+    radial-gradient(760px 460px at 0% 8%, rgba(143,196,255,.05), transparent 62%),
+    radial-gradient(700px 700px at 50% 120%, rgba(240,197,131,.05), transparent 65%),
     var(--bg);
   color:var(--txt);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  line-height:1.6;-webkit-font-smoothing:antialiased;
-  padding:0 0 60px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  padding:0 0 64px;
+  overflow-x:hidden;
 }
-.wrap{max-width:780px;margin:0 auto;padding:0 18px}
-.hero{padding:46px 0 30px;border-bottom:1px solid var(--line)}
+.wrap{max-width:800px;margin:0 auto;padding:0 18px}
+
+/* ── ХЕДЕР ── */
+.hero{padding:48px 0 34px;text-align:center}
+.stars{
+  color:var(--gold);letter-spacing:.5em;font-size:15px;
+  opacity:.85;margin-bottom:16px;padding-left:.5em;
+}
 .tag{
-  display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--accent);border:1px solid rgba(255,138,0,.4);background:rgba(255,138,0,.08);
-  padding:6px 12px;border-radius:100px;margin-bottom:18px;
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);
+  border:1px solid rgba(240,197,131,.32);
+  background:rgba(240,197,131,.06);
+  padding:7px 15px;border-radius:100px;margin-bottom:20px;
+  backdrop-filter:blur(6px);
 }
 h1{
-  font-size:clamp(28px,7vw,44px);line-height:1.1;font-weight:900;letter-spacing:-.02em;margin-bottom:14px;
-  background:linear-gradient(180deg,#fff,#c9c9dd);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-size:clamp(27px,7.2vw,44px);line-height:1.1;font-weight:900;letter-spacing:-.025em;
+  margin-bottom:16px;
+  background:linear-gradient(180deg,#ffffff 0%,#cfccdb 55%,#9d9aad 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-h1 .hl{background:linear-gradient(180deg,var(--accent2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{color:var(--muted);font-size:17px;max-width:600px}
-.lead b{color:var(--txt)}
+h1 .hl{
+  background:linear-gradient(180deg,#ffe6bc,var(--gold) 45%,var(--gold2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.lead{color:var(--silver);font-size:16.5px;max-width:600px;margin:0 auto}
+.lead b{color:#fff;font-weight:700}
+
+/* ── ЗВЁЗДНЫЙ РАЗДЕЛИТЕЛЬ ── */
+.rule{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:44px 0 6px;color:var(--gold);font-size:12px;opacity:.5;
+}
+.rule::before,.rule::after{
+  content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--line2),transparent);
+}
+
 h2{
-  font-size:23px;font-weight:800;letter-spacing:-.01em;margin:46px 0 8px;
-  display:flex;align-items:center;gap:10px;scroll-margin-top:20px;
+  font-size:clamp(20px,5vw,25px);font-weight:800;letter-spacing:-.015em;
+  margin:14px 0 14px;display:flex;align-items:center;gap:12px;scroll-margin-top:24px;
+  color:#fff;
 }
 h2 .n{
-  display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;
-  background:linear-gradient(180deg,var(--accent2),var(--accent));color:#1a1200;
-  border-radius:9px;font-size:15px;font-weight:900;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;flex:0 0 32px;
+  background:linear-gradient(180deg,rgba(240,197,131,.22),rgba(240,197,131,.06));
+  border:1px solid rgba(240,197,131,.34);
+  color:var(--gold);border-radius:10px;
+  font-size:14px;font-weight:900;
 }
-h3{font-size:17px;font-weight:700;margin:22px 0 8px}
-p{color:#c9c9dc;margin:10px 0}
-ul,ol{margin:12px 0 12px 22px;color:#c9c9dc}
-li{margin:7px 0}
-b,strong{color:#fff}
+h3{
+  font-size:16px;font-weight:800;margin:26px 0 10px;color:#fff;
+  display:flex;align-items:center;gap:8px;
+}
+h3::before{content:"▸";color:var(--gold);font-size:13px;opacity:.9}
+
+p{color:#c6c3d2;margin:10px 0}
+ul,ol{margin:14px 0 14px 0;color:#c6c3d2;list-style:none}
+ul li{position:relative;padding-left:20px;margin:9px 0}
+ul li::before{
+  content:"▸";position:absolute;left:0;top:0;color:var(--gold);font-size:13px;opacity:.85;
+}
+ol{counter-reset:li;padding-left:0}
+ol li{position:relative;padding-left:30px;margin:10px 0;counter-increment:li}
+ol li::before{
+  content:counter(li);
+  position:absolute;left:0;top:1px;
+  width:21px;height:21px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;color:var(--gold);
+  background:rgba(240,197,131,.10);
+  border:1px solid rgba(240,197,131,.28);
+}
+b,strong{color:#fff;font-weight:700}
+
+/* ── СТЕКЛЯННЫЕ ЗАМЕТКИ ── */
 .note{
-  border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:16px 18px;margin:18px 0;
-  font-size:15px;color:#d3d3e4;
+  position:relative;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border-radius:16px;padding:18px 18px 16px;margin:20px 0;
+  font-size:15px;color:#cfccda;
+  backdrop-filter:blur(10px);
+  overflow:hidden;
 }
-.note.ok{border-color:rgba(56,201,123,.35);background:rgba(56,201,123,.07)}
-.note.warn{border-color:rgba(255,77,94,.35);background:rgba(255,77,94,.07)}
-.note.tip{border-color:rgba(74,168,255,.32);background:rgba(74,168,255,.07)}
-.note .t{display:block;font-weight:800;color:#fff;margin-bottom:6px}
-.note.warn .t{color:#ff8b96}
-.note.ok .t{color:#6fe0a0}
-.note.tip .t{color:#8cc7ff}
+.note::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--gold),transparent);
+  opacity:.55;
+}
+.note.ok::before{background:linear-gradient(180deg,var(--green),transparent)}
+.note.warn::before{background:linear-gradient(180deg,var(--red),transparent)}
+.note.tip::before{background:linear-gradient(180deg,var(--blue),transparent)}
+.note .t{
+  display:flex;align-items:center;gap:8px;
+  font-weight:800;color:#fff;margin-bottom:7px;font-size:14.5px;
+}
+.note .t::before{content:"✦";color:var(--gold);font-size:12px}
+.note.ok .t::before{color:var(--green)}
+.note.warn .t::before{color:var(--red)}
+.note.tip .t::before{color:var(--blue)}
+
+/* ── КАРТОЧКИ ── */
 .card{
-  background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
-  border-radius:16px;padding:18px 18px 16px;margin:14px 0;
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line);
+  border-radius:16px;padding:18px;margin:16px 0;
+  backdrop-filter:blur(8px);
 }
-.card .h{font-weight:800;font-size:16px;color:#fff;margin-bottom:6px}
-.card .d{color:var(--muted);font-size:14px}
+.card .h{font-weight:800;font-size:15.5px;color:#fff;margin-bottom:6px}
+.card .d{color:var(--muted);font-size:14.5px}
+
+/* ── КНОПКИ-ССЫЛКИ ── */
 .btn{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  background:linear-gradient(180deg,rgba(255,138,0,.16),rgba(255,138,0,.07));
-  border:1px solid rgba(255,138,0,.45);color:#fff;text-decoration:none;
-  border-radius:14px;padding:15px 18px;margin:12px 0;font-weight:700;font-size:15px;
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(180deg,rgba(240,197,131,.13),rgba(240,197,131,.045));
+  border:1px solid rgba(240,197,131,.30);
+  color:#fff;text-decoration:none;
+  border-radius:14px;padding:15px 18px;margin:11px 0;
+  font-weight:700;font-size:15px;
+  backdrop-filter:blur(8px);
+  transition:transform .15s ease,border-color .15s ease;
 }
-.btn span.arr{color:var(--accent);font-size:20px;line-height:1}
-.btn:active{transform:translateY(1px)}
+.btn .star{color:var(--gold);font-size:13px;flex:0 0 auto}
+.btn .txt{flex:1;text-align:left}
+.btn span.arr{color:var(--gold);font-size:19px;line-height:1;flex:0 0 auto}
+.btn:active{transform:translateY(1px);border-color:rgba(240,197,131,.55)}
+
+/* ── ШАГИ ── */
 .step{
-  display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(42,42,63,.7);
+  display:flex;gap:14px;padding:15px 0;
+  border-bottom:1px solid rgba(255,255,255,.055);
 }
 .step:last-child{border-bottom:0}
 .step .num{
-  flex:0 0 26px;width:26px;height:26px;border-radius:8px;background:rgba(255,138,0,.14);
-  border:1px solid rgba(255,138,0,.4);color:var(--accent);font-weight:900;font-size:13px;
+  flex:0 0 27px;width:27px;height:27px;border-radius:9px;
+  background:rgba(240,197,131,.10);
+  border:1px solid rgba(240,197,131,.30);
+  color:var(--gold);font-weight:900;font-size:12px;
   display:flex;align-items:center;justify-content:center;margin-top:2px;
 }
 .step .body{flex:1}
-.step .body b{display:block;margin-bottom:3px}
+.step .body b{display:block;margin-bottom:3px;color:#fff}
 .step .body span{color:var(--muted);font-size:14.5px}
-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
-th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--accent);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-td:first-child{color:#fff;font-weight:600;width:44%}
-td:last-child{color:var(--muted)}
-footer{
-  margin-top:56px;padding-top:22px;border-top:1px solid var(--line);
-  color:var(--muted);font-size:13px;text-align:center;
+
+/* ── ТАБЛИЦЫ ── */
+.tablewrap{
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  margin:18px 0;background:linear-gradient(180deg,var(--panel),var(--panel2));
 }
-footer b{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;vertical-align:top}
+th{
+  color:var(--gold);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:800;border-bottom:1px solid var(--line2);
+  background:rgba(240,197,131,.05);
+}
+tr+tr td{border-top:1px solid rgba(255,255,255,.055)}
+td:first-child{color:#fff;font-weight:700;width:44%}
+td:last-child{color:var(--muted)}
+
+/* ── ФУТЕР ── */
+footer{
+  margin-top:56px;padding-top:24px;text-align:center;
+  color:var(--muted);font-size:12.5px;line-height:1.8;
+}
+footer .fs{color:var(--gold);letter-spacing:.4em;font-size:12px;opacity:.7;display:block;margin-bottom:14px}
+footer b{color:var(--gold);font-weight:700}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header class="hero">
+    <div class="stars">✦ ✦ ✦</div>
     <div class="tag">Standoff 2 · полный набор</div>
     <h1>Полный пак: <span class="hl">прицел · сенса · графика</span></h1>
     <p class="lead">Всё для настройки игры в одном месте: <b>прицел и его цвет</b>, три набора чувствительности, раскладки на <b>2, 3 и 4 пальца</b> и настройки графики, которые вытягивают даже слабый телефон.</p>
@@ -114,14 +224,15 @@ footer b{color:var(--accent)}
     Ставь по порядку: раскладка → чувствительность → прицел → графика. Это не прихоть — раскладка меняет положение рук, и только после неё сенса настраивается «под себя». Если перепутать порядок, придётся начинать заново.
   </div>
 
-  <h2 id="s1"><span class="n">1</span>Что внутри пака</h2>
+  <div class="rule">✦</div>
+  <h2 id="s1"><span class="n">01</span>Что внутри пака</h2>
   <p>Два архива на Google Drive. Открываются прямо с телефона в браузере, скачивать на компьютер не нужно.</p>
 
   <a class="btn" href="https://drive.google.com/drive/folders/1T_mSU8YBBBfemBXdE57IdEgAB9zq_gEI?usp=sharing" target="_blank" rel="noopener">
-    🎯 Прицел · чувствительность · раскладки <span class="arr">→</span>
+    <span class="star">✦</span><span class="txt">Прицел · чувствительность · раскладки</span><span class="arr">→</span>
   </a>
   <a class="btn" href="https://drive.google.com/drive/folders/15way3bn0KPyCF8nHo3J2ImEcc3ySlhpM?usp=sharing" target="_blank" rel="noopener">
-    💻 Настройки графики <span class="arr">→</span>
+    <span class="star">✦</span><span class="txt">Настройки графики</span><span class="arr">→</span>
   </a>
 
   <ul>
@@ -136,7 +247,8 @@ footer b{color:var(--accent)}
     Потом не придётся искать вторую ссылку в переписке. Файлы небольшие, места почти не займут.
   </div>
 
-  <h2 id="s2"><span class="n">2</span>Порядок установки</h2>
+  <div class="rule">✦</div>
+  <h2 id="s2"><span class="n">02</span>Порядок установки</h2>
   <p>Четыре шага, каждый занимает 5–10 минут. Не пытайся сделать всё за один заход — настройки не должны конфликтовать между собой.</p>
 
   <div class="step"><div class="num">1</div><div class="body"><b>Раскладка</b><span>Самая долгая привычка. Пока руки не привыкнут, остальное настраивать бессмысленно.</span></div></div>
@@ -144,16 +256,19 @@ footer b{color:var(--accent)}
   <div class="step"><div class="num">3</div><div class="body"><b>Прицел</b><span>Ставится последним из «боевых» настроек — он даёт мгновенный визуальный результат и может отвлечь от главного.</span></div></div>
   <div class="step"><div class="num">4</div><div class="body"><b>Графика</b><span>В самом конце. Сначала комфорт управления, потом картинка.</span></div></div>
 
-  <h2 id="s3"><span class="n">3</span>Раскладки на 2, 3 и 4 пальца</h2>
+  <div class="rule">✦</div>
+  <h2 id="s3"><span class="n">03</span>Раскладки на 2, 3 и 4 пальца</h2>
   <p>В папке лежат <b>фотографии экрана</b> с готовой расстановкой кнопок. Готового файла, который вставится одной кнопкой, не существует: игра не импортирует чужую раскладку, а экраны у всех разные — одна расстановка на другом телефоне съедет.</p>
 
   <h3>Какую выбрать</h3>
-  <table>
-    <tr><th>Раскладка</th><th>Кому подходит</th></tr>
-    <tr><td>2 пальца</td><td>Только начинаешь. Проще всего, но стрелять и целиться одновременно неудобно.</td></tr>
-    <tr><td>3 пальца</td><td>Оптимальный старт для тех, кто уже играл: стрельба отдельным пальцем, обзор не прерывается.</td></tr>
-    <tr><td>4 пальца</td><td>Если хочешь прыжок и присед без отпускания обзора. Привыкание дольше, потолок выше.</td></tr>
-  </table>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Раскладка</th><th>Кому подходит</th></tr>
+      <tr><td>2 пальца</td><td>Только начинаешь. Проще всего, но стрелять и целиться одновременно неудобно.</td></tr>
+      <tr><td>3 пальца</td><td>Оптимальный старт для тех, кто уже играл: стрельба отдельным пальцем, обзор не прерывается.</td></tr>
+      <tr><td>4 пальца</td><td>Если хочешь прыжок и присед без отпускания обзора. Привыкание дольше, потолок выше.</td></tr>
+    </table>
+  </div>
 
   <h3>Как перенести на свой телефон</h3>
   <div class="step"><div class="num">1</div><div class="body"><b>Сфотографируй свою текущую раскладку</b><span>Настройки → Управление → Настроить. Это страховка, если захочешь вернуть как было.</span></div></div>
@@ -175,7 +290,8 @@ footer b{color:var(--accent)}
     В игре есть кнопка «Скопировать» — ей можно перенести готовую раскладку из TPP в FPP, чтобы не расставлять дважды.
   </div>
 
-  <h2 id="s4"><span class="n">4</span>Чувствительность — 3 набора</h2>
+  <div class="rule">✦</div>
+  <h2 id="s4"><span class="n">04</span>Чувствительность — 3 набора</h2>
   <p>В архиве три готовых набора: спокойный, средний и агрессивный. Они отличаются скоростью разворота и резкостью прицеливания.</p>
 
   <div class="card"><div class="h">С чего начать</div><div class="d">Всегда со среднего набора. Низкий сделает разворот вязким, высокий — прицел будет «улетать» мимо головы.</div></div>
@@ -194,7 +310,8 @@ footer b{color:var(--accent)}
     У каждого своя рука, длина пальцев и размер экрана, поэтому идеала «из коробки» не бывает. Набор — стартовая точка, дальше подгоняй под себя.
   </div>
 
-  <h2 id="s5"><span class="n">5</span>Прицел и его цвет</h2>
+  <div class="rule">✦</div>
+  <h2 id="s5"><span class="n">05</span>Прицел и его цвет</h2>
   <p>Открой настройки прицела в игре и поставь значения из архива: форма, толщина, цвет.</p>
   <ul>
     <li><b>Цвет подбирай под карту.</b> На светлых участках лучше виден красный и тёмный с обводкой, на тёмных — зелёный и жёлтый.</li>
@@ -207,7 +324,8 @@ footer b{color:var(--accent)}
     Новый прицел сразу бросается в глаза, и кажется, что «стало лучше». На самом деле результат даёт раскладка и сенса, а прицел — это удобство. Поставишь его первым — будешь путать эффект.
   </div>
 
-  <h2 id="s6"><span class="n">6</span>Графика</h2>
+  <div class="rule">✦</div>
+  <h2 id="s6"><span class="n">06</span>Графика</h2>
   <p>Открой вторую папку — там скриншоты настроек. Выбери вариант под свой телефон.</p>
 
   <h3>Если телефон слабый</h3>
@@ -224,19 +342,23 @@ footer b{color:var(--accent)}
     Просадки кадров вредят стрельбе сильнее, чем помогает красивая картинка. Ровные 60 FPS всегда лучше, чем 90 с рывками.
   </div>
 
-  <h2 id="s7"><span class="n">7</span>Если что-то не получается</h2>
-  <table>
-    <tr><th>Проблема</th><th>Решение</th></tr>
-    <tr><td>Не нашёл чувствительность</td><td>Настройки → Чувствительность. Иногда пункт спрятан в «Настройках боя»</td></tr>
-    <tr><td>Раскладка не совпала</td><td>Расставь кнопки вручную по фото — экраны у всех разные</td></tr>
-    <tr><td>Прицел не появился</td><td>Включи свой прицел в настройках, проверь, не выбран ли стандартный</td></tr>
-    <tr><td>FPS падает</td><td>Снизь графику по скриншоту, отключи тени и сглаживание</td></tr>
-    <tr><td>Палец соскальзывает</td><td>Протри экран, сними чехол, уменьши прозрачность и размер кнопок</td></tr>
-    <tr><td>«Раньше стрелял лучше»</td><td>Так и должно быть в первые дни. Дай настройкам 3–5 матчей</td></tr>
-    <tr><td>Файлы не открываются</td><td>Напиши в чат — пришлю доступ заново</td></tr>
-  </table>
+  <div class="rule">✦</div>
+  <h2 id="s7"><span class="n">07</span>Если что-то не получается</h2>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Проблема</th><th>Решение</th></tr>
+      <tr><td>Не нашёл чувствительность</td><td>Настройки → Чувствительность. Иногда пункт спрятан в «Настройках боя»</td></tr>
+      <tr><td>Раскладка не совпала</td><td>Расставь кнопки вручную по фото — экраны у всех разные</td></tr>
+      <tr><td>Прицел не появился</td><td>Включи свой прицел в настройках, проверь, не выбран ли стандартный</td></tr>
+      <tr><td>FPS падает</td><td>Снизь графику по скриншоту, отключи тени и сглаживание</td></tr>
+      <tr><td>Палец соскальзывает</td><td>Протри экран, сними чехол, уменьши прозрачность и размер кнопок</td></tr>
+      <tr><td>«Раньше стрелял лучше»</td><td>Так и должно быть в первые дни. Дай настройкам 3–5 матчей</td></tr>
+      <tr><td>Файлы не открываются</td><td>Напиши в чат — пришлю доступ заново</td></tr>
+    </table>
+  </div>
 
-  <h2 id="s8"><span class="n">8</span>Важно знать</h2>
+  <div class="rule">✦</div>
+  <h2 id="s8"><span class="n">08</span>Важно знать</h2>
   <ul>
     <li><b>Это не читы.</b> Здесь только настройки самой игры — за них не банят.</li>
     <li><b>Меняй по одному пункту.</b> Поставил всё сразу — не поймёшь, что именно помогло.</li>
@@ -251,6 +373,7 @@ footer b{color:var(--accent)}
   </div>
 
   <footer>
+    <span class="fs">✦ ━━━━ ✦</span>
     Полный пак <b>Standoff 2</b> · актуально на момент покупки<br>
     Настройки меняются с обновлениями игры — если пункт не совпал, напиши в чат
   </footer>
