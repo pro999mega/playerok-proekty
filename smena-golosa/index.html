@@ -90,7 +90,8 @@
     max-width:400px;
     position:relative;
     transform-style:preserve-3d;
-    touch-action:none;
+    /* было touch-action:none — оно и блокировало прокрутку пальцем */
+    touch-action:pan-y;
   }
   .tilt{
     position:relative;
@@ -113,6 +114,7 @@
       0 0 80px rgba(255,122,24,.16);
     transform-style:preserve-3d;
     backface-visibility:hidden;
+    pointer-events:none;
   }
   .phone::after{
     content:"";
@@ -216,6 +218,7 @@
     color:#ffe9d6;white-space:nowrap;
     box-shadow:0 14px 34px rgba(0,0,0,.5);
     animation:float 5.5s ease-in-out infinite;
+    pointer-events:none;
   }
   .chip b{color:var(--orange2)}
   .chip1{top:26px;left:-26px;transform:translateZ(70px)}
@@ -742,18 +745,17 @@
     </ul>
   </div>
 
-  <section class="shop" id="bonus">
+  <section class="shop" id="shop">
     <div class="shop-badge">ПРЕМИУМ</div>
     <div class="crown">👑</div>
     <h2>Магазин Nagibatorz</h2>
     <p class="shop-sub">Гайды и настройки, которые реально работают</p>
     <ul>
-      <li>Пакет из 100 гайдов по играм — в подарок</li>
       <li>Раскладки, фарм, промокоды и настройки под конкретные игры</li>
+      <li>Новые гайды и разборы без воды</li>
       <li>Не получилось — пиши в чат, разберём вместе</li>
     </ul>
-    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">🎁 Забрать бонус</a>
-    <a class="btn ghost" href="https://playerok.com/profile/Nagibatorz/products">Перейти в магазин →</a>
+    <a class="btn" href="https://playerok.com/profile/Nagibatorz/products">Перейти в магазин →</a>
     <div class="shop-by">
       <span class="ava">N</span>
       <span><b>Nagibatorz</b> · на Playerok</span>
@@ -791,8 +793,10 @@
     }, true);
   }
 
+  // наклон от мыши — только на компьютере, палец больше не мешает прокрутке
   document.addEventListener('pointermove', function(e){
     if(!fxCtl.on) return;
+    if(e.pointerType && e.pointerType !== 'mouse') return;
     var r = stage.getBoundingClientRect();
     if(!r.width) return;
     var dx = (e.clientX - (r.left + r.width / 2)) / r.width;
