@@ -2,527 +2,552 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>7 способов трейда в Standoff 2 · Nagibatorz</title>
+<meta name="description" content="Семь схем заработка на рынке скинов Standoff 2 — от простых к сложным. Закупка через запросы, снайп, наклейки, фарм по «багу» рынка. Разбор без воды.">
 <style>
-  :root{
-    --bg:#08080c;
-    --bg2:#0d0d13;
-    --txt:#eceae f2;
-    --txt:#eceae6;
-    --mut:#9a97a6;
-    --gold:#f0c26a;
-    --gold2:#ffb347;
-    --line:rgba(240,194,106,.22);
-    --glass:rgba(255,255,255,.045);
-    --glass2:rgba(255,255,255,.07);
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    background:
-      radial-gradient(900px 520px at 82% -8%, rgba(240,194,106,.11), transparent 62%),
-      radial-gradient(700px 500px at 5% 12%, rgba(120,140,255,.05), transparent 60%),
-      #08080c;
-    color:#eceae6;
-    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 80px}
+:root{
+  --bg1:#f2ece4;
+  --bg2:#e2dbd1;
+  --bg3:#d3cbc0;
+  --ink:#2b2e33;
+  --ink2:#4a4e55;
+  --muted:#7b7f87;
+  --line:rgba(43,46,51,.10);
+  --glass:rgba(255,255,255,.68);
+  --glass2:rgba(255,255,255,.46);
+  --warn:#a9503c;
+  --good:#4c7a5e;
+  --info:#48688a;
+  --r:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, #fbf7f1 0%, rgba(251,247,241,0) 60%),
+    radial-gradient(ellipse 70% 50% at 100% 10%, #efe6da 0%, rgba(239,230,218,0) 55%),
+    linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 55%,var(--bg3) 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  padding:26px 16px 56px;
+  max-width:620px;
+  margin:0 auto;
+  overflow-x:hidden;
+  line-height:1.55;
+}
 
-  .brand{
-    display:flex;align-items:center;gap:10px;
-    font-size:12px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--mut);margin-bottom:26px;
-  }
-  .brand .star{color:var(--gold);font-size:14px}
-  .brand b{color:#eceae6;font-weight:600;letter-spacing:.1em}
+/* ---------- шапка ---------- */
+.hero{position:relative;text-align:center;padding:8px 0 26px}
+.brand{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:2.4px;text-transform:uppercase;
+  color:var(--muted);font-weight:600;
+  background:var(--glass2);
+  border:1px solid rgba(255,255,255,.85);
+  padding:7px 16px;border-radius:999px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 4px 14px rgba(90,74,54,.07);
+}
+.brand i{width:5px;height:5px;border-radius:50%;background:var(--ink2);display:block}
 
-  h1{
-    margin:0 0 14px;
-    font-size:clamp(30px,7vw,46px);
-    line-height:1.1;
-    letter-spacing:-.5px;
-    font-weight:800;
-    background:linear-gradient(180deg,#ffffff 0%,#dcd7e4 42%,#a49fb0 100%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  .lede{color:var(--mut);font-size:16px;margin:0 0 26px}
+h1{
+  margin:20px 0 12px;
+  font-size:clamp(34px,11vw,54px);
+  line-height:1.02;
+  letter-spacing:-1.2px;
+  font-weight:900;
+  text-transform:uppercase;
+  background:linear-gradient(178deg,#55595f 0%,#33373d 36%,#1e2126 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.95)) drop-shadow(0 8px 16px rgba(70,55,40,.22));
+}
+h1 span{display:block;font-size:.52em;letter-spacing:.16em;font-weight:700;margin-top:10px}
 
-  .rule{
-    display:flex;align-items:center;gap:12px;
-    margin:34px 0 26px;color:var(--gold);font-size:12px;
-  }
-  .rule::before,.rule::after{
-    content:"";height:1px;flex:1;
-    background:linear-gradient(90deg,transparent,var(--line),transparent);
-  }
+.lead{
+  color:var(--ink2);font-size:14.5px;max-width:430px;margin:0 auto;
+}
 
-  .note{
-    position:relative;
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:16px;
-    padding:20px 20px 20px 22px;
-    margin:0 0 8px;
-    overflow:hidden;
-  }
-  .note::before{
-    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
-    background:linear-gradient(180deg,var(--gold),rgba(240,194,106,.15));
-  }
-  .note p{margin:0;color:#d8d5df;font-size:15px}
-  .note .t{
-    display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--gold);margin-bottom:8px;font-weight:700;
-  }
+/* 3D-куб */
+.cube-wrap{display:flex;justify-content:center;margin:22px 0 6px;perspective:800px}
+.cube{
+  width:58px;height:58px;position:relative;transform-style:preserve-3d;
+  animation:spin 18s linear infinite;
+}
+.cube span{
+  position:absolute;inset:0;
+  border:1px solid rgba(255,255,255,.95);
+  background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(214,205,193,.42));
+  box-shadow:inset 0 0 22px rgba(255,255,255,.55);
+  border-radius:7px;
+}
+.cube span:nth-child(1){transform:translateZ(29px)}
+.cube span:nth-child(2){transform:rotateY(180deg) translateZ(29px)}
+.cube span:nth-child(3){transform:rotateY(90deg) translateZ(29px)}
+.cube span:nth-child(4){transform:rotateY(-90deg) translateZ(29px)}
+.cube span:nth-child(5){transform:rotateX(90deg) translateZ(29px)}
+.cube span:nth-child(6){transform:rotateX(-90deg) translateZ(29px)}
+@keyframes spin{
+  0%{transform:rotateX(-18deg) rotateY(0)}
+  100%{transform:rotateX(-18deg) rotateY(360deg)}
+}
 
-  nav.toc{
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:18px;
-    padding:20px 22px;
-  }
-  nav.toc .t{
-    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--gold);font-weight:700;margin-bottom:14px;
-  }
-  nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
-  nav.toc li{margin:0 0 2px}
-  nav.toc a{
-    display:flex;gap:12px;align-items:baseline;
-    color:#d6d3de;text-decoration:none;font-size:15px;
-    padding:8px 10px;border-radius:10px;
-    transition:background .18s,color .18s;
-  }
-  nav.toc a:hover{background:rgba(255,255,255,.05);color:#fff}
-  nav.toc a span.n{
-    flex:0 0 auto;color:var(--gold);font-weight:700;font-size:13px;
-    min-width:18px;
-  }
-  nav.toc a.grp{color:var(--mut);font-size:12px;letter-spacing:.14em;text-transform:uppercase;pointer-events:none;padding-top:14px}
+/* кнопка 3D */
+.d3btn{
+  display:inline-flex;align-items:center;gap:9px;
+  margin-top:18px;
+  font:inherit;font-size:12.5px;font-weight:700;letter-spacing:.4px;
+  color:var(--ink);
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.9);
+  padding:10px 18px;border-radius:999px;cursor:pointer;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 6px 18px rgba(90,74,54,.10),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:transform .2s,box-shadow .2s,background .2s;
+}
+.d3btn:active{transform:scale(.96)}
+.d3btn b{color:var(--muted);font-weight:700;letter-spacing:1px;font-size:10.5px}
+.d3btn.on{background:linear-gradient(180deg,#4a4e55,#2b2e33);color:#fff;border-color:rgba(255,255,255,.4)}
+.d3btn.on b{color:rgba(255,255,255,.6)}
 
-  h2{
-    font-size:13px;letter-spacing:.2em;text-transform:uppercase;
-    color:var(--gold);font-weight:700;margin:0 0 18px;
-  }
+/* ---------- карточки ---------- */
+.card{
+  position:relative;
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:var(--r);
+  padding:22px 20px;
+  margin-bottom:16px;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 12px 30px rgba(90,74,54,.10),inset 0 1px 0 rgba(255,255,255,.85);
+  transform-style:preserve-3d;
+  transition:transform .35s cubic-bezier(.22,.9,.3,1),box-shadow .35s;
+  will-change:transform;
+}
+body.d3 .card{transition:transform .12s ease-out}
+body.d3 .card:hover{box-shadow:0 20px 44px rgba(90,74,54,.16),inset 0 1px 0 rgba(255,255,255,.9)}
 
-  section{margin:0 0 8px}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.num{
+  flex:0 0 auto;
+  width:42px;height:42px;border-radius:14px;
+  display:grid;place-items:center;
+  font-size:19px;font-weight:900;color:#fff;
+  background:linear-gradient(160deg,#5b6067,#2b2e33);
+  box-shadow:0 6px 14px rgba(43,46,51,.28),inset 0 1px 0 rgba(255,255,255,.35);
+  transform:translateZ(24px);
+}
+h2{
+  font-size:19px;line-height:1.25;font-weight:800;letter-spacing:-.3px;color:var(--ink);
+}
+h2 small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-top:3px}
 
-  .step{
-    position:relative;
-    background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.022));
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    padding:24px 22px;
-    margin:0 0 16px;
-    overflow:hidden;
-  }
-  .step::after{
-    content:"";position:absolute;right:-40px;top:-60px;width:170px;height:170px;
-    background:radial-gradient(circle,rgba(240,194,106,.10),transparent 70%);
-    pointer-events:none;
-  }
-  .step .head{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px}
-  .num{
-    flex:0 0 auto;
-    width:42px;height:42px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:16px;color:#0b0b0f;
-    background:linear-gradient(160deg,#ffe1a3,#f0c26a 55%,#d39a3d);
-    box-shadow:0 6px 20px rgba(240,194,106,.22), inset 0 1px 0 rgba(255,255,255,.6);
-  }
-  .num.zero{background:linear-gradient(160deg,#e9e7ef,#b8b3c4 60%,#8b8797);color:#0b0b0f}
-  .step h3{
-    margin:2px 0 0;font-size:20px;line-height:1.25;font-weight:700;color:#fff;
-    letter-spacing:-.2px;
-  }
-  .step p{margin:0 0 12px;color:#cfcbd8;font-size:15px}
-  .step p:last-child{margin-bottom:0}
+p{font-size:14.5px;color:var(--ink2);margin-bottom:10px}
+p:last-child{margin-bottom:0}
+b,strong{color:var(--ink);font-weight:700}
 
-  .lbl{
-    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--mut);font-weight:700;margin:18px 0 8px;
-  }
+.sub{font-size:11.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin:16px 0 9px}
 
-  ul.arr{list-style:none;margin:0 0 14px;padding:0}
-  ul.arr li{
-    position:relative;padding-left:22px;margin:0 0 8px;
-    color:#d5d2de;font-size:15px;
-  }
-  ul.arr li::before{
-    content:"▸";position:absolute;left:0;top:0;
-    color:var(--gold);font-size:13px;line-height:1.7;
-  }
+ul,ol{list-style:none;margin:0 0 12px}
+li{
+  position:relative;padding-left:20px;margin-bottom:9px;
+  font-size:14.5px;color:var(--ink2);
+}
+li::before{
+  content:'';position:absolute;left:2px;top:9px;
+  width:6px;height:6px;border-radius:2px;
+  background:linear-gradient(160deg,#6d727a,#3c4046);
+  transform:rotate(45deg);
+}
+ul:last-child,ol:last-child{margin-bottom:0}
 
-  .warn{
-    position:relative;
-    background:rgba(255,120,90,.055);
-    border:1px solid rgba(255,120,90,.22);
-    border-radius:14px;
-    padding:14px 16px 14px 18px;
-    color:#f0d6cf;font-size:14.5px;
-    margin:14px 0 0;
-  }
-  .warn::before{
-    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
-    background:linear-gradient(180deg,#ff8f6a,rgba(255,120,90,.15));
-  }
-  .warn b{color:#ffb59b}
+/* блоки-заметки */
+.note{
+  border-radius:16px;padding:14px 16px;margin:14px 0;
+  font-size:13.8px;color:var(--ink2);
+  background:rgba(255,255,255,.6);
+  border:1px solid rgba(255,255,255,.9);
+  border-left:3px solid var(--info);
+}
+.note:last-child{margin-bottom:0}
+.note.warn{border-left-color:var(--warn)}
+.note.good{border-left-color:var(--good)}
+.note.info{border-left-color:var(--info)}
+.note b{display:block;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:6px}
+.note.warn b{color:var(--warn)}
+.note.good b{color:var(--good)}
+.note.info b{color:var(--info)}
 
-  .tip{
-    background:rgba(110,200,180,.05);
-    border:1px solid rgba(110,200,180,.20);
-    border-radius:14px;
-    padding:14px 16px;
-    color:#cfe8e1;font-size:14.5px;
-    margin:14px 0 0;
-  }
-  .tip b{color:#8ee0cb}
+/* таблица */
+.tablewrap{
+  border-radius:16px;overflow:hidden;margin:14px 0;
+  border:1px solid rgba(255,255,255,.9);
+  background:rgba(255,255,255,.55);
+}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{
+  text-align:left;padding:11px 14px;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+  color:#fff;background:linear-gradient(160deg,#5b6067,#33373d);font-weight:700;
+}
+td{padding:11px 14px;color:var(--ink2);border-top:1px solid var(--line);vertical-align:top}
+td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
 
-  code.nick{
-    display:inline-block;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.10);
-    border-radius:8px;
-    padding:6px 12px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;color:#fff;
-    letter-spacing:.06em;
-    word-break:break-all;
-    margin:4px 0 8px;
-  }
+/* содержание */
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{
+  display:inline-flex;align-items:center;gap:8px;
+  text-decoration:none;color:var(--ink);
+  font-size:12.5px;font-weight:600;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  padding:8px 13px;border-radius:999px;
+  box-shadow:0 3px 10px rgba(90,74,54,.06);
+  transition:transform .15s,box-shadow .15s;
+}
+.toc a:active{transform:scale(.96)}
+.toc a i{
+  font-style:normal;font-size:10.5px;font-weight:800;color:#fff;
+  width:18px;height:18px;border-radius:6px;display:grid;place-items:center;
+  background:linear-gradient(160deg,#5b6067,#2b2e33);
+}
 
-  .tablewrap{
-    overflow-x:auto;
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;
-    margin:14px 0 0;
-  }
-  table{border-collapse:collapse;width:100%;min-width:420px;font-size:14.5px}
-  th{
-    text-align:left;padding:12px 14px;
-    background:rgba(240,194,106,.08);
-    color:var(--gold);font-weight:700;font-size:12px;
-    letter-spacing:.1em;text-transform:uppercase;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  td{
-    padding:12px 14px;color:#d5d2de;
-    border-bottom:1px solid rgba(255,255,255,.05);
-    vertical-align:top;
-  }
-  tr:last-child td{border-bottom:none}
+/* ник */
+.nick{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  display:block;font-size:12px;letter-spacing:-.3px;
+  color:var(--ink);
+  background:rgba(255,255,255,.8);
+  border:1px dashed rgba(43,46,51,.22);
+  border-radius:12px;padding:12px 14px;margin:12px 0;
+  overflow-x:auto;white-space:nowrap;
+}
 
-  ul.check{list-style:none;margin:0;padding:0}
-  ul.check li{
-    position:relative;padding-left:28px;margin:0 0 10px;
-    color:#d5d2de;font-size:15px;
-  }
-  ul.check li::before{
-    content:"✦";position:absolute;left:0;top:0;
-    color:var(--gold);font-size:13px;line-height:1.75;
-  }
+/* магазин */
+.shop{
+  position:relative;
+  margin-top:26px;
+  border-radius:26px;
+  padding:26px 22px;
+  text-align:center;
+  background:linear-gradient(165deg,#3a3e44 0%,#23262b 55%,#171a1e 100%);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 22px 50px rgba(30,24,18,.35),inset 0 1px 0 rgba(255,255,255,.16);
+  overflow:hidden;
+  transform-style:preserve-3d;
+}
+.shop::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 65%);
+  pointer-events:none;
+}
+.shop .crown{
+  font-size:22px;color:#e6dcc7;display:block;margin-bottom:8px;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));
+}
+.shop .badge{
+  display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:#cfc3ab;border:1px solid rgba(207,195,171,.42);
+  padding:5px 12px;border-radius:999px;margin-bottom:14px;font-weight:700;
+}
+.shop h3{
+  font-size:23px;font-weight:900;letter-spacing:-.4px;color:#fbf8f3;
+  margin-bottom:8px;position:relative;
+}
+.shop p{color:rgba(251,248,243,.62);font-size:13.5px;margin-bottom:18px;position:relative}
+.shop a.btn{
+  display:inline-flex;align-items:center;gap:9px;position:relative;
+  text-decoration:none;font-size:14px;font-weight:800;letter-spacing:.2px;
+  color:#23262b;
+  background:linear-gradient(180deg,#fbf8f3,#e6dcc7);
+  padding:14px 26px;border-radius:999px;
+  box-shadow:0 10px 26px rgba(0,0,0,.35),inset 0 1px 0 #fff;
+  transition:transform .18s;
+}
+.shop a.btn:active{transform:scale(.97)}
 
-  .gift{
-    margin:34px 0 0;
-    text-align:center;
-    background:
-      radial-gradient(600px 220px at 50% 0%, rgba(240,194,106,.16), transparent 70%),
-      linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-    border:1px solid rgba(240,194,106,.30);
-    border-radius:22px;
-    padding:34px 24px 30px;
-  }
-  .gift .k{
-    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--gold);font-weight:700;margin-bottom:12px;
-  }
-  .gift h3{
-    margin:0 0 12px;font-size:22px;color:#fff;font-weight:800;letter-spacing:-.3px;
-  }
-  .gift p{margin:0 auto 22px;max-width:440px;color:#cfcbd8;font-size:15px}
-  .btn{
-    display:inline-flex;align-items:center;gap:10px;
-    padding:15px 30px;border-radius:999px;
-    background:linear-gradient(160deg,#ffe1a3,#f0c26a 55%,#d39a3d);
-    color:#12100a;font-weight:800;font-size:15px;letter-spacing:.02em;
-    text-decoration:none;
-    box-shadow:0 10px 30px rgba(240,194,106,.28), inset 0 1px 0 rgba(255,255,255,.6);
-    transition:transform .18s, box-shadow .18s;
-  }
-  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(240,194,106,.36), inset 0 1px 0 rgba(255,255,255,.6)}
+footer{text-align:center;margin-top:26px}
+footer p{font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:600}
 
-  footer{
-    margin-top:44px;padding-top:22px;
-    border-top:1px solid rgba(255,255,255,.06);
-    color:var(--mut);font-size:13px;
-    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  }
-  footer .star{color:var(--gold)}
+/* появление */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,.9,.3,1)}
+.reveal.in{opacity:1;transform:none}
+body.d3 .reveal.in{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
 
-  @media (max-width:520px){
-    .wrap{padding:24px 16px 64px}
-    .step{padding:20px 18px;border-radius:18px}
-    .num{width:38px;height:38px;font-size:15px}
-    .step h3{font-size:18px}
-  }
+@media (prefers-reduced-motion:reduce){
+  .cube{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+@media (max-width:380px){
+  .num{width:38px;height:38px;border-radius:12px;font-size:17px}
+  h2{font-size:17.5px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="brand"><span class="star">✦</span> <b>Nagibatorz</b> · Standoff 2</div>
+<header class="hero">
+  <div class="brand"><i></i>Nagibatorz · Standoff 2<i></i></div>
 
-  <h1>7 способов трейда</h1>
-  <p class="lede">Схемы заработка на рынке скинов — от простых к тем, что требуют реакции</p>
+  <h1>7 способов трейда<span>Рынок скинов</span></h1>
 
-  <div class="note">
-    <span class="t">Как пользоваться</span>
-    <p>Способы идут от простого к сложному. Начни с первого — он не требует больших вложений. Осваивай по одной схеме, не пытайся применить всё сразу. И начинай с небольших сумм: цены на рынке меняются, часть способов зависит от удачи.</p>
+  <p class="lead">Схемы заработка на рынке скинов — от простых к тем, что требуют реакции.</p>
+
+  <div class="cube-wrap">
+    <div class="cube" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
   </div>
 
-  <div class="rule">✦</div>
+  <button class="d3btn" id="d3btn" type="button"><b>3D:</b> <span id="d3state">выкл</span></button>
+</header>
 
+<section class="card reveal">
+  <h2>Как пользоваться<small>Перед началом</small></h2>
+  <p>Способы идут от простого к сложному. Начни с первого — он не требует больших вложений. Осваивай по одной схеме, не пытайся применить всё сразу. И начинай с небольших сумм: цены на рынке меняются, часть способов зависит от удачи.</p>
+</section>
+
+<section class="card reveal">
+  <div class="head"><div class="num">≡</div><h2>Содержание</h2></div>
   <nav class="toc">
-    <div class="t">Содержание</div>
-    <ol>
-      <li><a href="#start"><span class="n">0</span> Перед началом</a></li>
-      <li><a href="#s1"><span class="n">1</span> Закупка через запросы</a></li>
-      <li><a href="#s2"><span class="n">2</span> Ловля передачи голды</a></li>
-      <li><a href="#s3"><span class="n">3</span> Массовый закуп с наклейками</a></li>
-      <li><a href="#s4"><span class="n">4</span> Наклейки из удалённых коллекций</a></li>
-      <li><a href="#s5"><span class="n">5</span> Снайп по 0,03</a></li>
-      <li><a href="#s6"><span class="n">6</span> Фарм на «баге» рынка</a></li>
-      <li><a href="#s7"><span class="n">7</span> Байт байтеров</a></li>
-      <li><a href="#honest"><span class="n">✦</span> Честно про заработок</a></li>
-      <li><a href="#check"><span class="n">✦</span> Чек-лист новичка</a></li>
-    </ol>
+    <a href="#s0"><i>0</i>С чего начать</a>
+    <a href="#s1"><i>1</i>Закупка через запросы</a>
+    <a href="#s2"><i>2</i>Ловля передачи голды</a>
+    <a href="#s3"><i>3</i>Массовый закуп</a>
+    <a href="#s4"><i>4</i>Наклейки из удалённых</a>
+    <a href="#s5"><i>5</i>Снайп по 0,03</a>
+    <a href="#s6"><i>6</i>Фарм на «баге»</a>
+    <a href="#s7"><i>7</i>Байт байтеров</a>
+    <a href="#honest"><i>!</i>Честно про заработок</a>
+    <a href="#check"><i>✓</i>Чек-лист новичка</a>
   </nav>
+</section>
 
-  <div class="rule">✦ Подготовка ✦</div>
+<section class="card reveal" id="s0">
+  <div class="head"><div class="num">0</div><h2>С чего начать<small>Подготовка</small></h2></div>
+  <p>Первым делом смени ник на максимальное количество «W» — например:</p>
+  <span class="nick">WWWWWWWWWWWWWWWWWWWWWWWWWWW</span>
+  <p><b>Зачем:</b> на рынке скинов сделки идут быстро, и ник, который невозможно запомнить или прочитать, не даёт случайным людям узнать тебя в дальнейшем. Мелочь, но трейдеры с рынка советуют её делать сразу.</p>
+  <p class="sub">Три правила для всех семи способов</p>
+  <ul>
+    <li>Сначала изучи среднюю цену скина, потом что-то делай</li>
+    <li>Никогда не вкладывай всю голду в одну схему</li>
+    <li>Не пытайся запустить несколько способов одновременно на старте</li>
+  </ul>
+</section>
 
-  <section id="start">
-    <div class="step">
-      <div class="head">
-        <div class="num zero">0</div>
-        <h3>С чего начать</h3>
-      </div>
-      <p>Первым делом смени ник на максимальное количество «W» — например:</p>
-      <code class="nick">WWWWWWWWWWWWWWWWWWWWWWWWWWW</code>
-      <p><b>Зачем:</b> на рынке скинов сделки идут быстро, и ник, который невозможно запомнить или прочитать, не даёт случайным людям узнать тебя в дальнейшем. Мелочь, но трейдеры с рынка советуют её делать сразу.</p>
-      <p>Дальше — три правила, которые действуют во всех семи способах:</p>
-      <ul class="arr">
-        <li>Сначала изучи среднюю цену скина, потом что-то делай</li>
-        <li>Никогда не вкладывай всю голду в одну схему</li>
-        <li>Не пытайся запустить несколько способов одновременно на старте</li>
-      </ul>
-    </div>
-  </section>
+<section class="card reveal" id="s1">
+  <div class="head"><div class="num">1</div><h2>Закупка скинов через запросы<small>Способ</small></h2></div>
+  <p>Самый простой способ и лучший старт, если у тебя мало голды.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Найди скин и посмотри среднюю цену, за которую его покупают</li>
+    <li>Вычисли из неё 22% — получится цена, по которой ты будешь покупать</li>
+    <li>Поставь эту сумму в разделе «Запросы на покупку» и жди</li>
+    <li>Обычно скины прилетают примерно за 1 день</li>
+    <li>Когда предметы пришли — выставляй их по средней цене, которую считал в начале</li>
+  </ul>
+  <p>Разница между ценой запроса и средней ценой продажи ≈ 22%. А если скин прилетит по лоу-прайсу — заработаешь ещё больше.</p>
+  <div class="note info"><b>Почему это работает</b>Продавцу проще скинуть скин в готовый запрос, чем ждать покупателя самому. Ты платишь за это скидкой.</div>
+</section>
 
-  <div class="rule">✦ Способы ✦</div>
+<section class="card reveal" id="s2">
+  <div class="head"><div class="num">2</div><h2>Ловля передачи голды<small>Способ</small></h2></div>
+  <p>Этот способ получается не всегда, но если выходит — плюс огромный. Основан на том, что голду в игре часто передают через лоты: покупатель ставит ненужный скин по завышенной цене, а продавец голды его выкупает.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Найди скин с маленьким количеством предметов на рынке — до 10 000</li>
+    <li>Купи его</li>
+    <li>Жди: кто-то выставит этот же скин за сумму, которая сильно выше средней — это и есть передача голды</li>
+    <li>Выставь свой скин по той же цене и листай ленту до лота этого человека</li>
+    <li>Сделай скриншот, вырежи его аватарку и поставь себе</li>
+  </ul>
+  <p><b>Логика:</b> человек, который покупает голду, будет искать лот продавца — и может ошибиться, увидев твой скин с такой же ценой и такой же аватаркой. Если купит твой — ты уходишь в большой плюс.</p>
+  <div class="note warn"><b>Риск</b>Скин покупаешь своими деньгами, и если передача не состоится — он останется у тебя по цене выше рынка. Способ с риском, не вкладывай в него всю голду.</div>
+</section>
 
-  <section id="s1">
-    <div class="step">
-      <div class="head">
-        <div class="num">1</div>
-        <h3>Закупка скинов через запросы</h3>
-      </div>
-      <p>Самый простой способ и лучший старт, если у тебя мало голды.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Найди скин и посмотри среднюю цену, за которую его покупают</li>
-        <li>Вычисли из неё 22% — получится цена, по которой ты будешь покупать</li>
-        <li>Поставь эту сумму в разделе «Запросы на покупку» и жди</li>
-        <li>Обычно скины прилетают примерно за 1 день</li>
-        <li>Когда предметы пришли — выставляй их по средней цене, которую считал в начале</li>
-      </ul>
-      <p>Разница между ценой запроса и средней ценой продажи ≈ 22%. А если скин прилетит по лоу-прайсу — заработаешь ещё больше.</p>
-      <div class="tip"><b>Почему это работает:</b> продавцу проще скинуть скин в готовый запрос, чем ждать покупателя самому. Ты платишь за это скидкой.</div>
-    </div>
-  </section>
+<section class="card reveal" id="s3">
+  <div class="head"><div class="num">3</div><h2>Массовый закуп скинов<small>Способ</small></h2></div>
+  <p>Хорош, если у тебя много голды.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Выбери недорогой скин</li>
+    <li>В запросах на покупку закажи большое количество</li>
+    <li>Жди — часть прилетит по 0,03</li>
+    <li>Обычные скины продавай по средней цене</li>
+    <li>Скины с наклейками продавай по цене скина + 20% от стоимости наклеек</li>
+  </ul>
+  <p>Главное здесь — везение: если прилетит скин с наклейками, это и есть основной заработок. В среднем способ уводит в плюс на 15–20% от вложенного, но не всегда.</p>
+  <div class="note info"><b>Учти</b>Цена наклейки не всегда равна её цене в игре — смотри, за сколько наклейки реально продаются на рынке, а не только их каталожную стоимость.</div>
+</section>
 
-  <section id="s2">
-    <div class="step">
-      <div class="head">
-        <div class="num">2</div>
-        <h3>Ловля передачи голды</h3>
-      </div>
-      <p>Этот способ получается не всегда, но если выходит — плюс огромный. Основан на том, что голду в игре часто передают через лоты: покупатель ставит ненужный скин по завышенной цене, продавец голды его выкупает.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Найди скин с маленьким количеством предметов на рынке — до 10 000</li>
-        <li>Купи его</li>
-        <li>Жди: кто-то выставит этот же скин за сумму, которая сильно выше средней. Это и есть передача голды</li>
-        <li>Выставь свой скин по той же цене и листай ленту до лота этого человека</li>
-        <li>Сделай скриншот, вырежи его аватарку и поставь себе</li>
-      </ul>
-      <p><b>Логика:</b> человек, который покупает голду, будет искать лот продавца — и может ошибиться, увидев твой скин с такой же ценой и такой же аватаркой. Если купит твой — ты уходишь в большой плюс.</p>
-      <div class="warn"><b>Внимание:</b> скин покупаешь своими деньгами, и если передача не состоится — он останется у тебя по цене выше рынка. Способ с риском, не вкладывай в него всю голду.</div>
-    </div>
-  </section>
+<section class="card reveal" id="s4">
+  <div class="head"><div class="num">4</div><h2>Наклейки из удалённых коллекций<small>Способ</small></h2></div>
+  <p>Способ на ожидание: вложился и ждёшь, пока вырастет. Это как инвестиция, а не быстрый заработок.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Выбери наклейку — желательно из удалённых коллекций или из тех, откуда получить её уже нельзя</li>
+    <li>Купи</li>
+    <li>Жди, пока цена начнёт расти</li>
+    <li>Продавай, когда сумма тебя устраивает или когда хочешь забрать плюс быстрее</li>
+  </ul>
+  <p>Смысл в том, что количество таких наклеек в игре не увеличивается: их больше не выбить, а спрос остаётся. Поэтому цена со временем растёт — вопрос только в том, сколько ждать.</p>
+  <div class="note warn"><b>Риск</b>«Вырастет» ≠ «вырастет быстро». Можно ждать месяц. Не вкладывай в это деньги, которые нужны в игре прямо сейчас.</div>
+</section>
 
-  <section id="s3">
-    <div class="step">
-      <div class="head">
-        <div class="num">3</div>
-        <h3>Массовый закуп скинов</h3>
-      </div>
-      <p>Хорош, если у тебя много голды.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Выбери недорогой скин</li>
-        <li>В запросах на покупку закажи большое количество</li>
-        <li>Жди — часть прилетит по 0,03</li>
-        <li>Обычные скины продавай по средней цене</li>
-        <li>Скины с наклейками продавай по цене скина + 20% от стоимости наклеек</li>
-      </ul>
-      <p>Главное здесь — везение: если прилетит скин с наклейками, это и есть основной заработок. В среднем способ уводит в плюс на 15–20% от вложенного, но не всегда.</p>
-      <div class="tip">Цена наклейки не всегда равна её цене в игре — смотри, за сколько наклейки реально продаются на рынке, а не только их каталожную стоимость.</div>
-    </div>
-  </section>
-
-  <section id="s4">
-    <div class="step">
-      <div class="head">
-        <div class="num">4</div>
-        <h3>Наклейки из удалённых коллекций</h3>
-      </div>
-      <p>Способ на ожидание: вложился и ждёшь, пока вырастет. Это как инвестиция, а не быстрый заработок.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Выбери наклейку — желательно из удалённых коллекций или из тех, откуда получить её уже нельзя</li>
-        <li>Купи</li>
-        <li>Жди, пока цена начнёт расти</li>
-        <li>Продавай, когда сумма тебя устраивает или когда хочешь забрать плюс быстрее</li>
-      </ul>
-      <p>Смысл в том, что количество таких наклеек в игре не увеличивается: их больше не выбить, а спрос остаётся. Поэтому цена со временем растёт — вопрос только в том, сколько ждать.</p>
-      <div class="warn"><b>«Вырастет» ≠ «вырастет быстро».</b> Можно ждать месяц. Не вкладывай в это деньги, которые нужны в игре прямо сейчас.</div>
-    </div>
-  </section>
-
-  <section id="s5">
-    <div class="step">
-      <div class="head">
-        <div class="num">5</div>
-        <h3>Снайп — ловля скинов по 0,03</h3>
-      </div>
-      <p>Технически самый сложный: тут нужна реакция, а не удача.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Выбери скин, который можешь купить. Желательно не на всю голду — если не получится, останешься в минусе</li>
-        <li>Зайди в «Запросы на покупку»</li>
-        <li>Поставь сумму на 0,01 меньше, чем первый скин в слоте</li>
-        <li>Не жми «Заказать» сразу — сначала следи за тремя вещами</li>
-        <li>Когда минимальная цена запроса перебьётся хотя бы на 0,01 — жми «Заказать»</li>
-        <li>Если скин не прилетел за 2–3 секунды — повтори всё заново</li>
-      </ul>
-      <div class="lbl">Три вещи, за которыми следишь</div>
-      <div class="tablewrap">
-        <table>
-          <tr><th>Что</th><th>Зачем</th></tr>
-          <tr><td>Слот</td><td>Не поставили ли скин дешевле — тогда тоже уходи на 0,01 ниже</td></tr>
-          <tr><td>Запросы</td><td>По их количеству видно, что кто-то готовится ловить скин</td></tr>
-          <tr><td>Мин. цена</td><td>Как только её перебили хоть на 0,01 — момент настал</td></tr>
-        </table>
-      </div>
-      <div class="tip">Тренируйся на дешёвых скинах. На дорогих одна ошибка на 0,01 может стоить дорого.</div>
-    </div>
-  </section>
-
-  <section id="s6">
-    <div class="step">
-      <div class="head">
-        <div class="num">6</div>
-        <h3>Фарм на «баге» рынка</h3>
-      </div>
-      <p>Самый прибыльный из семи, но требует времени и усидчивости. Здесь не нужно вкладывать много — нужно листать и замечать.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Выбери скин, на котором 20 000+ предложений — не важно какой именно</li>
-        <li>Листай предложения вниз примерно 5 минут. В какой-то момент появится «окно», где идёт много скинов с наклейками — ты поймёшь, когда это произойдёт</li>
-        <li>Скупай скины с наклейками, а потом продавай</li>
-      </ul>
-      <p><b>С чего начать:</b> бери сначала непопулярные скины — например AKR12 «Aurora», USP «Line», M16 «Faset». Изучи их цены покупки и продажи, можно даже сделать мини-анализ рынка.</p>
-      <div class="tip">Шанс на хороший откуп выше, если брать скины с одинаковыми наклейками — их проще продать набором.</div>
-      <p>Сколько выйдет за вечер — зависит от усидчивости, реакции и везения. Постоянной цифры нет: один день даёт заметный плюс, другой — почти ничего. Когда наловчишься, переходи на дорогие скины, лучше на популярные оружия вроде AKR и AWM. Там уже придётся внимательнее смотреть на цены наклеек.</p>
-      <div class="warn">Это работа за экраном, а не кнопка «получить деньги». В дни, когда «окно» не открывается, можно просидеть впустую.</div>
-    </div>
-  </section>
-
-  <section id="s7">
-    <div class="step">
-      <div class="head">
-        <div class="num">7</div>
-        <h3>Байт байтеров</h3>
-      </div>
-      <p>Название звучит непонятно, но схема простая. Байтеры — это люди, которые спамят рынок скинами с 4 наклейками по низкой цене, чтобы поймать чужую ошибку.</p>
-      <div class="lbl">Как делать</div>
-      <ul class="arr">
-        <li>Листай AKR «Worm» до «бага», про который рассказано в способе 6</li>
-        <li>Жди, пока появятся люди, спамящие скином с 4 наклейками по низкой цене — это и есть байтеры</li>
-        <li>Закупи по запросу несколько таких же скинов — но пустых, без наклеек</li>
-        <li>Спамь вместе с ним, по той же цене, но своими пустыми скинами</li>
-      </ul>
-      <p><b>Расчёт:</b> кто-то будет пытаться поймать скин байтера и ошибётся ценой или лотом — и купит твой. Прибыль здесь именно за счёт ошибки другого человека, поэтому способ самый «нервный» из всех.</p>
-      <div class="warn">Тут ты играешь против других людей, а не против рынка. Никакой гарантии, что ошибётся именно в твою пользу. Не ставь на это последнее.</div>
-    </div>
-  </section>
-
-  <div class="rule">✦ Важное ✦</div>
-
-  <section id="honest">
-    <div class="step">
-      <div class="head">
-        <div class="num zero">!</div>
-        <h3>Честно про заработок</h3>
-      </div>
-      <p>Эти схемы работают, но ни одна из них не даёт фиксированного дохода. Вот что надо понимать до старта:</p>
-      <ul class="arr">
-        <li><b>Цены на рынке меняются.</b> Схема, которая работала месяц назад, сегодня может не дать ничего</li>
-        <li><b>Часть способов — про удачу.</b> Способы 2 и 7 зависят от чужой ошибки, способ 3 — от везения с наклейками</li>
-        <li><b>Время тоже стоит денег.</b> Способ 6 — это часы за экраном, а не пара минут</li>
-        <li><b>Начинай с малого.</b> Первую неделю работай на маленьких суммах, чтобы понять рынок и не потерять всё сразу</li>
-        <li><b>Не вкладывай всё.</b> Всегда оставляй часть голды — иначе на следующем шаге нечем будет торговать</li>
-      </ul>
-      <div class="tip"><b>Лучший старт:</b> способ 1 на маленькой сумме. Понял механику, заработал первые проценты — перешёл к следующему.</div>
-    </div>
-  </section>
-
-  <section id="check">
-    <div class="step">
-      <div class="head">
-        <div class="num zero">✓</div>
-        <h3>Чек-лист новичка</h3>
-      </div>
-      <ul class="check">
-        <li>Ник изменён, рынок изучен хотя бы по 3–5 скинам</li>
-        <li>Понятно, что такое «запросы на покупку» и как они работают</li>
-        <li>Записал средние цены на 3 скина, с которыми буду работать</li>
-        <li>Начал со способа 1, а не сразу со всех семи</li>
-        <li>Вложил не больше половины голды</li>
-        <li>Знаю, сколько готов потерять, если схема не сработает</li>
-        <li>Не покупаю скины по цене выше средней «на всякий случай»</li>
-        <li>Веду учёт: сколько вложил и сколько вышло</li>
-      </ul>
-    </div>
-  </section>
-
-  <div class="gift">
-    <div class="k">✦ Твой подарок ✦</div>
-    <h3>Пакет из 100 гайдов по играм</h3>
-    <p>Раскладки, фарм, промокоды, настройки под конкретные игры.</p>
-    <a class="btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">✦ Забрать бонус</a>
+<section class="card reveal" id="s5">
+  <div class="head"><div class="num">5</div><h2>Снайп — ловля скинов по 0,03<small>Способ</small></h2></div>
+  <p>Технически самый сложный: тут нужна реакция, а не удача.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Выбери скин, который можешь купить. Желательно не на всю голду — если не получится, останешься в минусе</li>
+    <li>Зайди в «Запросы на покупку»</li>
+    <li>Поставь сумму на 0,01 меньше, чем первый скин в слоте</li>
+    <li>Не жми «Заказать» сразу — сначала следи за тремя вещами</li>
+    <li>Когда минимальная цена запроса перебьётся хотя бы на 0,01 — жми «Заказать»</li>
+    <li>Если скин не прилетел за 2–3 секунды — повтори всё заново</li>
+  </ul>
+  <p class="sub">Три вещи, за которыми следишь</p>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Что</th><th>Зачем</th></tr>
+      <tr><td>Слот</td><td>Не поставили ли скин дешевле — тогда тоже уходи на 0,01 ниже</td></tr>
+      <tr><td>Запросы</td><td>По их количеству видно, что кто-то готовится ловить скин</td></tr>
+      <tr><td>Мин. цена</td><td>Как только её перебили хоть на 0,01 — момент настал</td></tr>
+    </table>
   </div>
+  <div class="note good"><b>Совет</b>Тренируйся на дешёвых скинах. На дорогих одна ошибка на 0,01 может стоить дорого.</div>
+</section>
 
-  <footer>
-    <span><span class="star">✦</span> Nagibatorz · Standoff 2</span>
-    <span>Гайд для покупателей · Playerok</span>
-  </footer>
+<section class="card reveal" id="s6">
+  <div class="head"><div class="num">6</div><h2>Фарм на «баге» рынка<small>Способ</small></h2></div>
+  <p>Самый прибыльный из семи, но требует времени и усидчивости. Здесь не нужно вкладывать много — нужно листать и замечать.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Выбери скин, на котором 20 000+ предложений — не важно какой именно</li>
+    <li>Листай предложения вниз примерно 5 минут. В какой-то момент появится «окно», где идёт много скинов с наклейками — ты поймёшь, когда это произойдёт</li>
+    <li>Скупай скины с наклейками, а потом продавай</li>
+  </ul>
+  <p><b>С чего начать:</b> бери сначала непопулярные скины — например AKR12 «Aurora», USP «Line», M16 «Faset». Изучи их цены покупки и продажи, можно даже сделать мини-анализ рынка.</p>
+  <p>Шанс на хороший откуп выше, если брать скины с одинаковыми наклейками — их проще продать набором.</p>
+  <p>Сколько выйдет за вечер — зависит от усидчивости, реакции и везения. Постоянной цифры нет: один день даёт заметный плюс, другой — почти ничего. Когда наловчишься, переходи на дорогие скины, лучше на популярное оружие вроде AKR и AWM. Там уже придётся внимательнее смотреть на цены наклеек.</p>
+  <div class="note warn"><b>Важно</b>Это работа за экраном, а не кнопка «получить деньги». В дни, когда «окно» не открывается, можно просидеть впустую.</div>
+</section>
 
-</div>
+<section class="card reveal" id="s7">
+  <div class="head"><div class="num">7</div><h2>Байт байтеров<small>Способ</small></h2></div>
+  <p>Название звучит непонятно, но схема простая. Байтеры — это люди, которые спамят рынок скинами с 4 наклейками по низкой цене, чтобы поймать чужую ошибку.</p>
+  <p class="sub">Как делать</p>
+  <ul>
+    <li>Листай AKR «Worm» до «бага», про который рассказано в способе 6</li>
+    <li>Жди, пока появятся люди, спамящие скином с 4 наклейками по низкой цене — это и есть байтеры</li>
+    <li>Закупи по запросу несколько таких же скинов — но пустых, без наклеек</li>
+    <li>Спамь вместе с ним, по той же цене, но своими пустыми скинами</li>
+  </ul>
+  <p><b>Расчёт:</b> кто-то будет пытаться поймать скин байтера и ошибётся ценой или лотом — и купит твой. Прибыль здесь именно за счёт ошибки другого человека, поэтому способ самый «нервный» из всех.</p>
+  <div class="note warn"><b>Риск</b>Тут ты играешь против других людей, а не против рынка. Никакой гарантии, что ошибётся именно в твою пользу. Не ставь на это последнее.</div>
+</section>
+
+<section class="card reveal" id="honest">
+  <div class="head"><div class="num">!</div><h2>Честно про заработок<small>Важное</small></h2></div>
+  <p>Эти схемы работают, но ни одна из них не даёт фиксированного дохода. Вот что надо понимать до старта:</p>
+  <ul>
+    <li>Цены на рынке меняются. Схема, которая работала месяц назад, сегодня может не дать ничего</li>
+    <li>Часть способов — про удачу. Способы 2 и 7 зависят от чужой ошибки, способ 3 — от везения с наклейками</li>
+    <li>Время тоже стоит денег. Способ 6 — это часы за экраном, а не пара минут</li>
+    <li>Начинай с малого. Первую неделю работай на маленьких суммах, чтобы понять рынок и не потерять всё сразу</li>
+    <li>Не вкладывай всё. Всегда оставляй часть голды — иначе на следующем шаге нечем будет торговать</li>
+  </ul>
+  <div class="note info"><b>Лучший старт</b>Способ 1 на маленькой сумме. Понял механику, заработал первые проценты — перешёл к следующему.</div>
+</section>
+
+<section class="card reveal" id="check">
+  <div class="head"><div class="num">✓</div><h2>Чек-лист новичка<small>Проверь себя</small></h2></div>
+  <ul>
+    <li>Ник изменён, рынок изучен хотя бы по 3–5 скинам</li>
+    <li>Понятно, что такое «запросы на покупку» и как они работают</li>
+    <li>Записал средние цены на 3 скина, с которыми буду работать</li>
+    <li>Начал со способа 1, а не сразу со всех семи</li>
+    <li>Вложил не больше половины голды</li>
+    <li>Знаю, сколько готов потерять, если схема не сработает</li>
+    <li>Не покупаю скины по цене выше средней «на всякий случай»</li>
+    <li>Веду учёт: сколько вложил и сколько вышло</li>
+  </ul>
+</section>
+
+<section class="shop reveal">
+  <span class="crown">♛</span>
+  <div class="badge">Магазин</div>
+  <h3>Nagibatorz</h3>
+  <p>Фарм, графика, прицелы, гайды и полные паки для Standoff 2</p>
+  <a class="btn" href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Смотреть товары →</a>
+</section>
+
+<footer>
+  <p>Nagibatorz · Standoff 2</p>
+</footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('d3btn');
+  var state = document.getElementById('d3state');
+  var body = document.body;
+
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var on = body.classList.toggle('d3');
+      state.textContent = on ? 'вкл' : 'выкл';
+      btn.classList.toggle('on', on);
+    });
+  }
+
+  // появление
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // наклон карточек
+  var cards = document.querySelectorAll('.card, .shop');
+  var MAX = 6;
+
+  function tilt(el, px, py){
+    var r = el.getBoundingClientRect();
+    var dx = (px - r.left) / r.width - 0.5;
+    var dy = (py - r.top) / r.height - 0.5;
+    el.style.setProperty('--ry', (dx * MAX).toFixed(2) + 'deg');
+    el.style.setProperty('--rx', (-dy * MAX).toFixed(2) + 'deg');
+    el.style.transform = 'perspective(900px) rotateX(' + (-dy * MAX).toFixed(2) + 'deg) rotateY(' + (dx * MAX).toFixed(2) + 'deg) translateZ(0)';
+  }
+
+  function reset(el){
+    el.style.transform = '';
+  }
+
+  cards.forEach(function(el){
+    el.addEventListener('pointermove', function(e){
+      if (!body.classList.contains('d3')) return;
+      if (e.pointerType === 'touch' && e.buttons === 0 && e.isPrimary === false) return;
+      tilt(el, e.clientX, e.clientY);
+    });
+    el.addEventListener('pointerleave', function(){ reset(el); });
+    el.addEventListener('pointercancel', function(){ reset(el); });
+  });
+
+  document.addEventListener('pointermove', function(e){
+    if (!body.classList.contains('d3')) return;
+    if (e.pointerType !== 'touch') return;
+    var el = e.target.closest ? e.target.closest('.card, .shop') : null;
+    if (el) tilt(el, e.clientX, e.clientY);
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(){
+    cards.forEach(reset);
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
