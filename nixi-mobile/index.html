@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07090c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Nixi Mobile — прототип</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:radial-gradient(120% 90% at 50% -15%, #1b222b 0%, #0a0e12 55%, #05070a 100%);
+  color:#eef3f8;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  display:flex;flex-direction:column;
+  min-height:100dvh;
+  padding:calc(env(safe-area-inset-top,0px) + 78px) 12px calc(env(safe-area-inset-bottom,0px) + 14px);
+  gap:10px;
+  overflow:hidden;
+}
+/* ───────── КАПСУЛА ───────── */
+#capsuleWrap{
+  position:fixed;left:0;right:0;top:0;z-index:60;
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;
+  pointer-events:none;
+}
+#capsule{
+  pointer-events:auto;cursor:pointer;
+  width:min(96vw,430px);
+  display:flex;align-items:center;gap:11px;
+  padding:11px 14px;
+  border-radius:24px;
+  background:linear-gradient(180deg,#141a21,#0a0e12);
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 16px 38px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
+  transition:border-color .2s, box-shadow .2s, transform .12s;
+  user-select:none;
+}
+#capsule:active{transform:scale(.985)}
+#capsule.listening{border-color:rgba(255,122,24,.6);box-shadow:0 16px 38px rgba(0,0,0,.6), 0 0 0 3px rgba(255,122,24,.13)}
+#capsule.thinking{border-color:rgba(120,190,255,.45)}
+.lens{
+  width:30px;height:30px;flex:0 0 30px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #2a3540, #0d1216 70%);
+  border:1px solid rgba(255,255,255,.13);
+  display:grid;place-items:center;position:relative;
+}
+.lens i{
+  width:9px;height:9px;border-radius:50%;
+  background:#5d6b78;display:block;transition:background .2s, box-shadow .2s;
+}
+#capsule.listening .lens i{background:#ff7a18;box-shadow:0 0 12px 3px rgba(255,122,24,.55);animation:pulse 1s infinite}
+#capsule.thinking .lens i{background:#78beff;box-shadow:0 0 12px 3px rgba(120,190,255,.45);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.72)}}
+#capText{
+  flex:1;min-width:0;
+  font-size:14px;line-height:1.25;color:#cfd8e2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#capText b{color:#fff;font-weight:600}
+.hint{font-size:11px;color:#6d7b89;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ───────── ЛОГ ───────── */
+#log{
+  flex:1;min-height:0;overflow-y:auto;
+  display:flex;flex-direction:column;gap:9px;
+  padding:2px 2px 6px;
+  scrollbar-width:none;
+}
+#log::-webkit-scrollbar{display:none}
+.msg{
+  max-width:88%;padding:10px 13px;border-radius:16px;
+  font-size:14px;line-height:1.45;white-space:pre-wrap;word-break:break-word;
+  animation:pop .18s ease-out;
+}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;background:linear-gradient(180deg,#2b3views,#243040);background:#243040;border:1px solid rgba(255,255,255,.08);border-bottom-right-radius:6px}
+.msg.nixi{align-self:flex-start;background:#111820;border:1px solid rgba(255,255,255,.07);border-bottom-left-radius:6px}
+.msg.sys{align-self:center;background:none;color:#71808f;font-size:12px;text-align:center;max-width:100%;padding:2px}
+.msg img{max-width:100%;border-radius:10px;display:block;margin-top:8px}
+/* ───────── НИЖНЯЯ ПАНЕЛЬ ───────── */
+#dock{display:flex;gap:8px;flex:0 0 auto}
+.btn{
+  flex:1;border:1px solid rgba(255,255,255,.1);background:#131a21;color:#e8eef5;
+  border-radius:14px;padding:12px 8px;font-size:12.5px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:inherit;cursor:pointer;transition:background .15s,transform .1s;
+}
+.btn:active{transform:scale(.97);background:#1a232c}
+.btn.accent{background:linear-gradient(180deg,#ff8c34,#ef6c0a);border-color:rgba(255,140,52,.5);color:#150c04}
+/* ───────── НАСТРОЙКИ ───────── */
+#panel{
+  position:fixed;inset:0;z-index:80;display:none;
+  background:rgba(3,5,8,.78);backdrop-filter:blur(7px);
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 14px calc(env(safe-area-inset-bottom,0px) + 18px);
+  overflow-y:auto;
+}
+#panel.open{display:block}
+.sheet{
+  max-width:460px;margin:0 auto;background:#0f151b;border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;
+}
+.sheet h2{margin:0 0 2px;font-size:16px}
+label{font-size:12px;color:#8fa0b0;display:block;margin-bottom:5px}
+input{
+  width:100%;padding:11px 12px;border-radius:11px;border:1px solid rgba(255,255,255,.12);
+  background:#0a0e13;color:#eef3f8;font-size:13px;font-family:inherit;
+}
+input:focus{outline:none;border-color:rgba(255,122,24,.5)}
+.note{font-size:11.5px;color:#74838f;line-height:1.45}
+.note a{color:#78beff}
+</style>
+</head>
+<body>
+
+<div id="capsuleWrap">
+  <div id="capsule">
+    <div class="lens"><i></i></div>
+    <div style="flex:1;min-width:0">
+      <div id="capText"><b>Nixi Mobile</b> · нажми и говори</div>
+      <div class="hint">«привет» · «который час» · «что на экране»</div>
+    </div>
+  </div>
+</div>
+
+<div id="log"></div>
+
+<div id="dock">
+  <button class="btn" id="btnScreen">👁 Экран</button>
+  <button class="btn" id="btnStop">⏹ Стоп</button>
+  <button class="btn accent" id="btnSet">⚙ Ключ</button>
+</div>
+
+<div id="panel">
+  <div class="sheet">
+    <h2>Настройки прототипа</h2>
+    <div>
+      <label>Ключ OpenRouter (начинается на sk-or-…)</label>
+      <input id="inKey" type="password" placeholder="sk-or-v1-…" autocomplete="off">
+    </div>
+    <div>
+      <label>Модель для текста</label>
+      <input id="inText" placeholder="meta-llama/llama-3.3-70b-instruct:free">
+    </div>
+    <div>
+      <label>Модель для анализа экрана (нужно зрение)</label>
+      <input id="inVision" placeholder="google/gemini-2.0-flash-exp:free">
+    </div>
+    <div class="note">Ключ хранится только в этом браузере (localStorage) и уходит напрямую в OpenRouter. Бесплатные модели с поддержкой картинок меняются — актуальные смотри на openrouter.ai/models с фильтром «vision».</div>
+    <button class="btn accent" id="btnSave">Сохранить</button>
+    <button class="btn" id="btnClose">Закрыть</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const log = $('log'), capsule = $('capsule'), capText = $('capText');
+  const KEY = 'nixi.key', MT = 'nixi.model.text', MV = 'nixi.model.vision';
+  const DEF_T = 'meta-llama/llama-3.3-70b-instruct:free';
+  const DEF_V = 'google/gemini-2.0-flash-exp:free';
+
+  let speaking = false, listening = false, rec = null, recFinal = '';
+  let currentStream = null;
+
+  /* ───────── утилиты ───────── */
+  function msg(role, text, img){
+    const d = document.createElement('div');
+    d.className = 'msg ' + role;
+    d.textContent = text;
+    if (img){
+      const im = document.createElement('img');
+      im.src = img;
+      d.appendChild(im);
+    }
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+  function status(html, cls){
+    capText.innerHTML = html;
+    capsule.classList.remove('listening','thinking');
+    if (cls) capsule.classList.add(cls);
+  }
+  function key(){ return (localStorage.getItem(KEY) || '').trim(); }
+  function modelT(){ return (localStorage.getItem(MT) || '').trim() || DEF_T; }
+  function modelV(){ return (localStorage.getItem(MV) || '').trim() || DEF_V; }
+
+  /* ───────── озвучка ───────── */
+  let voices = [];
+  function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+  if (window.speechSynthesis){
+    loadVoices();
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  function speak(text){
+    if (!window.speechSynthesis || !text) return;
+    speechSynthesis.cancel();
+    const clean = text.replace(/[*_#`>]/g, '').replace(/\s+/g, ' ').trim();
+    const short = clean.length > 700 ? clean.slice(0, 700) + '…' : clean;
+    const u = new SpeechSynthesisUtterance(short);
+    u.lang = 'ru-RU';
+    const ru = voices.find(v => /^ru/i.test(v.lang));
+    if (ru) u.voice = ru;
+    u.rate = 1.03; u.pitch = 1;
+    u.onstart = () => { speaking = true; status('Говорю…'); };
+    u.onend = () => { speaking = false; status('<b>Nixi</b> · нажми и говори'); };
+    u.onerror = () => { speaking = false; status('<b>Nixi</b> · нажми и говори'); };
+    speechSynthesis.speak(u);
+  }
+  function stopSpeak(){
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    speaking = false;
+  }
+
+  /* ───────── распознавание речи ───────── */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  function listen(){
+    if (!SR){
+      msg('sys', 'Этот браузер не умеет слушать речь. Открой страницу в Chrome.');
+      return;
+    }
+    if (listening){ try { rec.stop(); } catch(e){} return; }
+    stopSpeak();
+    recFinal = '';
+    rec = new SR();
+    rec.lang = 'ru-RU';
+    rec.interimResults = true;
+    rec.continuous = false;
+    rec.maxAlternatives = 1;
+
+    rec.onstart = () => { listening = true; status('Слушаю…', 'listening'); };
+    rec.onresult = e => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++){
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) recFinal += t + ' ';
+        else interim += t;
+      }
+      status(recFinal || interim || 'Слушаю…', 'listening');
+    };
+    rec.onerror = e => {
+      listening = false;
+      capsule.classList.remove('listening');
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed')
+        msg('sys', 'Микрофон запрещён. Разреши его в настройках Chrome для этого сайта.');
+      else if (e.error === 'no-speech')
+        status('<b>Nixi</b> · не расслышал, попробуй ещё');
+      else
+        status('<b>Nixi</b> · ошибка микрофона: ' + e.error);
+    };
+    rec.onend = () => {
+      listening = false;
+      capsule.classList.remove('listening');
+      const text = recFinal.trim();
+      if (text){ handle(text); }
+      else status('<b>Nixi</b> · нажми и говори');
+    };
+    try { rec.start(); } catch(e){ status('Не удалось запустить микрофон'); }
+  }
+
+  /* ───────── OpenRouter ───────── */
+  async function askAI(messages, model){
+    const k = key();
+    if (!k) throw new Error('NO_KEY');
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + k,
+        'X-Title': 'Nixi Mobile'
+      },
+      body: JSON.stringify({ model: model, messages: messages, max_tokens: 550, temperature: 0.6 })
+    });
+    if (!r.ok){
+      const t = await r.text();
+      throw new Error('HTTP ' + r.status + ': ' + t.slice(0, 220));
+    }
+    const j = await r.json();
+    const out = j && j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+    if (!out) throw new Error('Пустой ответ модели');
+    return String(out).trim();
+  }
+  const SYS = 'Ты Никси — голосовой ассистент в телефоне пользователя. Отвечай по-русски, коротко и живо: 1–3 предложения, обычной разговорной речью. Никаких списков, заголовков и разметки markdown — твой ответ читают вслух. Если просят проанализировать экран — опиши, что видно, и подскажи, что можно сделать.';
+
+  /* ───────── захват экрана ───────── */
+  async function captureScreen(){
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+      msg('sys', 'Браузер не умеет показывать экран. Нужен Chrome на Android или компьютер.');
+      return;
+    }
+    if (!key()){
+      msg('sys', 'Для анализа экрана нужен ключ OpenRouter — нажми «Ключ».');
+      openPanel();
+      return;
+    }
+    status('Запрашиваю экран…', 'thinking');
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 2 }, audio: false });
+    } catch(e){
+      msg('sys', 'Захват экрана отменён или недоступен: ' + e.name);
+      status('<b>Nixi</b> · нажми и говори');
+      return;
+    }
+    try {
+      currentStream = stream;
+      const track = stream.getVideoTracks()[0];
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.muted = true;
+      await video.play();
+      await new Promise(r => setTimeout(r, 700));
+      const w = video.videoWidth || 720, h = video.videoHeight || 1280;
+      const scale = Math.min(1, 1100 / Math.max(w, h));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(w * scale);
+      cv.height = Math.round(h * scale);
+      cv.getContext('2d').drawImage(video, 0, 0, cv.width, cv.height);
+      const shot = cv.toDataURL('image/jpeg', 0.72);
+      try { track.stop(); } catch(e){}
+      currentStream = null;
+
+      status('Смотрю на экран…', 'thinking');
+      const answer = await askAI([
+        { role: 'system', content: SYS },
+        { role: 'user', content: [
+          { type: 'text', text: 'Проанализируй скриншот моего телефона: что происходит на экране, что за приложение или страница, и что я могу сделать дальше. Коротко.' },
+          { type: 'image_url', image_url: { url: shot } }
+        ]}
+      ], modelV());
+      msg('nixi', answer, shot);
+      speak(answer);
+    } catch(err){
+      handleErr(err);
+    } finally {
+      if (currentStream){ try { currentStream.getTracks().forEach(t => t.stop()); } catch(e){} currentStream = null; }
+    }
+  }
+
+  function handleErr(err){
+    status('<b>Nixi</b> · ошибка');
+    const m = String(err && err.message || err);
+    if (m === 'NO_KEY'){
+      msg('sys', 'Ключ OpenRouter не введён — нажми «Ключ» и вставь его.');
+      openPanel();
+    } else {
+      msg('nixi', 'Не получилось: ' + m);
+    }
+  }
+
+  /* ───────── команды ───────── */
+  const SITES = {
+    'ютуб': 'https://youtube.com', 'youtube': 'https://youtube.com',
+    'вк': 'https://vk.com', 'вконтакте': 'https://vk.com',
+    'телеграм': 'https://web.telegram.org', 'телеграмм': 'https://web.telegram.org',
+    'рутуб': 'https://rutube.ru', 'яндекс': 'https://ya.ru',
+    'гугл': 'https://google.com', 'зен': 'https://dzen.ru'
+  };
+  let timerId = null;
+
+  async function handle(raw){
+    const text = raw.trim();
+    const t = text.toLowerCase();
+    msg('user', text);
+    status('Думаю…', 'thinking');
+
+    // приветствие
+    if (/^(привет|здравствуй|хай|ку|добрый день|доброе утро|добрый вечер)\b/.test(t)){
+      const words = ['Привет! Я Никси, я живу в шапке экрана. Скажи, что сделать: проанализировать экран, поставить таймер или просто поговорить.',
+                     'Привет! Я на месте. Что смотрим и что делаем?'];
+      const a = words[Math.floor(Math.random() * words.length)];
+      msg('nixi', a); speak(a); return;
+    }
+    // время
+    if (/(котор(ый|ое) час|сколько времени|время сейчас)/.test(t)){
+      const d = new Date();
+      const a = 'Сейчас ' + d.getHours() + ' ' + (d.getMinutes() < 10 ? 'ноль ' : '') + d.getMinutes() + ' минут.';
+      msg('nixi', a); speak(a); return;
+    }
+    // экран
+    if (/(что на экране|что у меня на экране|проанализируй экран|анализ экрана|посмотри на экран|что видно)/.test(t)){
+      msg('sys', 'Откроется системный запрос — нажми «Начать сейчас»/«Транслировать экран».');
+      captureScreen(); return;
+    }
+    // таймер
+    const tm = t.match(/(таймер|напомни)[^\d]*(\d+)\s*(секунд|сек|минут|мин|час|ч)/);
+    if (tm){
+      let n = parseInt(tm[2], 10);
+      const unit = tm[3];
+      let sec = n;
+      if (/мин/.test(unit)) sec = n * 60;
+      if (/час|^ч$/.test(unit)) sec = n * 3600;
+      if (timerId) clearTimeout(timerId);
+      const label = sec >= 60 ? Math.round(sec / 60) + ' мин' : sec + ' сек';
+      timerId = setTimeout(() => {
+        const a = 'Таймер на ' + label + ' закончился.';
+        msg('nixi', a); speak(a);
+      }, sec * 1000);
+      const a = 'Поставил таймер на ' + label + '. Скажу, когда выйдет время.';
+      msg('nixi', a); speak(a); return;
+    }
+    // открыть сайт
+    const op = t.match(/^открой\s+(.+)$/);
+    if (op){
+      const what = op[1].trim();
+      const url = SITES[what] || ('https://www.google.com/search?q=' + encodeURIComponent(what));
+      const a = 'Открываю ' + what + '.';
+      msg('nixi', a); speak(a);
+      window.open(url, '_blank');
+      return;
+    }
+
+    // остальное — в модель
+    try {
+      const answer = await askAI([
+        { role: 'system', content: SYS },
+        { role: 'user', content: text }
+      ], modelT());
+      msg('nixi', answer);
+      speak(answer);
+    } catch(err){
+      handleErr(err);
+    }
+  }
+
+  /* ───────── панель настроек ───────── */
+  function openPanel(){
+    $('inKey').value = key();
+    $('inText').value = localStorage.getItem(MT) || '';
+    $('inVision').value = localStorage.getItem(MV) || '';
+    $('panel').classList.add('open');
+  }
+  $('btnSet').onclick = openPanel;
+  $('btnClose').onclick = () => $('panel').classList.remove('open');
+  $('btnSave').onclick = () => {
+    const k = $('inKey').value.trim();
+    if (k) localStorage.setItem(KEY, k); else localStorage.removeItem(KEY);
+    const a = $('inText').value.trim();
+    if (a) localStorage.setItem(MT, a); else localStorage.removeItem(MT);
+    const b = $('inVision').value.trim();
+    if (b) localStorage.setItem(MV, b); else localStorage.removeItem(MV);
+    $('panel').classList.remove('open');
+    msg('sys', 'Сохранено. Модель текста: ' + modelT() + ' · экран: ' + modelV());
+  };
+
+  /* ───────── кнопки ───────── */
+  capsule.onclick = () => {
+    if (speaking){ stopSpeak(); status('<b>Nixi</b> · нажми и говори'); return; }
+    listen();
+  };
+  $('btnStop').onclick = () => {
+    stopSpeak();
+    if (listening && rec){ try { rec.stop(); } catch(e){} }
+    status('<b>Nixi</b> · нажми и говори');
+  };
+  $('btnScreen').onclick = captureScreen;
+
+  /* ───────── старт ───────── */
+  msg('sys', 'Прототип Nixi Mobile. Капсула сверху — нажми и говори голосом.');
+  msg('nixi', 'Привет! Я Никси. Скажи «привет», «который час», «таймер на 2 минуты» или «что на экране». Для свободных ответов и анализа экрана нажми «Ключ» и вставь ключ OpenRouter.');
+  if (!key()) setTimeout(openPanel, 900);
+})();
+</script>
+</body>
+</html>
