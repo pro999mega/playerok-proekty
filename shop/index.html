@@ -38,12 +38,10 @@
   }
   .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 20px}
 
-  /* ───── прогресс чтения ───── */
   #prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:60;
     background:linear-gradient(90deg,var(--gold-l),var(--gold),var(--gold-d));
     box-shadow:0 0 14px rgba(193,154,82,.7);transition:width .12s linear}
 
-  /* ───── шапка ───── */
   header{position:sticky;top:0;z-index:50;backdrop-filter:blur(20px) saturate(150%);
     -webkit-backdrop-filter:blur(20px) saturate(150%);
     background:linear-gradient(180deg,rgba(248,243,236,.92),rgba(248,243,236,.72));
@@ -59,7 +57,6 @@
     padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.72);
     border:1px solid rgba(193,154,82,.38);white-space:nowrap}
 
-  /* ───── первый экран ───── */
   .hero{padding:56px 0 8px;text-align:center}
   .eyebrow{display:inline-block;font-size:10.5px;letter-spacing:.34em;font-weight:700;color:var(--gold-d);
     padding:8px 16px;border-radius:999px;border:1px solid rgba(193,154,82,.34);
@@ -75,14 +72,12 @@
     padding:11px 18px;border-radius:999px;background:rgba(255,255,255,.78);
     border:1px solid var(--lineTop);box-shadow:var(--shadowSm)}
 
-  /* ───── плитки ───── */
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:38px 0 0}
   .stat{background:var(--glass);border:1px solid var(--lineTop);border-radius:20px;
     padding:20px 10px;text-align:center;box-shadow:var(--shadowSm);backdrop-filter:blur(14px)}
   .stat b{display:block;font-size:26px;letter-spacing:-.02em;line-height:1}
   .stat span{display:block;margin-top:8px;font-size:9.5px;letter-spacing:.2em;font-weight:700;color:var(--mut)}
 
-  /* ───── каталог ───── */
   .sec{margin:64px 0 0}
   .sec-head{text-align:center;margin-bottom:26px}
   .sec-head h2{margin:0;font-size:clamp(24px,6vw,34px);letter-spacing:-.028em;font-weight:800}
@@ -118,7 +113,6 @@
   .go svg{transition:transform .3s}
   .card:hover .go svg{transform:translateX(4px)}
 
-  /* ───── модалка ───── */
   .ovl{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;
     background:rgba(36,31,26,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:0}
   .ovl.on{display:flex}
@@ -141,7 +135,7 @@
   .lockbox{background:rgba(255,255,255,.75);border:1px solid var(--lineTop);border-radius:20px;padding:20px 18px;
     box-shadow:var(--shadowSm)}
   .lockbox .lb{display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.2em;font-weight:800;color:var(--gold-d);margin-bottom:13px}
-  input.code{width:100%;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:.22em;text-align:center;
+  input.code{width:100%;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:.2em;text-align:center;
     text-transform:uppercase;padding:15px 12px;border-radius:14px;border:1px solid rgba(36,31,26,.14);
     background:#fffdf9;color:var(--ink);outline:none;transition:border-color .25s,box-shadow .25s}
   input.code::placeholder{letter-spacing:.14em;font-weight:600;color:#b9b1a2}
@@ -158,7 +152,6 @@
   @keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
   .hint{margin:12px 0 0;font-size:11px;line-height:1.55;color:var(--mut)}
 
-  /* ───── гайд внутри ───── */
   .guide{margin-top:4px}
   .guide h4{margin:24px 0 8px;font-size:15px;letter-spacing:-.01em;font-weight:800;display:flex;align-items:center;gap:9px}
   .guide h4::before{content:"";width:16px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-d))}
@@ -175,7 +168,6 @@
   .done{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
   .done span{font-size:11px;color:var(--mut);line-height:1.5}
 
-  /* ───── финальная карточка ───── */
   .final{margin:64px 0 0;position:relative;overflow:hidden;border-radius:30px;padding:38px 24px;text-align:center;
     background:radial-gradient(120% 120% at 50% 0%,#3a3128 0%,#221d18 55%,#14100d 100%);
     border:1px solid rgba(193,154,82,.4);box-shadow:0 50px 90px -50px rgba(20,16,13,.95)}
@@ -268,7 +260,7 @@
       title:"Фарм серебра + бонус",
       tag:"STANDOFF 2",
       short:"Откуда брать серебро стабильно: напарники, задания, ежедневный бонус и куда не стоит тратиться.",
-      code:"FARM2026",
+      codes:["FARM2026","ФАРМ2026"],
       desc:"Гайд по серебру: как закрывать задания напарников, какие брать первыми, как не терять награду и какой бонус забирать каждый день.",
       guide:'<h4>С чего начать</h4>'
         +'<p>Серебро в Standoff 2 капает из трёх мест: матчи, задания напарников и ежедневные бонусы. Первые два требуют времени, третий — только входа в игру. Начинай с третьего, он бесплатный.</p>'
@@ -298,7 +290,7 @@
       title:"НЕЙРО ПАК",
       tag:"НЕЙРОСЕТИ",
       short:"Все модели в одном окне через браузер: регистрация, режимы, выбор модели и формула запроса.",
-      code:"NEIRO2026",
+      codes:["NEIRO2026","НЕЙРО2026","НЕЙРОПАК2026"],
       desc:"Гайд по доступу к нейросетям в одном окне: ссылка, регистрация, четыре режима работы, выбор модели под задачу и формула запроса.",
       guide:'<h4>Шаг 1 — открываешь сайт</h4>'
         +'<p>Переходишь по ссылке и сразу попадаешь в чат.</p>'
@@ -331,7 +323,7 @@
       title:"7 способов трейда",
       tag:"ОБМЕН",
       short:"Семь схем обмена: как меняться так, чтобы не остаться в минусе и не нарваться на подмену.",
-      code:"TREID2026",
+      codes:["TREID2026","ТРЕЙД2026","TRADE2026"],
       desc:"Семь способов обмена игровыми предметами: что дают, где подвох и как проверять сделку перед передачей.",
       guide:'<h4>Семь способов</h4>'
         +'<ul>'
@@ -339,7 +331,7 @@
         +'<li><b>2. Обмен с доплатой</b> — один предмет + доплата за более дорогой. Фиксируй цену доплаты до трейда, а не после.</li>'
         +'<li><b>3. Набор за набор</b> — несколько предметов с одной стороны против одного дорогого. Считай сумму целиком, не по одному предмету.</li>'
         +'<li><b>4. Обмен через посредника</b> — когда обе стороны не доверяют друг другу. Посредник держит предмет, пока оба не подтвердили.</li>'
-        +'<li><b>5. Обмен «предмет на предмет с доплатой»</b> — смешанный вариант: частично вещами, частично деньгами или серебром.</li>'
+        +'<li><b>5. Смешанный обмен</b> — частично вещами, частично деньгами или серебром.</li>'
         +'<li><b>6. Обмен с отложенной передачей</b> — когда предмет на удержании. Договор фиксируй текстом в чате, чтобы остались следы.</li>'
         +'<li><b>7. Обмен через обменник</b> — быстрый сброс одного предмета на другой через сторонние сервисы. Удобно, но теряешь в цене — за скорость платишь.</li>'
         +'</ul>'
@@ -360,7 +352,7 @@
       title:"Графика",
       tag:"ОФОРМЛЕНИЕ",
       short:"Аватар, баннер и карточка товара: пропорции, палитра, шрифт и как не убить качество при сохранении.",
-      code:"GRAF2026",
+      codes:["GRAF2026","ГРАФ2026","ГРАФИКА2026"],
       desc:"Гайд по оформлению профиля и товаров: размеры, палитра, шрифты и типичные ошибки, из-за которых картинка выглядит дешёвой.",
       guide:'<h4>Размеры, которые нужны</h4>'
         +'<ul>'
@@ -396,7 +388,7 @@
       title:"Прицел M40 / AWM",
       tag:"СТРЕЛЬБА",
       short:"Настройка прицела и чувствительности под снайперку: что крутить, что не трогать и как тренировать.",
-      code:"AIM2026",
+      codes:["AIM2026","АИМ2026","ПРИЦЕЛ2026"],
       desc:"Гайд по снайперскому прицелу: чувствительность, точка прицеливания, тренировка в полигоне и привычки, которые мешают попадать.",
       guide:'<h4>С чего начать настройку</h4>'
         +'<p>Сначала выставь чувствительность, потом трогай прицел. С непривычной чувствительностью любая сетка кажется неудобной.</p>'
@@ -432,7 +424,28 @@
   var ovl = document.getElementById("ovl");
   var sheet = document.getElementById("sheet");
 
-  function norm(s){ return String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); }
+  // кириллица → латиница, чтобы «НЕЙРО-2026» равнялось «NEIRO2026»
+  var TR = {
+    "а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z",
+    "и":"i","й":"i","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r",
+    "с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"c","ч":"ch","ш":"sh","щ":"sch",
+    "ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"
+  };
+  function norm(s){
+    return String(s || "")
+      .toLowerCase()
+      .replace(/[а-яё]/g, function(ch){ return TR[ch] !== undefined ? TR[ch] : ch; })
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
+  }
+  function codeMatches(input, product){
+    var v = norm(input);
+    if(!v) return false;
+    for(var i = 0; i < product.codes.length; i++){
+      if(norm(product.codes[i]) === v) return true;
+    }
+    return false;
+  }
 
   function readAccess(){
     try{
@@ -523,7 +536,7 @@
         +   '<input class="code" id="codeInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="КОД ИЗ СООБЩЕНИЯ">'
         +   '<button class="btn" type="button" id="codeBtn">ОТКРЫТЬ ДОСТУП</button>'
         +   '<p class="err" id="codeErr"></p>'
-        +   '<p class="hint">Код приходит в сообщении на Playerok сразу после покупки. Регистр и дефисы не важны.</p>'
+        +   '<p class="hint">Код приходит в сообщении на Playerok сразу после покупки. Пиши как удобно — русскими буквами или латиницей, с дефисом или без: <b>НЕЙРО-2026</b> и <b>NEIRO2026</b> подойдут одинаково.</p>'
         + '</div>';
     }
 
@@ -539,15 +552,14 @@
       var err = document.getElementById("codeErr");
 
       function tryCode(){
-        var val = norm(input.value);
-        if(!val){
+        if(!norm(input.value)){
           err.textContent = "Введи код — поле пустое.";
           input.classList.remove("shake");
           void input.offsetWidth;
           input.classList.add("shake");
           return;
         }
-        if(val === p.code){
+        if(codeMatches(input.value, p)){
           grantAccess(p.id);
           render();
           openSheet(p.id);
@@ -585,7 +597,6 @@
 
   render();
 
-  // появление блоков
   var fxs = document.querySelectorAll(".fx");
   if("IntersectionObserver" in window){
     var io2 = new IntersectionObserver(function(entries){
@@ -596,7 +607,6 @@
     for(var m = 0; m < fxs.length; m++){ fxs[m].classList.add("in"); }
   }
 
-  // прогресс
   var prog = document.getElementById("prog");
   function onScroll(){
     var h = document.documentElement;
