@@ -2,565 +2,370 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>НЕЙРО ПАК — все модели в одном окне</title>
 <style>
 :root{
-  --bg1:#f8f4ee; --bg2:#eee7dc; --bg3:#e2d9cb;
-  --ink:#2b2926; --ink2:#57534c; --mut:#8d867b;
-  --card:rgba(255,255,255,.72);
-  --brd:rgba(255,255,255,.95);
-  --line:rgba(43,41,38,.09);
-  --gold:#c89b54; --gold2:#b8894a;
-  --dark:#232120;
-  --sh:0 24px 48px -28px rgba(64,54,42,.45);
+  --bg1:#faf6f0; --bg2:#f2ebe1; --bg3:#e9e0d3;
+  --ink:#2a2724; --ink2:#5f584f; --mut:#8f887d;
+  --card:#ffffff; --line:rgba(42,39,36,.10);
+  --gold:#c89b54; --gold2:#b8853c; --goldsoft:#f3e3c8;
+  --dark:#1a1815;
+  --sh:0 20px 40px -24px rgba(70,55,35,.35);
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  margin:0;color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink);
   background:
     radial-gradient(900px 520px at 50% -10%,#fffdf9,transparent 62%),
-    radial-gradient(700px 400px at 0% 105%,rgba(255,255,255,.6),transparent 60%),
     linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 58%,var(--bg3) 100%);
   background-attachment:fixed;
   -webkit-font-smoothing:antialiased;
-  line-height:1.6;
+  line-height:1.62;
 }
-#bar{position:fixed;top:0;left:0;height:2.5px;width:0;z-index:100;
-  background:linear-gradient(90deg,#b3aa9d,var(--ink));transition:width .1s linear}
+#bar{position:fixed;top:0;left:0;height:2.5px;width:0;z-index:99;
+  background:linear-gradient(90deg,var(--gold),var(--ink));border-radius:0 2px 2px 0}
 
-/* ---------- шапка ---------- */
-header{
-  position:sticky;top:0;z-index:50;
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  background:rgba(248,244,238,.82);
-  border-bottom:1px solid var(--line);
-}
-.hw{max-width:940px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
-.av{width:38px;height:38px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;flex:none}
-.av svg{width:22px;height:22px}
-.hn{font-weight:700;font-size:14.5px;letter-spacing:-.1px}
-.hp{font-size:11.5px;color:var(--mut);margin-top:-2px}
-.badge{
-  margin-left:auto;font-size:10.5px;letter-spacing:1.4px;font-weight:700;
-  padding:7px 13px;border-radius:100px;color:var(--gold2);
-  border:1px solid rgba(200,155,84,.4);background:rgba(255,255,255,.5);
-}
+/* header */
+.hdr{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:12px 18px;background:rgba(250,246,240,.86);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.who{display:flex;align-items:center;gap:10px}
+.ava{width:38px;height:38px;border-radius:50%;background:var(--dark);display:grid;place-items:center;flex:none}
+.ava svg{width:20px;height:20px}
+.who b{display:block;font-size:14.5px;line-height:1.2}
+.who span{display:block;font-size:11.5px;color:var(--mut);line-height:1.2}
+.badge{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold2);border:1px solid rgba(200,155,84,.42);background:rgba(255,255,255,.6);
+  padding:7px 13px;border-radius:100px;white-space:nowrap}
 
-/* ---------- общий каркас ---------- */
-main{max-width:940px;margin:0 auto;padding:0 16px 60px}
-section{margin-top:38px}
-h1,h2,h3{letter-spacing:-.7px;line-height:1.15;margin:0}
-p{margin:0 0 12px}
-.mut{color:var(--mut)}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 70px}
 
-/* ---------- hero ---------- */
+/* hero */
 .hero{padding:34px 0 6px;text-align:center}
-h1{
-  font-size:clamp(38px,11vw,66px);font-weight:800;letter-spacing:-2.2px;
-  color:#332f2a;
-  text-shadow:0 1px 0 #fff,0 2px 0 #e7dfd2,0 3px 0 #ded4c5,0 5px 10px rgba(80,66,48,.16);
-}
-.sub{
-  margin-top:12px;font-size:12.5px;letter-spacing:3.2px;
-  color:var(--gold2);font-weight:700;text-transform:uppercase;
-}
-.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-.chip{
-  font-size:11px;letter-spacing:1.5px;font-weight:700;color:var(--ink2);
-  padding:8px 15px;border-radius:100px;
-  background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.95);
-  box-shadow:0 8px 18px -12px rgba(70,58,44,.5);
-}
+h1{font-size:clamp(42px,13vw,68px);line-height:.94;letter-spacing:-.03em;font-weight:900;
+  text-shadow:0 1px 0 #fff,0 8px 22px rgba(120,100,70,.16)}
+.sub{margin-top:14px;font-size:12.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2)}
+.pills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px 0 0}
+.pill{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);
+  background:rgba(255,255,255,.85);border:1px solid var(--line);padding:9px 16px;border-radius:100px;
+  box-shadow:0 6px 14px -10px rgba(70,55,35,.4)}
 
-/* ---------- 3D сцена ---------- */
-.scene{
-  margin:26px auto 0;max-width:440px;height:300px;position:relative;
-  perspective:1100px;touch-action:pan-y;
-}
-.tiltable{transition:transform .7s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
-.scene.on .tiltable{transform:rotateX(6deg) rotateY(-9deg)}
-.mini{
-  width:158px;aspect-ratio:9/19.2;border-radius:26px;background:#1c1b19;
-  padding:7px;position:absolute;left:50%;top:8px;transform:translateX(-50%);
-  box-shadow:0 30px 46px -24px rgba(60,50,40,.6),inset 0 0 0 1px rgba(255,255,255,.14);
-}
-.mini:before{
-  content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);
-  width:46px;height:12px;border-radius:8px;background:#1c1b19;z-index:3;
-}
-.mini .scr{
-  width:100%;height:100%;border-radius:20px;overflow:hidden;
-  background:linear-gradient(160deg,#2a2724,#121110);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
-  color:#fff;text-align:center;padding:12px;
-}
-.scr .star{font-size:22px;color:#f3cf8a}
-.scr .nm{font-size:12.5px;font-weight:800;letter-spacing:-.2px}
-.scr .sm{font-size:7px;letter-spacing:1.8px;color:#a9a29a}
-.scr .btn{margin-top:4px;font-size:8.5px;font-weight:800;letter-spacing:1.4px;color:#2a241c;
-  background:linear-gradient(180deg,#f0d399,#d3a95f);padding:6px 16px;border-radius:100px}
-.pedestal{
-  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
-  width:230px;height:44px;border-radius:50%;
-  background:linear-gradient(180deg,#efe8dd,#d6ccbc);
-  box-shadow:0 22px 34px -20px rgba(70,58,44,.6),inset 0 1px 0 #fff;
-}
-.cube{
-  position:absolute;right:24px;top:34px;width:52px;height:52px;
-  transform-style:preserve-3d;animation:spin 16s linear infinite;
-}
-.cube i{position:absolute;inset:0;background:rgba(214,200,178,.32);
-  border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(4px)}
-.cube i:nth-child(1){transform:translateZ(26px)}
-.cube i:nth-child(2){transform:rotateY(180deg) translateZ(26px)}
-.cube i:nth-child(3){transform:rotateY(90deg) translateZ(26px)}
-.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(26px)}
-.cube i:nth-child(5){transform:rotateX(90deg) translateZ(26px)}
-.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(26px)}
-@keyframes spin{to{transform:rotateX(360deg) rotateY(360deg)}}
+/* scene */
+.scene{position:relative;margin:26px auto 0;padding:22px 0 0;display:flex;justify-content:center;align-items:flex-end;min-height:330px}
+.pedestal{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+  width:min(340px,88%);height:44px;border-radius:50%;
+  background:linear-gradient(180deg,#fffdf8,#e6dccb);
+  box-shadow:0 26px 40px -26px rgba(90,72,48,.55),inset 0 -6px 12px rgba(180,160,130,.28)}
+.cube{position:absolute;right:6%;bottom:70px;width:64px;height:64px;opacity:.9;
+  background:linear-gradient(145deg,#fffdf8,#e2d8c7);
+  border-radius:10px;transform:rotate(-14deg) skewY(-6deg);
+  box-shadow:-8px 12px 26px -12px rgba(90,72,48,.5),inset 0 2px 0 #fff}
 
-.tbtn{
-  display:block;margin:6px auto 0;cursor:pointer;
-  font:700 11px/1 inherit;letter-spacing:1.6px;color:var(--ink2);
-  padding:10px 18px;border-radius:100px;border:1px solid rgba(255,255,255,.95);
-  background:rgba(255,255,255,.6);box-shadow:0 10px 20px -14px rgba(70,58,44,.6);
-}
-.tbtn b{display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:#bdb5a8;margin-right:7px;transition:background .3s}
-.scene.on ~ .tbtn b{background:#5aa87a}
+/* big phone */
+.big{position:relative;z-index:2;width:238px;background:#151312;border-radius:38px;padding:9px;
+  box-shadow:0 30px 50px -28px rgba(50,38,24,.7),inset 0 0 0 1px rgba(255,255,255,.06)}
+.screen{position:relative;background:linear-gradient(180deg,#221f1c,#171512);border-radius:30px;overflow:hidden;
+  height:420px;padding:16px 12px 12px;display:flex;flex-direction:column}
+.notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:62px;height:15px;background:#0c0b0a;border-radius:100px;z-index:3}
+.stat{display:flex;justify-content:space-between;font-size:9px;color:#8d857a;padding:0 4px 12px}
+.apphead{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;font-weight:800;
+  letter-spacing:.16em;color:#f0e6d6;padding-bottom:12px}
+.apphead i{color:var(--gold);font-style:normal}
+.chat{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;overflow:hidden}
+.msg{max-width:84%;font-size:10.5px;line-height:1.45;padding:8px 11px;border-radius:14px;opacity:0}
+.msg.u{align-self:flex-end;background:linear-gradient(160deg,#d9ab63,#c08f43);color:#241c0f;border-bottom-right-radius:5px}
+.msg.a{align-self:flex-start;background:rgba(255,255,255,.09);color:#eae2d5;border:1px solid rgba(255,255,255,.08);border-bottom-left-radius:5px}
+.msg:nth-child(1){animation:m1 13s infinite}
+.msg:nth-child(2){animation:m2 13s infinite}
+.msg:nth-child(3){animation:m3 13s infinite}
+.msg:nth-child(4){animation:m4 13s infinite}
+@keyframes m1{0%{opacity:0;transform:translateY(8px)}3%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+@keyframes m2{0%,17%{opacity:0;transform:translateY(8px)}20%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+@keyframes m3{0%,38%{opacity:0;transform:translateY(8px)}41%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+@keyframes m4{0%,60%{opacity:0;transform:translateY(8px)}63%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+.chat-cycle{display:contents}
+.typing{align-self:flex-start;display:flex;gap:4px;padding:9px 12px;border-radius:14px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.08);
+  animation:typ 13s infinite}
+.typing i{width:4px;height:4px;border-radius:50%;background:#c9bfae;display:block;animation:bl 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.18s}
+.typing i:nth-child(3){animation-delay:.36s}
+@keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes typ{0%{opacity:0}12%{opacity:1}16%{opacity:0}100%{opacity:0}}
+.chat-reset{animation:fade 13s infinite}
+@keyframes fade{0%{opacity:1}93%{opacity:1}97%{opacity:0}100%{opacity:0}}
 
-/* ---------- статистика ---------- */
+/* stats */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
-.stat{
-  background:var(--card);border:1px solid var(--brd);border-radius:18px;
-  padding:18px 10px;text-align:center;backdrop-filter:blur(14px);box-shadow:var(--sh);
-}
-.stat b{display:block;font-size:26px;letter-spacing:-1px;color:var(--ink)}
-.stat span{font-size:9.5px;letter-spacing:1.8px;color:var(--mut);font-weight:700;text-transform:uppercase}
+.stat-card{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:20px;padding:18px 8px;text-align:center;box-shadow:var(--sh)}
+.stat-card b{display:block;font-size:clamp(22px,6vw,28px);line-height:1;font-weight:900;letter-spacing:-.02em}
+.stat-card span{display:block;margin-top:8px;font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
 
-/* ---------- панели ---------- */
-.panel{
-  background:var(--card);border:1px solid var(--brd);border-radius:22px;
-  padding:22px;backdrop-filter:blur(16px);box-shadow:var(--sh);
-}
-.panel h3{font-size:16px;margin-bottom:14px}
-.toc{display:grid;gap:0}
-.toc a{
-  display:flex;align-items:center;gap:12px;padding:13px 0;text-decoration:none;
-  color:var(--ink);font-size:14.5px;border-bottom:1px solid var(--line);
-}
-.toc a:last-child{border-bottom:none}
-.sq{
-  width:28px;height:28px;border-radius:8px;flex:none;display:flex;
-  align-items:center;justify-content:center;
-  font-size:11.5px;font-weight:800;color:#fff;
-  background:linear-gradient(160deg,#6a7079,#2b2926);
-}
+/* panel */
+.panel{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:24px;padding:22px 20px;margin-top:24px;box-shadow:var(--sh)}
+.panel h2{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:16px}
+.inside{display:flex;flex-direction:column;gap:2px}
+.inside .row{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}
+.inside .row:last-child{border-bottom:0}
+.num{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:11.5px;font-weight:800;
+  background:linear-gradient(160deg,#e0b877,#c1903f);color:#2a2008;box-shadow:0 6px 12px -8px rgba(150,110,50,.9)}
+.inside .row p{font-size:14.5px;color:var(--ink)}
 
-/* ---------- шаги ---------- */
-.sec-title{font-size:clamp(26px,7vw,34px);font-weight:800;margin-bottom:6px}
-.sec-sub{color:var(--mut);font-size:14px;margin-bottom:20px}
-.step{
-  background:var(--card);border:1px solid var(--brd);border-radius:22px;
-  padding:20px;margin-bottom:14px;backdrop-filter:blur(16px);box-shadow:var(--sh);
-  display:grid;grid-template-columns:1fr;gap:18px;
-}
-.step-top{display:flex;align-items:center;gap:11px;margin-bottom:10px}
-.num{
-  width:30px;height:30px;border-radius:9px;flex:none;display:flex;
-  align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;
-  background:linear-gradient(160deg,#c9a45c,#a8813e);
-}
-.step h3{font-size:16.5px}
-.step p{font-size:14px;color:var(--ink2);margin-bottom:8px}
+/* section title */
+.sec{margin-top:38px}
+.sec-t{font-size:clamp(24px,7vw,32px);font-weight:900;letter-spacing:-.02em;line-height:1.15}
+.sec-t em{color:var(--gold2);font-style:normal}
+.lead{margin-top:8px;font-size:14.5px;color:var(--ink2)}
+
+/* steps */
+.steps{display:flex;flex-direction:column;gap:16px;margin-top:22px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px 20px;box-shadow:var(--sh)}
+.step-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.step-head .num{width:36px;height:36px;border-radius:11px;font-size:13px}
+.step-head h3{font-size:18px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.step p{font-size:14.5px;color:var(--ink2);margin-bottom:11px}
 .step p:last-child{margin-bottom:0}
-.mini-wrap{display:flex;justify-content:center;padding:6px 0 2px}
-.mini-static{
-  width:186px;aspect-ratio:9/19.2;border-radius:28px;background:#1c1b19;
-  padding:8px;position:relative;
-  box-shadow:0 26px 42px -26px rgba(60,50,40,.65),inset 0 0 0 1px rgba(255,255,255,.14);
-}
-.mini-static:before{
-  content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);
-  width:52px;height:13px;border-radius:9px;background:#1c1b19;z-index:3;
-}
-.mini-static img{
-  width:100%;height:100%;object-fit:cover;object-position:top center;
-  border-radius:21px;display:block;
-}
-.cap{text-align:center;font-size:11px;color:var(--mut);margin-top:9px;letter-spacing:.2px}
+.step p b{color:var(--ink);font-weight:700}
+.link{display:block;margin:12px 0;padding:13px 15px;border-radius:14px;
+  background:linear-gradient(160deg,#fdf7ec,#f5e9d6);border:1px solid rgba(200,155,84,.35);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#7a5620;
+  word-break:break-all;text-decoration:none}
+.link:hover{background:linear-gradient(160deg,#fff9ee,#f1e2c9)}
+.mini{margin:16px auto 0;width:192px;background:#151312;border-radius:30px;padding:7px;
+  box-shadow:0 18px 34px -20px rgba(50,38,24,.65)}
+.mini img{display:block;width:100%;border-radius:24px}
+figcaption{margin-top:10px;text-align:center;font-size:11.5px;color:var(--mut)}
 
-/* ---------- таблица режимов ---------- */
-.rows{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.5)}
-.row{display:grid;grid-template-columns:1fr;gap:2px;padding:13px 15px;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:none}
-.row b{font-size:13.5px;letter-spacing:.2px}
-.row span{font-size:12.8px;color:var(--mut)}
+.modes{list-style:none;display:flex;flex-direction:column;gap:9px;margin:4px 0 12px}
+.modes li{font-size:14px;color:var(--ink2);padding-left:22px;position:relative}
+.modes li:before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;border-radius:3px;
+  background:linear-gradient(160deg,#e0b877,#c1903f)}
+.modes li b{color:var(--ink)}
 
-/* ---------- формула ---------- */
-.formula{display:grid;gap:9px;margin:14px 0}
-.frow{
-  display:flex;gap:11px;align-items:flex-start;font-size:13.5px;
-  background:rgba(255,255,255,.55);border:1px solid var(--line);
-  border-radius:14px;padding:12px 14px;
-}
-.frow i{
-  font-style:normal;flex:none;width:22px;height:22px;border-radius:7px;
-  background:rgba(200,155,84,.16);color:var(--gold2);
-  font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;
-}
-.note{
-  border-radius:16px;padding:14px 16px;font-size:13.5px;
-  background:rgba(255,255,255,.55);border:1px solid var(--line);
-}
-.warn{background:#fbf0ee;border-color:rgba(180,90,70,.16)}
-.tip{background:#eef7f1;border-color:rgba(60,140,95,.16)}
-.lbl{font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;
-  color:var(--mut);margin-bottom:6px}
+.formula{display:grid;gap:8px;margin:14px 0}
+.frow{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink2);
+  background:#fbf7f0;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.frow span{flex:none;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--gold2);min-width:64px;text-transform:uppercase}
+.bad,.good{font-size:13.5px;border-radius:12px;padding:12px 14px;margin-top:9px}
+.bad{background:#fbf0ee;border:1px solid #f0d8d2;color:#8a4a3c}
+.good{background:#eef7f1;border:1px solid #d4ead9;color:#33684a}
+.bad b,.good b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
 
-/* ---------- чек-лист ---------- */
-.check{display:grid;gap:2px}
-.check label{
-  display:flex;align-items:flex-start;gap:11px;padding:11px 0;
-  font-size:14px;border-bottom:1px solid var(--line);cursor:pointer;
-}
-.check label:last-child{border-bottom:none}
-.check input{
-  appearance:none;-webkit-appearance:none;width:19px;height:19px;flex:none;margin:2px 0 0;
-  border-radius:6px;border:1.5px solid rgba(43,41,38,.28);background:#fff;
-  cursor:pointer;position:relative;transition:.2s;
-}
-.check input:checked{background:linear-gradient(160deg,#c9a45c,#a8813e);border-color:transparent}
-.check input:checked:after{
-  content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
-  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg);
-}
-.check input:checked + span{color:var(--mut);text-decoration:line-through}
+/* note */
+.note{margin-top:20px;font-size:13.5px;color:#6b4a1e;background:linear-gradient(160deg,#fdf6ea,#f7ecd9);
+  border:1px solid rgba(200,155,84,.32);border-left:3px solid var(--gold);border-radius:14px;padding:15px 16px}
 
-/* ---------- FAQ ---------- */
-details{
-  border-radius:16px;background:rgba(255,255,255,.55);
-  border:1px solid var(--line);margin-bottom:9px;overflow:hidden;
-}
-summary{
-  cursor:pointer;list-style:none;padding:15px 17px;font-size:14px;font-weight:600;
-  display:flex;justify-content:space-between;gap:12px;align-items:center;
-}
-summary::-webkit-details-marker{display:none}
-summary:after{content:"+";font-weight:400;font-size:19px;color:var(--gold2);transition:transform .25s}
-details[open] summary:after{transform:rotate(45deg)}
-details .body{padding:0 17px 15px;font-size:13.5px;color:var(--ink2)}
+/* faq */
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 17px;margin-top:10px;box-shadow:0 10px 24px -20px rgba(70,55,35,.5)}
+details summary{font-size:14.5px;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details summary::-webkit-details-marker{display:none}
+details summary:after{content:"+";color:var(--gold2);font-weight:800;font-size:17px;line-height:1}
+details[open] summary:after{content:"–"}
+details p{margin-top:10px;font-size:14px;color:var(--ink2)}
 
-/* ---------- магазин ---------- */
-.shop{
-  margin-top:34px;border-radius:24px;padding:30px 22px;text-align:center;color:#f6f2ea;
-  background:linear-gradient(165deg,#33373e,#12151a 70%);
-  border:1px solid rgba(200,170,110,.34);
-  box-shadow:0 34px 60px -34px rgba(20,18,16,.85);
-  position:relative;overflow:hidden;
-}
-.shop:before{
-  content:"";position:absolute;inset:-40% -20% auto;height:200px;
-  background:radial-gradient(closest-side,rgba(200,170,110,.16),transparent);
-}
-.shop .crown{font-size:17px;color:#e6c988;letter-spacing:6px}
-.shop h3{font-size:22px;margin:10px 0 6px;color:#fff;letter-spacing:-.5px}
-.shop p{font-size:13.5px;color:#b8b2a6;max-width:360px;margin:0 auto 18px}
-.shop .tag{
-  display:inline-block;font-size:9.5px;letter-spacing:2px;font-weight:800;
-  padding:6px 12px;border-radius:100px;color:#e6c988;
-  border:1px solid rgba(230,201,136,.35);margin-bottom:16px;
-}
-.shop a{
-  display:inline-block;text-decoration:none;font-weight:800;font-size:13.5px;
-  color:#2a241c;padding:14px 30px;border-radius:100px;
-  background:linear-gradient(180deg,#e6c988,#c9a45c);
-  box-shadow:0 16px 30px -14px rgba(201,164,92,.7);
-}
-
-footer{text-align:center;padding:34px 16px 20px;font-size:11.5px;color:var(--mut)}
+/* shop */
+.shop{margin-top:34px;border-radius:24px;padding:26px 22px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#2f333a,#13161a);color:#efe7d8;
+  box-shadow:0 26px 50px -28px rgba(20,20,20,.8);border:1px solid rgba(200,170,110,.3)}
+.shop:before{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at 80% 0%,rgba(200,155,84,.22),transparent 70%);pointer-events:none}
+.shop .crown{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#d9b978;margin-bottom:10px}
+.shop h3{font-size:21px;font-weight:800;letter-spacing:-.01em;position:relative}
+.shop p{font-size:13.5px;color:#b3ab9d;margin-top:8px;position:relative}
+.shop ul{list-style:none;margin:14px 0 18px;position:relative}
+.shop li{font-size:13.5px;color:#cbc3b4;padding-left:18px;position:relative;margin-bottom:6px}
+.shop li:before{content:"▸";position:absolute;left:0;color:#c9a45c}
+.shop a{display:inline-block;position:relative;text-decoration:none;font-weight:800;font-size:14px;
+  color:#241d0d;background:linear-gradient(160deg,#e6c988,#c9a45c);padding:13px 22px;border-radius:100px;
+  box-shadow:0 14px 26px -14px rgba(200,155,84,.7)}
+.foot{margin-top:26px;text-align:center;font-size:12px;color:var(--mut)}
+.foot svg{vertical-align:-3px;margin-right:6px}
 
 @media(min-width:640px){
-  .step{grid-template-columns:1fr 230px;align-items:center;gap:26px}
-  .row{grid-template-columns:190px 1fr;gap:16px;align-items:baseline}
-  .stats{gap:14px}
-  .stat b{font-size:32px}
-  .scene{height:330px}
-  .mini{width:176px}
+  .step{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
+  .step .txt{min-width:0}
+  .mini{margin-top:0}
+  .step.wide{display:block}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
-  html{scroll-behavior:auto}
+  .msg,.typing{opacity:1!important}
 }
 </style>
 </head>
 <body>
 <div id="bar"></div>
 
-<header>
-  <div class="hw">
-    <div class="av">
-      <svg viewBox="0 0 24 24" fill="none">
-        <g fill="#fff">
-          <ellipse cx="12" cy="6.6" rx="2.5" ry="3.6"/>
-          <ellipse cx="12" cy="17.4" rx="2.5" ry="3.6"/>
-          <ellipse cx="6.6" cy="12" rx="3.6" ry="2.5"/>
-          <ellipse cx="17.4" cy="12" rx="3.6" ry="2.5"/>
-          <circle cx="12" cy="12" r="1.5"/>
-        </g>
-      </svg>
+<header class="hdr">
+  <div class="who">
+    <div class="ava">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.4" fill="#fff" opacity=".95"/><circle cx="12" cy="4.6" r="2.5" fill="#fff" opacity=".85"/><circle cx="12" cy="19.4" r="2.5" fill="#fff" opacity=".85"/><circle cx="4.6" cy="12" r="2.5" fill="#fff" opacity=".85"/><circle cx="19.4" cy="12" r="2.5" fill="#fff" opacity=".85"/></svg>
     </div>
-    <div>
-      <div class="hn">Nagibatorz</div>
-      <div class="hp">на Playerok</div>
-    </div>
-    <div class="badge">НЕЙРО ПАК</div>
+    <div><b>Nagibatorz</b><span>на Playerok</span></div>
   </div>
+  <div class="badge">НЕЙРО ПАК</div>
 </header>
 
-<main>
+<main class="wrap">
 
-  <div class="hero">
+  <section class="hero">
     <h1>НЕЙРО ПАК</h1>
-    <div class="sub">все модели в одном окне</div>
-    <div class="chips">
-      <div class="chip">АВТО-ВЫДАЧА</div>
-      <div class="chip">ОНЛАЙН 24/7</div>
-      <div class="chip">БЕЗ ПОДПИСКИ</div>
+    <div class="sub">Все модели в одном окне</div>
+    <div class="pills">
+      <div class="pill">Авто-выдача</div>
+      <div class="pill">Онлайн 24/7</div>
+      <div class="pill">Без подписки</div>
     </div>
-  </div>
 
-  <div class="scene" id="scene">
-    <div class="tiltable">
-      <div class="mini">
-        <div class="scr">
-          <div class="star">✦</div>
-          <div class="nm">НЕЙРО ПАК</div>
-          <div class="sm">ВСЕ МОДЕЛИ</div>
-          <div class="btn">НАЧАТЬ</div>
-        </div>
-      </div>
-      <div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="scene">
       <div class="pedestal"></div>
-    </div>
-  </div>
-  <button class="tbtn" id="tbtn"><b></b>3D: вкл</button>
-
-  <div class="stats">
-    <div class="stat"><b>50+</b><span>моделей</span></div>
-    <div class="stat"><b>0 ₽</b><span>подписка</span></div>
-    <div class="stat"><b>2</b><span>устройства</span></div>
-  </div>
-
-  <section>
-    <div class="panel">
-      <h3>Что внутри гайда</h3>
-      <div class="toc">
-        <a href="#s1"><span class="sq">01</span> Открываешь сайт — и всё</a>
-        <a href="#s2"><span class="sq">02</span> Выбираешь режим работы</a>
-        <a href="#s3"><span class="sq">03</span> Берёшь модель под задачу</a>
-        <a href="#s4"><span class="sq">04</span> Пишешь запрос по формуле</a>
-        <a href="#s5"><span class="sq">05</span> Сохраняешь рабочие связки</a>
-      </div>
-    </div>
-  </section>
-
-  <section id="s1">
-    <div class="sec-title">Открываешь сайт — и всё</div>
-    <div class="sec-sub">Ни установки, ни регистрации. Браузер и интернет.</div>
-
-    <div class="step">
-      <div>
-        <div class="step-top"><div class="num">01</div><h3>Заходишь на сайт</h3></div>
-        <p>Ссылку ты получил вместе с покупкой. Открывается в любом браузере — с телефона, планшета или компьютера. Интерфейс одинаковый, ничего дополнительно ставить не нужно.</p>
-        <p>Первое, что видишь: сверху переключатель режимов, в центре большое поле «What would you like to do?» — это и есть место, куда ты пишешь задачу. Справа от поля кнопка выбора модели.</p>
-        <p class="mut">Ничего не нажимай наугад — сначала прочитай шаг 02. Режим важнее модели.</p>
-      </div>
-      <div>
-        <div class="mini-wrap">
-          <div class="mini-static">
-            <img src="img/Screenshot_20261031-004721.jpg" alt="Стартовый экран: поле ввода задачи">
+      <div class="cube"></div>
+      <div class="big">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="stat"><span>23:41</span><span>5G ▮▮▮ 96%</span></div>
+          <div class="apphead"><i>✦</i> НЕЙРО ПАК</div>
+          <div class="chat chat-reset">
+            <div class="msg u">Сделай описание товара для Playerok</div>
+            <div class="msg a">Готово. Три варианта — от делового до дерзкого.</div>
+            <div class="msg u">Теперь картинку к нему</div>
+            <div class="msg a">Держи. Тёплый минимализм, без лишнего.</div>
+            <div class="typing"><i></i><i></i><i></i></div>
           </div>
         </div>
-        <div class="cap">Стартовый экран</div>
       </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card"><b>50+</b><span>Моделей</span></div>
+      <div class="stat-card"><b>0 ₽</b><span>Подписка</span></div>
+      <div class="stat-card"><b>∞</b><span>С любого устройства</span></div>
     </div>
   </section>
 
-  <section id="s2">
-    <div class="sec-title">Выбираешь режим работы</div>
-    <div class="sec-sub">Четыре режима — под четыре разных ситуации.</div>
+  <section class="panel">
+    <h2>Что внутри гайда</h2>
+    <div class="inside">
+      <div class="row"><div class="num">01</div><p>Куда зайти и что там вообще на экране</p></div>
+      <div class="row"><div class="num">02</div><p>Какой режим выбрать: Direct, Battle, Agent или Side by Side</p></div>
+      <div class="row"><div class="num">03</div><p>Как выбрать модель под задачу, а не по названию</p></div>
+      <div class="row"><div class="num">04</div><p>Формула запроса, после которой нейросеть выдаёт нормальный результат</p></div>
+    </div>
+  </section>
 
-    <div class="step">
-      <div>
-        <div class="step-top"><div class="num">02</div><h3>Переключаешь режим</h3></div>
-        <p>Нажми на значок режима рядом с полем ввода. Откроется список — выбери один из четырёх.</p>
-        <p>Новичку почти всегда нужен <b>Direct</b>: обычный чат с одной моделью. Остальные режимы — когда хочется сравнить или решить сложную задачу.</p>
-        <p class="mut">Переключился — вернулся назад одним нажатием. Ничего не сломается.</p>
-      </div>
-      <div>
-        <div class="mini-wrap">
-          <div class="mini-static">
-            <img src="img/Screenshot_20261031-004728.jpg" alt="Меню режимов: Battle, Agent, Side by Side, Direct">
-          </div>
+  <section class="sec">
+    <h2 class="sec-t">Открываешь сайт — <em>и всё</em></h2>
+    <p class="lead">Без установки. Браузер, интернет — дальше по шагам.</p>
+
+    <div class="steps">
+
+      <article class="step">
+        <div class="txt">
+          <div class="step-head"><div class="num">01</div><h3>Переходишь по ссылке</h3></div>
+          <p><b>Переходишь по ссылке</b> — и попадаешь сразу в чат, без регистрации и без установки приложения:</p>
+          <a class="link" href="https://arena.ai/text/direct?model_a=max" target="_blank" rel="noopener">https://arena.ai/text/direct?model_a=max</a>
+          <p>Открывается с любого устройства: телефон, планшет, ноутбук, компьютер. Интерфейс один и тот же, аккаунт нигде не нужен.</p>
+          <p><b>Что видишь на экране:</b> сверху переключатель режимов, в центре большое поле «What would you like to do?» — это и есть место, куда пишешь задачу. Справа от поля кнопка модели.</p>
         </div>
-        <div class="cap">Меню режимов</div>
-      </div>
-    </div>
+        <figure>
+          <div class="mini"><img src="img/Screenshot_20261031-004721.jpg" alt="Стартовый экран: поле ввода задачи"></div>
+          <figcaption>Стартовый экран: поле ввода и переключатель режимов сверху</figcaption>
+        </figure>
+      </article>
 
-    <div class="panel" style="margin-top:14px">
-      <div class="rows">
-        <div class="row"><b>Direct</b><span>Один на один с выбранной моделью. Берёшь, когда знаешь, чего хочешь.</span></div>
-        <div class="row"><b>Side by Side</b><span>Две модели рядом на один запрос. Удобно, когда не понимаешь, кто отвечает лучше.</span></div>
-        <div class="row"><b>Battle Mode</b><span>Две модели анонимно. Ты выбираешь лучший ответ, не зная названий — так честнее.</span></div>
-        <div class="row"><b>Agent Mode</b><span>Для больших задач: не один ответ, а цепочка шагов с работой над результатом.</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="s3">
-    <div class="sec-title">Берёшь модель под задачу</div>
-    <div class="sec-sub">Не «какая лучше», а «какая под это дело».</div>
-
-    <div class="step">
-      <div>
-        <div class="step-top"><div class="num">03</div><h3>Открываешь список моделей</h3></div>
-        <p>Кнопка выбора модели — справа от поля ввода. Нажмёшь — откроется панель со списком, поиском и фильтрами по типу: текст, код, картинки, поиск в интернете.</p>
-        <p>Правило простое: сначала ставишь фильтр под свою задачу, потом смотришь на две-три модели из списка и берёшь одну.</p>
-        <p>Пункт <b>Max</b> — это не отдельная модель, а «автомат»: он сам подбирает подходящую под твой запрос. Хороший выбор, когда лень разбираться.</p>
-      </div>
-      <div>
-        <div class="mini-wrap">
-          <div class="mini-static">
-            <img src="img/Screenshot_20261031-004735.jpg" alt="Панель выбора модели с поиском и фильтрами">
-          </div>
+      <article class="step">
+        <div class="txt">
+          <div class="step-head"><div class="num">02</div><h3>Выбираешь режим</h3></div>
+          <p>Режим важнее модели — от него зависит, как ты получишь ответ. Нажми переключатель сверху и выбери из четырёх:</p>
+          <ul class="modes">
+            <li><b>Direct</b> — обычный чат с одной моделью. Нужен в 90% случаев: пишешь и получаешь ответ.</li>
+            <li><b>Side by Side</b> — две выбранные модели отвечают рядом на один запрос. Удобно сравнить, кто пишет лучше.</li>
+            <li><b>Battle Mode</b> — две анонимные модели отвечают вслепую, ты выбираешь лучший ответ и только потом видишь имена. Так честнее всего понять, кто реально сильнее.</li>
+            <li><b>Agent Mode</b> — для сложных задач: сам разбивает работу на шаги и доводит до результата.</li>
+          </ul>
+          <p>Для первого раза оставь <b>Direct</b>.</p>
         </div>
-        <div class="cap">Выбор модели</div>
-      </div>
+        <figure>
+          <div class="mini"><img src="img/Screenshot_20261031-004728.jpg" alt="Меню выбора режима"></div>
+          <figcaption>Меню режимов: Battle, Agent, Side by Side, Direct</figcaption>
+        </figure>
+      </article>
+
+      <article class="step">
+        <div class="txt">
+          <div class="step-head"><div class="num">03</div><h3>Выбираешь модель</h3></div>
+          <p>Нажми кнопку модели справа от поля ввода — откроется список со всеми доступными нейросетями. Сверху поиск и фильтры по типу задачи.</p>
+          <p><b>Как выбирать:</b> сначала поставь фильтр под свою задачу, потом возьми две модели из списка и сравни на одном и том же запросе. Оставляешь ту, что ответила лучше — дальше работаешь только с ней.</p>
+          <p>В списке есть <b>Max</b> — это не отдельная модель, а автомат: он сам подбирает подходящую под твой запрос. Хороший вариант, когда не хочется разбираться — но на конкретной задаче лучше выбрать руками.</p>
+        </div>
+        <figure>
+          <div class="mini"><img src="img/Screenshot_20261031-004735.jpg" alt="Панель выбора модели"></div>
+          <figcaption>Панель моделей: поиск, фильтры и список</figcaption>
+        </figure>
+      </article>
+
+      <article class="step wide">
+        <div class="step-head"><div class="num">04</div><h3>Пишешь запрос по формуле</h3></div>
+        <p>Одна и та же модель на запросе «напиши текст» и на нормальном запросе выдаёт два совершенно разных результата. Формула простая — четыре части:</p>
+        <div class="formula">
+          <div class="frow"><span>Роль</span>Кто ты в этой задаче: «ты редактор», «ты маркетолог», «ты преподаватель»</div>
+          <div class="frow"><span>Задача</span>Что конкретно нужно сделать — одно действие, а не три сразу</div>
+          <div class="frow"><span>Контекст</span>Для кого, где будет использоваться, что важно учесть</div>
+          <div class="frow"><span>Формат</span>Как отдать: список, таблица, 3 варианта, до 500 знаков</div>
+        </div>
+        <div class="bad"><b>Так не надо</b>«Напиши пост про мой товар»</div>
+        <div class="good"><b>Так надо</b>«Ты копирайтер. Напиши пост для Playerok про гайд по настройкам телефона. Аудитория — школьники 14–17, играют в шутеры. Пиши простым языком, без канцелярита, до 400 знаков, дай 3 варианта с разным настроением.»</div>
+        <p style="margin-top:14px">Как только получил хороший результат — <b>сохрани сам запрос</b>, а не только ответ. Через день он сэкономит тебе полчаса на формулировках.</p>
+      </article>
+
     </div>
 
-    <div class="note tip" style="margin-top:14px">
-      <div class="lbl">Простой старт</div>
-      Не хочешь разбираться в названиях — оставь Max и работай. Когда поймёшь, чего не хватает, вернёшься к списку и возьмёшь конкретную модель.
-    </div>
+    <div class="note">Если на каком-то шаге непонятно — напиши в чат. Разбираемся вручную, без «перечитайте инструкцию».</div>
   </section>
 
-  <section id="s4">
-    <div class="sec-title">Пишешь запрос по формуле</div>
-    <div class="sec-sub">Одна и та же модель на разных запросах даёт разный уровень.</div>
-
-    <div class="panel">
-      <div class="formula">
-        <div class="frow"><i>1</i><div><b>Роль.</b> Кто отвечает: «ты редактор», «ты преподаватель по математике».</div></div>
-        <div class="frow"><i>2</i><div><b>Задача.</b> Что нужно сделать. Глаголом: «перепиши», «найди ошибку», «составь план».</div></div>
-        <div class="frow"><i>3</i><div><b>Контекст.</b> Для кого, зачем, что уже есть на руках.</div></div>
-        <div class="frow"><i>4</i><div><b>Формат.</b> Как должен выглядеть ответ: список, таблица, 5 пунктов, до 200 слов.</div></div>
-      </div>
-
-      <div class="note warn" style="margin-bottom:10px">
-        <div class="lbl">Так не надо</div>
-        «напиши текст»
-      </div>
-      <div class="note tip">
-        <div class="lbl">Так надо</div>
-        «Ты редактор. Перепиши мой текст для поста в соцсетях: короче, живее, без канцелярита, до 600 знаков. Вот текст: …»
-      </div>
-    </div>
+  <section class="sec">
+    <h2 class="sec-t">Частые вопросы</h2>
+    <details><summary>Нужна регистрация или оплата?</summary><p>Аккаунт для базовой работы не нужен: открыл ссылку, написал запрос. Платить за сам сайт тоже не нужно.</p></details>
+    <details><summary>Работает с телефона?</summary><p>Да, и с телефона, и с планшета, и с компьютера. Интерфейс один и тот же, отдельное приложение ставить не надо — достаточно браузера.</p></details>
+    <details><summary>Чем Max отличается от обычной модели?</summary><p>Max не модель, а автоматический выбор: он сам решает, какая нейросеть лучше подойдёт под конкретный запрос. Обычная модель — когда ты сам её выбрал.</p></details>
+    <details><summary>Какая модель лучше?</summary><p>Универсально лучшей нет. Одна сильнее в текстах, другая в коде, третья в разборе картинок. Поэтому в режиме Side by Side дай один запрос двум моделям и сравни ответы.</p></details>
+    <details><summary>А если ответ плохой?</summary><p>Значит либо запрос короткий, либо модель не под задачу. Перепиши запрос по формуле из шага 04 или смени модель — разница будет заметна сразу.</p></details>
+    <details><summary>Сколько этим можно пользоваться?</summary><p>Доступ остаётся у тебя: без ключей, без срока действия и без ежемесячных списаний.</p></details>
   </section>
 
-  <section id="s5">
-    <div class="sec-title">Сохраняешь рабочие связки</div>
-    <div class="sec-sub">Один раз настроил — дальше экономишь по полчаса.</div>
-
-    <div class="panel">
-      <div class="check">
-        <label><input type="checkbox"><span>Сохраняй сам запрос, а не только ответ — он пригодится ещё десять раз</span></label>
-        <label><input type="checkbox"><span>Завёл рабочий запрос — запиши, какая модель его выдала лучше всех</span></label>
-        <label><input type="checkbox"><span>Сравнил две модели — оставь одну и не распыляйся</span></label>
-        <label><input type="checkbox"><span>Долгая задача — переходи в Agent Mode, а не мучай Direct</span></label>
-        <label><input type="checkbox"><span>Непонятный ответ — не переписывай запрос с нуля, а попроси уточнить</span></label>
-      </div>
-    </div>
-
-    <div class="note" style="margin-top:14px">
-      Если на каком-то шаге непонятно — напиши в чат. Разбираемся вручную, без «перечитайте инструкцию».
-    </div>
+  <section class="shop">
+    <div class="crown">Премиум</div>
+    <h3>Магазин Nagibatorz</h3>
+    <p>Гайды и настройки, которые реально работают.</p>
+    <ul>
+      <li>Раскладки, фарм и промокоды под конкретные игры</li>
+      <li>Настройки телефона и компьютера без рута</li>
+      <li>Новые гайды и разборы без воды</li>
+      <li>Не получилось — пиши в чат, разберём вместе</li>
+    </ul>
+    <a href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Перейти в магазин →</a>
   </section>
 
-  <section>
-    <div class="sec-title" style="margin-bottom:16px">Частые вопросы</div>
-
-    <details>
-      <summary>Нужно что-то устанавливать?</summary>
-      <div class="body">Нет. Всё работает в браузере — с телефона, планшета и компьютера. Отдельное приложение не нужно.</div>
-    </details>
-    <details>
-      <summary>Почему модели столько, а пользуюсь я одной?</summary>
-      <div class="body">Так и должно быть. У каждой сильная сторона: одна лучше пишет, другая точнее в коде, третья разбирает длинные документы. Со временем у тебя останется три-четыре любимых.</div>
-    </details>
-    <details>
-      <summary>Что выбрать, если вообще не разбираюсь?</summary>
-      <div class="body">Режим Direct и модель Max. Работаешь как с обычным чатом, а «автомат» сам подбирает модель под запрос.</div>
-    </details>
-    <details>
-      <summary>Ссылка открывается долго или не открывается</summary>
-      <div class="body">Смени сеть или браузер, попробуй без встроенного блокировщика. Не помогло — напиши в чат, помогу с конкретным устройством.</div>
-    </details>
-    <details>
-      <summary>Сколько это работает по времени?</summary>
-      <div class="body">Доступ остаётся у тебя, срок не ограничен. Подписку оплачивать не нужно.</div>
-    </details>
-    <details>
-      <summary>А если на телефоне неудобно?</summary>
-      <div class="body">На компьютере удобнее для длинных задач: больше экран, проще копировать. На телефоне быстрее для коротких вопросов на ходу.</div>
-    </details>
-  </section>
-
-  <div class="shop">
-    <div class="crown">✦ ✦ ✦</div>
-    <h3>Nagibatorz</h3>
-    <div class="tag">ПРЕМИУМ ВЫБОР</div>
-    <p>Ещё товары, гайды и рабочие связки — всё в одном профиле на Playerok.</p>
-    <a href="https://playerok.com/profile/Nagibatorz/products">Открыть магазин</a>
+  <div class="foot">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="#8f887d"/><circle cx="12" cy="5" r="2.2" fill="#8f887d" opacity=".7"/><circle cx="12" cy="19" r="2.2" fill="#8f887d" opacity=".7"/><circle cx="5" cy="12" r="2.2" fill="#8f887d" opacity=".7"/><circle cx="19" cy="12" r="2.2" fill="#8f887d" opacity=".7"/></svg>
+    Nagibatorz · на Playerok
   </div>
 
 </main>
 
-<footer>НЕЙРО ПАК · гайд для покупателя · Nagibatorz на Playerok</footer>
-
 <script>
 (function(){
-  var bar=document.getElementById('bar');
+  var bar = document.getElementById('bar');
   function onScroll(){
-    var h=document.documentElement;
-    var max=h.scrollHeight-h.clientHeight;
-    var p=max>0?(h.scrollTop||document.body.scrollTop)/max:0;
-    bar.style.width=(p*100)+'%';
+    var h = document.documentElement;
+    var sc = h.scrollTop || document.body.scrollTop;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (sc / max) * 100 : 0) + '%';
   }
-  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
-
-  var scene=document.getElementById('scene');
-  var btn=document.getElementById('tbtn');
-  btn.addEventListener('click',function(){
-    scene.classList.toggle('on');
-    btn.innerHTML='<b></b>'+(scene.classList.contains('on')?'3D: вкл':'3D: выкл');
-  });
-
-  var saved=[];
-  try{ saved=JSON.parse(localStorage.getItem('np_check')||'[]'); }catch(e){ saved=[]; }
-  var boxes=document.querySelectorAll('.check input');
-  boxes.forEach(function(b,i){
-    b.checked=!!saved[i];
-    b.addEventListener('change',function(){
-      var arr=[];
-      boxes.forEach(function(x){arr.push(x.checked)});
-      try{ localStorage.setItem('np_check',JSON.stringify(arr)); }catch(e){}
-    });
-  });
 })();
 </script>
 </body>
