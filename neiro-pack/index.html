@@ -2,511 +2,566 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<meta name="referrer" content="no-referrer">
-<title>Нейро-пак: все ИИ в одном окне · Nagibatorz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>НЕЙРО ПАК — все модели в одном окне</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --bg:#0a0a0c;
-    --card:rgba(255,255,255,.045);
-    --card2:rgba(255,255,255,.07);
-    --line:rgba(255,255,255,.1);
-    --orange:#ff7a18;
-    --orange2:#ffb347;
-    --text:#edeff2;
-    --muted:#9aa0aa;
-  }
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:"";
-    position:fixed;inset:0;
-    background:
-      radial-gradient(900px 500px at 12% -8%, rgba(255,122,24,.20), transparent 60%),
-      radial-gradient(700px 420px at 96% 6%, rgba(255,69,0,.12), transparent 60%),
-      radial-gradient(800px 500px at 50% 105%, rgba(255,140,0,.08), transparent 60%);
-    pointer-events:none;z-index:0;
-  }
-  .wrap{position:relative;z-index:1;max-width:840px;margin:0 auto;padding:0 18px 90px}
+:root{
+  --bg1:#f8f4ee; --bg2:#eee7dc; --bg3:#e2d9cb;
+  --ink:#2b2926; --ink2:#57534c; --mut:#8d867b;
+  --card:rgba(255,255,255,.72);
+  --brd:rgba(255,255,255,.95);
+  --line:rgba(43,41,38,.09);
+  --gold:#c89b54; --gold2:#b8894a;
+  --dark:#232120;
+  --sh:0 24px 48px -28px rgba(64,54,42,.45);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:
+    radial-gradient(900px 520px at 50% -10%,#fffdf9,transparent 62%),
+    radial-gradient(700px 400px at 0% 105%,rgba(255,255,255,.6),transparent 60%),
+    linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 58%,var(--bg3) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+#bar{position:fixed;top:0;left:0;height:2.5px;width:0;z-index:100;
+  background:linear-gradient(90deg,#b3aa9d,var(--ink));transition:width .1s linear}
 
-  .hero{
-    padding:48px 0 34px;
-    text-align:center;
-    border-bottom:1px solid var(--line);
-    margin-bottom:34px;
-  }
-  .hero .tag{
-    display:inline-block;
-    font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
-    color:var(--orange2);
-    border:1px solid rgba(255,122,24,.35);
-    background:rgba(255,122,24,.08);
-    border-radius:100px;
-    padding:6px 16px;margin-bottom:20px;
-  }
-  .hero h1{
-    font-size:clamp(28px,7.5vw,48px);
-    line-height:1.12;
-    font-weight:900;
-    letter-spacing:-.5px;
-    background:linear-gradient(180deg,#fff 0%,#e6e9ee 45%,var(--orange) 130%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 6px 26px rgba(255,122,24,.35));
-  }
-  .hero p{color:var(--muted);margin-top:14px;font-size:15.5px}
+/* ---------- шапка ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  background:rgba(248,244,238,.82);
+  border-bottom:1px solid var(--line);
+}
+.hw{max-width:940px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.av{width:38px;height:38px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;flex:none}
+.av svg{width:22px;height:22px}
+.hn{font-weight:700;font-size:14.5px;letter-spacing:-.1px}
+.hp{font-size:11.5px;color:var(--mut);margin-top:-2px}
+.badge{
+  margin-left:auto;font-size:10.5px;letter-spacing:1.4px;font-weight:700;
+  padding:7px 13px;border-radius:100px;color:var(--gold2);
+  border:1px solid rgba(200,155,84,.4);background:rgba(255,255,255,.5);
+}
 
-  .note{
-    background:linear-gradient(135deg,rgba(255,122,24,.13),rgba(255,122,24,.03));
-    border:1px solid rgba(255,122,24,.28);
-    border-radius:16px;
-    padding:16px 18px;
-    font-size:14.5px;
-    margin-bottom:26px;
-    color:#f3e3d6;
-  }
-  .note b{color:var(--orange2)}
+/* ---------- общий каркас ---------- */
+main{max-width:940px;margin:0 auto;padding:0 16px 60px}
+section{margin-top:38px}
+h1,h2,h3{letter-spacing:-.7px;line-height:1.15;margin:0}
+p{margin:0 0 12px}
+.mut{color:var(--mut)}
 
-  .searchbox{margin-bottom:26px}
-  .searchbox input{
-    width:100%;
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:14px 18px;
-    color:var(--text);
-    font-size:15.5px;
-    outline:none;
-    transition:.2s;
-    backdrop-filter:blur(10px);
-  }
-  .searchbox input:focus{border-color:rgba(255,122,24,.55);background:var(--card2)}
-  .searchbox input::placeholder{color:#6d737d}
+/* ---------- hero ---------- */
+.hero{padding:34px 0 6px;text-align:center}
+h1{
+  font-size:clamp(38px,11vw,66px);font-weight:800;letter-spacing:-2.2px;
+  color:#332f2a;
+  text-shadow:0 1px 0 #fff,0 2px 0 #e7dfd2,0 3px 0 #ded4c5,0 5px 10px rgba(80,66,48,.16);
+}
+.sub{
+  margin-top:12px;font-size:12.5px;letter-spacing:3.2px;
+  color:var(--gold2);font-weight:700;text-transform:uppercase;
+}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.chip{
+  font-size:11px;letter-spacing:1.5px;font-weight:700;color:var(--ink2);
+  padding:8px 15px;border-radius:100px;
+  background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 8px 18px -12px rgba(70,58,44,.5);
+}
 
-  .toc{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:8px;
-    margin-bottom:38px;
-    backdrop-filter:blur(12px);
-  }
-  .toc-title{
-    font-size:12px;letter-spacing:1.8px;text-transform:uppercase;
-    color:var(--muted);padding:12px 16px 8px;font-weight:700;
-  }
-  .toc a{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 16px;
-    border-radius:12px;
-    color:var(--text);
-    text-decoration:none;
-    font-size:15px;
-    font-weight:600;
-    transition:.15s;
-  }
-  .toc a:hover{background:rgba(255,122,24,.1);color:#fff}
-  .toc a .ico{
-    width:26px;height:26px;flex:0 0 26px;
-    display:grid;place-items:center;
-    border-radius:8px;
-    background:rgba(255,122,24,.15);
-    font-size:13px;
-  }
+/* ---------- 3D сцена ---------- */
+.scene{
+  margin:26px auto 0;max-width:440px;height:300px;position:relative;
+  perspective:1100px;touch-action:pan-y;
+}
+.tiltable{transition:transform .7s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.scene.on .tiltable{transform:rotateX(6deg) rotateY(-9deg)}
+.mini{
+  width:158px;aspect-ratio:9/19.2;border-radius:26px;background:#1c1b19;
+  padding:7px;position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  box-shadow:0 30px 46px -24px rgba(60,50,40,.6),inset 0 0 0 1px rgba(255,255,255,.14);
+}
+.mini:before{
+  content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:46px;height:12px;border-radius:8px;background:#1c1b19;z-index:3;
+}
+.mini .scr{
+  width:100%;height:100%;border-radius:20px;overflow:hidden;
+  background:linear-gradient(160deg,#2a2724,#121110);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  color:#fff;text-align:center;padding:12px;
+}
+.scr .star{font-size:22px;color:#f3cf8a}
+.scr .nm{font-size:12.5px;font-weight:800;letter-spacing:-.2px}
+.scr .sm{font-size:7px;letter-spacing:1.8px;color:#a9a29a}
+.scr .btn{margin-top:4px;font-size:8.5px;font-weight:800;letter-spacing:1.4px;color:#2a241c;
+  background:linear-gradient(180deg,#f0d399,#d3a95f);padding:6px 16px;border-radius:100px}
+.pedestal{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+  width:230px;height:44px;border-radius:50%;
+  background:linear-gradient(180deg,#efe8dd,#d6ccbc);
+  box-shadow:0 22px 34px -20px rgba(70,58,44,.6),inset 0 1px 0 #fff;
+}
+.cube{
+  position:absolute;right:24px;top:34px;width:52px;height:52px;
+  transform-style:preserve-3d;animation:spin 16s linear infinite;
+}
+.cube i{position:absolute;inset:0;background:rgba(214,200,178,.32);
+  border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(4px)}
+.cube i:nth-child(1){transform:translateZ(26px)}
+.cube i:nth-child(2){transform:rotateY(180deg) translateZ(26px)}
+.cube i:nth-child(3){transform:rotateY(90deg) translateZ(26px)}
+.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(26px)}
+.cube i:nth-child(5){transform:rotateX(90deg) translateZ(26px)}
+.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(26px)}
+@keyframes spin{to{transform:rotateX(360deg) rotateY(360deg)}}
 
-  .part{
-    margin:52px 0 24px;
-    font-size:clamp(22px,5.5vw,30px);
-    font-weight:900;
-    letter-spacing:-.3px;
-    padding-bottom:12px;
-    border-bottom:1px solid var(--line);
-    scroll-margin-top:18px;
-  }
-  .part span{
-    background:linear-gradient(90deg,var(--orange2),var(--orange));
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
+.tbtn{
+  display:block;margin:6px auto 0;cursor:pointer;
+  font:700 11px/1 inherit;letter-spacing:1.6px;color:var(--ink2);
+  padding:10px 18px;border-radius:100px;border:1px solid rgba(255,255,255,.95);
+  background:rgba(255,255,255,.6);box-shadow:0 10px 20px -14px rgba(70,58,44,.6);
+}
+.tbtn b{display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#bdb5a8;margin-right:7px;transition:background .3s}
+.scene.on ~ .tbtn b{background:#5aa87a}
 
-  .step{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:20px 20px 22px;
-    margin-bottom:14px;
-    backdrop-filter:blur(10px);
-    scroll-margin-top:18px;
-  }
-  .step h3{
-    font-size:17.5px;
-    font-weight:800;
-    margin-bottom:12px;
-    display:flex;gap:11px;align-items:flex-start;
-    letter-spacing:-.2px;
-  }
-  .num{
-    flex:0 0 28px;height:28px;
-    display:grid;place-items:center;
-    border-radius:9px;
-    background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;font-size:13.5px;font-weight:900;
-    box-shadow:0 4px 14px rgba(255,122,24,.35);
-  }
-  .step p{font-size:15px;color:#cfd4db;margin-bottom:10px}
-  .step p:last-child{margin-bottom:0}
-  .step ul,.step ol{margin:10px 0 0 4px;padding-left:18px}
-  .step li{font-size:15px;color:#cfd4db;margin-bottom:7px}
-  .step li::marker{color:var(--orange)}
+/* ---------- статистика ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.stat{
+  background:var(--card);border:1px solid var(--brd);border-radius:18px;
+  padding:18px 10px;text-align:center;backdrop-filter:blur(14px);box-shadow:var(--sh);
+}
+.stat b{display:block;font-size:26px;letter-spacing:-1px;color:var(--ink)}
+.stat span{font-size:9.5px;letter-spacing:1.8px;color:var(--mut);font-weight:700;text-transform:uppercase}
 
-  kbd{
-    display:inline-block;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.18);
-    border-bottom-width:2px;
-    border-radius:6px;
-    padding:1px 7px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    color:#fff;
-    white-space:nowrap;
-  }
-  code{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:13px;
-    background:rgba(255,122,24,.12);
-    color:var(--orange2);
-    padding:2px 7px;border-radius:6px;
-    word-break:break-all;
-  }
-  .path{
-    display:block;
-    background:rgba(0,0,0,.4);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:11px 14px;
-    margin:10px 0;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12.5px;
-    color:#ffcf9a;
-    overflow-x:auto;
-    white-space:nowrap;
-  }
+/* ---------- панели ---------- */
+.panel{
+  background:var(--card);border:1px solid var(--brd);border-radius:22px;
+  padding:22px;backdrop-filter:blur(16px);box-shadow:var(--sh);
+}
+.panel h3{font-size:16px;margin-bottom:14px}
+.toc{display:grid;gap:0}
+.toc a{
+  display:flex;align-items:center;gap:12px;padding:13px 0;text-decoration:none;
+  color:var(--ink);font-size:14.5px;border-bottom:1px solid var(--line);
+}
+.toc a:last-child{border-bottom:none}
+.sq{
+  width:28px;height:28px;border-radius:8px;flex:none;display:flex;
+  align-items:center;justify-content:center;
+  font-size:11.5px;font-weight:800;color:#fff;
+  background:linear-gradient(160deg,#6a7079,#2b2926);
+}
 
-  .warn{
-    background:rgba(255,60,60,.09);
-    border:1px solid rgba(255,80,80,.32);
-    border-left:3px solid #ff4d4d;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#ffc9c9;
-  }
-  .warn b{color:#ff8f8f}
+/* ---------- шаги ---------- */
+.sec-title{font-size:clamp(26px,7vw,34px);font-weight:800;margin-bottom:6px}
+.sec-sub{color:var(--mut);font-size:14px;margin-bottom:20px}
+.step{
+  background:var(--card);border:1px solid var(--brd);border-radius:22px;
+  padding:20px;margin-bottom:14px;backdrop-filter:blur(16px);box-shadow:var(--sh);
+  display:grid;grid-template-columns:1fr;gap:18px;
+}
+.step-top{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.num{
+  width:30px;height:30px;border-radius:9px;flex:none;display:flex;
+  align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;
+  background:linear-gradient(160deg,#c9a45c,#a8813e);
+}
+.step h3{font-size:16.5px}
+.step p{font-size:14px;color:var(--ink2);margin-bottom:8px}
+.step p:last-child{margin-bottom:0}
+.mini-wrap{display:flex;justify-content:center;padding:6px 0 2px}
+.mini-static{
+  width:186px;aspect-ratio:9/19.2;border-radius:28px;background:#1c1b19;
+  padding:8px;position:relative;
+  box-shadow:0 26px 42px -26px rgba(60,50,40,.65),inset 0 0 0 1px rgba(255,255,255,.14);
+}
+.mini-static:before{
+  content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  width:52px;height:13px;border-radius:9px;background:#1c1b19;z-index:3;
+}
+.mini-static img{
+  width:100%;height:100%;object-fit:cover;object-position:top center;
+  border-radius:21px;display:block;
+}
+.cap{text-align:center;font-size:11px;color:var(--mut);margin-top:9px;letter-spacing:.2px}
 
-  .tip{
-    background:rgba(70,200,120,.08);
-    border:1px solid rgba(70,200,120,.25);
-    border-left:3px solid #37c97a;
-    border-radius:12px;
-    padding:13px 16px;
-    margin:14px 0 0;
-    font-size:14px;
-    color:#c3f0d8;
-  }
+/* ---------- таблица режимов ---------- */
+.rows{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.5)}
+.row{display:grid;grid-template-columns:1fr;gap:2px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row b{font-size:13.5px;letter-spacing:.2px}
+.row span{font-size:12.8px;color:var(--mut)}
 
-  .tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
-  .tbl th{
-    text-align:left;padding:10px 12px;
-    color:var(--muted);font-size:12px;
-    text-transform:uppercase;letter-spacing:1.2px;
-    border-bottom:1px solid var(--line);
-  }
-  .tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
-  .tbl tr:last-child td{border-bottom:none}
-  .tbl td:first-child{font-weight:600;color:#fff}
+/* ---------- формула ---------- */
+.formula{display:grid;gap:9px;margin:14px 0}
+.frow{
+  display:flex;gap:11px;align-items:flex-start;font-size:13.5px;
+  background:rgba(255,255,255,.55);border:1px solid var(--line);
+  border-radius:14px;padding:12px 14px;
+}
+.frow i{
+  font-style:normal;flex:none;width:22px;height:22px;border-radius:7px;
+  background:rgba(200,155,84,.16);color:var(--gold2);
+  font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;
+}
+.note{
+  border-radius:16px;padding:14px 16px;font-size:13.5px;
+  background:rgba(255,255,255,.55);border:1px solid var(--line);
+}
+.warn{background:#fbf0ee;border-color:rgba(180,90,70,.16)}
+.tip{background:#eef7f1;border-color:rgba(60,140,95,.16)}
+.lbl{font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;
+  color:var(--mut);margin-bottom:6px}
 
-  .bonus{
-    margin-top:56px;
-    background:linear-gradient(140deg,rgba(255,122,24,.18),rgba(255,122,24,.04));
-    border:1px solid rgba(255,122,24,.35);
-    border-radius:22px;
-    padding:28px 24px;
-    text-align:center;
-    scroll-margin-top:18px;
-  }
-  .bonus h2{
-    font-size:24px;font-weight:900;margin-bottom:10px;
-    background:linear-gradient(90deg,#fff,var(--orange2));
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-  .bonus p{color:#f0ddd0;font-size:14.5px;margin-bottom:18px}
-  .btn{
-    display:inline-block;
-    background:linear-gradient(150deg,var(--orange),#d95a00);
-    color:#fff;text-decoration:none;
-    font-weight:800;font-size:15.5px;
-    padding:15px 34px;border-radius:14px;
-    box-shadow:0 10px 30px rgba(255,122,24,.35);
-    transition:.18s;
-  }
-  .btn:active{transform:scale(.97)}
+/* ---------- чек-лист ---------- */
+.check{display:grid;gap:2px}
+.check label{
+  display:flex;align-items:flex-start;gap:11px;padding:11px 0;
+  font-size:14px;border-bottom:1px solid var(--line);cursor:pointer;
+}
+.check label:last-child{border-bottom:none}
+.check input{
+  appearance:none;-webkit-appearance:none;width:19px;height:19px;flex:none;margin:2px 0 0;
+  border-radius:6px;border:1.5px solid rgba(43,41,38,.28);background:#fff;
+  cursor:pointer;position:relative;transition:.2s;
+}
+.check input:checked{background:linear-gradient(160deg,#c9a45c,#a8813e);border-color:transparent}
+.check input:checked:after{
+  content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg);
+}
+.check input:checked + span{color:var(--mut);text-decoration:line-through}
 
-  footer{
-    margin-top:54px;
-    padding-top:26px;
-    border-top:1px solid var(--line);
-    text-align:center;
-    color:var(--muted);
-    font-size:13.5px;
-  }
-  footer b{color:var(--text)}
+/* ---------- FAQ ---------- */
+details{
+  border-radius:16px;background:rgba(255,255,255,.55);
+  border:1px solid var(--line);margin-bottom:9px;overflow:hidden;
+}
+summary{
+  cursor:pointer;list-style:none;padding:15px 17px;font-size:14px;font-weight:600;
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";font-weight:400;font-size:19px;color:var(--gold2);transition:transform .25s}
+details[open] summary:after{transform:rotate(45deg)}
+details .body{padding:0 17px 15px;font-size:13.5px;color:var(--ink2)}
 
-  .top{
-    position:fixed;
-    right:16px;bottom:18px;
-    width:46px;height:46px;
-    border-radius:50%;
-    background:rgba(255,122,24,.9);
-    color:#fff;border:none;
-    font-size:19px;
-    display:grid;place-items:center;
-    box-shadow:0 8px 24px rgba(255,122,24,.4);
-    cursor:pointer;
-    opacity:0;pointer-events:none;
-    transition:.25s;
-    z-index:50;
-  }
-  .top.show{opacity:1;pointer-events:auto}
+/* ---------- магазин ---------- */
+.shop{
+  margin-top:34px;border-radius:24px;padding:30px 22px;text-align:center;color:#f6f2ea;
+  background:linear-gradient(165deg,#33373e,#12151a 70%);
+  border:1px solid rgba(200,170,110,.34);
+  box-shadow:0 34px 60px -34px rgba(20,18,16,.85);
+  position:relative;overflow:hidden;
+}
+.shop:before{
+  content:"";position:absolute;inset:-40% -20% auto;height:200px;
+  background:radial-gradient(closest-side,rgba(200,170,110,.16),transparent);
+}
+.shop .crown{font-size:17px;color:#e6c988;letter-spacing:6px}
+.shop h3{font-size:22px;margin:10px 0 6px;color:#fff;letter-spacing:-.5px}
+.shop p{font-size:13.5px;color:#b8b2a6;max-width:360px;margin:0 auto 18px}
+.shop .tag{
+  display:inline-block;font-size:9.5px;letter-spacing:2px;font-weight:800;
+  padding:6px 12px;border-radius:100px;color:#e6c988;
+  border:1px solid rgba(230,201,136,.35);margin-bottom:16px;
+}
+.shop a{
+  display:inline-block;text-decoration:none;font-weight:800;font-size:13.5px;
+  color:#2a241c;padding:14px 30px;border-radius:100px;
+  background:linear-gradient(180deg,#e6c988,#c9a45c);
+  box-shadow:0 16px 30px -14px rgba(201,164,92,.7);
+}
 
-  .hide{display:none!important}
+footer{text-align:center;padding:34px 16px 20px;font-size:11.5px;color:var(--mut)}
 
-  @media(max-width:430px){
-    .wrap{padding:0 14px 84px}
-    .hero{padding:34px 0 26px}
-    .step{padding:17px 15px 19px;border-radius:16px}
-    .step h3{font-size:16.5px}
-    .step p,.step li{font-size:14.5px}
-  }
+@media(min-width:640px){
+  .step{grid-template-columns:1fr 230px;align-items:center;gap:26px}
+  .row{grid-template-columns:190px 1fr;gap:16px;align-items:baseline}
+  .stats{gap:14px}
+  .stat b{font-size:32px}
+  .scene{height:330px}
+  .mini{width:176px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="bar"></div>
+
+<header>
+  <div class="hw">
+    <div class="av">
+      <svg viewBox="0 0 24 24" fill="none">
+        <g fill="#fff">
+          <ellipse cx="12" cy="6.6" rx="2.5" ry="3.6"/>
+          <ellipse cx="12" cy="17.4" rx="2.5" ry="3.6"/>
+          <ellipse cx="6.6" cy="12" rx="3.6" ry="2.5"/>
+          <ellipse cx="17.4" cy="12" rx="3.6" ry="2.5"/>
+          <circle cx="12" cy="12" r="1.5"/>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <div class="hn">Nagibatorz</div>
+      <div class="hp">на Playerok</div>
+    </div>
+    <div class="badge">НЕЙРО ПАК</div>
+  </div>
+</header>
+
+<main>
 
   <div class="hero">
-    <div class="tag">Nagibatorz · гайд</div>
-    <h1>Нейро-пак: все&nbsp;ИИ в&nbsp;одном окне</h1>
-    <p>GPT, Gemini, Grok, Claude и десятки других — без подписок и оплат</p>
+    <h1>НЕЙРО ПАК</h1>
+    <div class="sub">все модели в одном окне</div>
+    <div class="chips">
+      <div class="chip">АВТО-ВЫДАЧА</div>
+      <div class="chip">ОНЛАЙН 24/7</div>
+      <div class="chip">БЕЗ ПОДПИСКИ</div>
+    </div>
   </div>
 
-  <div class="note">
-    <b>Что это:</b> одна площадка, где собраны десятки нейросетей. Ты пишешь запрос один раз — и сравниваешь ответы разных моделей. Платить за подписки не нужно. Ниже — как зайти и как выжимать из этого максимум.
+  <div class="scene" id="scene">
+    <div class="tiltable">
+      <div class="mini">
+        <div class="scr">
+          <div class="star">✦</div>
+          <div class="nm">НЕЙРО ПАК</div>
+          <div class="sm">ВСЕ МОДЕЛИ</div>
+          <div class="btn">НАЧАТЬ</div>
+        </div>
+      </div>
+      <div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="pedestal"></div>
+    </div>
+  </div>
+  <button class="tbtn" id="tbtn"><b></b>3D: вкл</button>
+
+  <div class="stats">
+    <div class="stat"><b>50+</b><span>моделей</span></div>
+    <div class="stat"><b>0 ₽</b><span>подписка</span></div>
+    <div class="stat"><b>2</b><span>устройства</span></div>
   </div>
 
-  <div class="searchbox">
-    <input type="text" id="q" placeholder="Поиск по гайду — например «код» или «запрос»" autocomplete="off">
+  <section>
+    <div class="panel">
+      <h3>Что внутри гайда</h3>
+      <div class="toc">
+        <a href="#s1"><span class="sq">01</span> Открываешь сайт — и всё</a>
+        <a href="#s2"><span class="sq">02</span> Выбираешь режим работы</a>
+        <a href="#s3"><span class="sq">03</span> Берёшь модель под задачу</a>
+        <a href="#s4"><span class="sq">04</span> Пишешь запрос по формуле</a>
+        <a href="#s5"><span class="sq">05</span> Сохраняешь рабочие связки</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="sec-title">Открываешь сайт — и всё</div>
+    <div class="sec-sub">Ни установки, ни регистрации. Браузер и интернет.</div>
+
+    <div class="step">
+      <div>
+        <div class="step-top"><div class="num">01</div><h3>Заходишь на сайт</h3></div>
+        <p>Ссылку ты получил вместе с покупкой. Открывается в любом браузере — с телефона, планшета или компьютера. Интерфейс одинаковый, ничего дополнительно ставить не нужно.</p>
+        <p>Первое, что видишь: сверху переключатель режимов, в центре большое поле «What would you like to do?» — это и есть место, куда ты пишешь задачу. Справа от поля кнопка выбора модели.</p>
+        <p class="mut">Ничего не нажимай наугад — сначала прочитай шаг 02. Режим важнее модели.</p>
+      </div>
+      <div>
+        <div class="mini-wrap">
+          <div class="mini-static">
+            <img src="img/Screenshot_20261031-004721.jpg" alt="Стартовый экран: поле ввода задачи">
+          </div>
+        </div>
+        <div class="cap">Стартовый экран</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s2">
+    <div class="sec-title">Выбираешь режим работы</div>
+    <div class="sec-sub">Четыре режима — под четыре разных ситуации.</div>
+
+    <div class="step">
+      <div>
+        <div class="step-top"><div class="num">02</div><h3>Переключаешь режим</h3></div>
+        <p>Нажми на значок режима рядом с полем ввода. Откроется список — выбери один из четырёх.</p>
+        <p>Новичку почти всегда нужен <b>Direct</b>: обычный чат с одной моделью. Остальные режимы — когда хочется сравнить или решить сложную задачу.</p>
+        <p class="mut">Переключился — вернулся назад одним нажатием. Ничего не сломается.</p>
+      </div>
+      <div>
+        <div class="mini-wrap">
+          <div class="mini-static">
+            <img src="img/Screenshot_20261031-004728.jpg" alt="Меню режимов: Battle, Agent, Side by Side, Direct">
+          </div>
+        </div>
+        <div class="cap">Меню режимов</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="rows">
+        <div class="row"><b>Direct</b><span>Один на один с выбранной моделью. Берёшь, когда знаешь, чего хочешь.</span></div>
+        <div class="row"><b>Side by Side</b><span>Две модели рядом на один запрос. Удобно, когда не понимаешь, кто отвечает лучше.</span></div>
+        <div class="row"><b>Battle Mode</b><span>Две модели анонимно. Ты выбираешь лучший ответ, не зная названий — так честнее.</span></div>
+        <div class="row"><b>Agent Mode</b><span>Для больших задач: не один ответ, а цепочка шагов с работой над результатом.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="sec-title">Берёшь модель под задачу</div>
+    <div class="sec-sub">Не «какая лучше», а «какая под это дело».</div>
+
+    <div class="step">
+      <div>
+        <div class="step-top"><div class="num">03</div><h3>Открываешь список моделей</h3></div>
+        <p>Кнопка выбора модели — справа от поля ввода. Нажмёшь — откроется панель со списком, поиском и фильтрами по типу: текст, код, картинки, поиск в интернете.</p>
+        <p>Правило простое: сначала ставишь фильтр под свою задачу, потом смотришь на две-три модели из списка и берёшь одну.</p>
+        <p>Пункт <b>Max</b> — это не отдельная модель, а «автомат»: он сам подбирает подходящую под твой запрос. Хороший выбор, когда лень разбираться.</p>
+      </div>
+      <div>
+        <div class="mini-wrap">
+          <div class="mini-static">
+            <img src="img/Screenshot_20261031-004735.jpg" alt="Панель выбора модели с поиском и фильтрами">
+          </div>
+        </div>
+        <div class="cap">Выбор модели</div>
+      </div>
+    </div>
+
+    <div class="note tip" style="margin-top:14px">
+      <div class="lbl">Простой старт</div>
+      Не хочешь разбираться в названиях — оставь Max и работай. Когда поймёшь, чего не хватает, вернёшься к списку и возьмёшь конкретную модель.
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="sec-title">Пишешь запрос по формуле</div>
+    <div class="sec-sub">Одна и та же модель на разных запросах даёт разный уровень.</div>
+
+    <div class="panel">
+      <div class="formula">
+        <div class="frow"><i>1</i><div><b>Роль.</b> Кто отвечает: «ты редактор», «ты преподаватель по математике».</div></div>
+        <div class="frow"><i>2</i><div><b>Задача.</b> Что нужно сделать. Глаголом: «перепиши», «найди ошибку», «составь план».</div></div>
+        <div class="frow"><i>3</i><div><b>Контекст.</b> Для кого, зачем, что уже есть на руках.</div></div>
+        <div class="frow"><i>4</i><div><b>Формат.</b> Как должен выглядеть ответ: список, таблица, 5 пунктов, до 200 слов.</div></div>
+      </div>
+
+      <div class="note warn" style="margin-bottom:10px">
+        <div class="lbl">Так не надо</div>
+        «напиши текст»
+      </div>
+      <div class="note tip">
+        <div class="lbl">Так надо</div>
+        «Ты редактор. Перепиши мой текст для поста в соцсетях: короче, живее, без канцелярита, до 600 знаков. Вот текст: …»
+      </div>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="sec-title">Сохраняешь рабочие связки</div>
+    <div class="sec-sub">Один раз настроил — дальше экономишь по полчаса.</div>
+
+    <div class="panel">
+      <div class="check">
+        <label><input type="checkbox"><span>Сохраняй сам запрос, а не только ответ — он пригодится ещё десять раз</span></label>
+        <label><input type="checkbox"><span>Завёл рабочий запрос — запиши, какая модель его выдала лучше всех</span></label>
+        <label><input type="checkbox"><span>Сравнил две модели — оставь одну и не распыляйся</span></label>
+        <label><input type="checkbox"><span>Долгая задача — переходи в Agent Mode, а не мучай Direct</span></label>
+        <label><input type="checkbox"><span>Непонятный ответ — не переписывай запрос с нуля, а попроси уточнить</span></label>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:14px">
+      Если на каком-то шаге непонятно — напиши в чат. Разбираемся вручную, без «перечитайте инструкцию».
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title" style="margin-bottom:16px">Частые вопросы</div>
+
+    <details>
+      <summary>Нужно что-то устанавливать?</summary>
+      <div class="body">Нет. Всё работает в браузере — с телефона, планшета и компьютера. Отдельное приложение не нужно.</div>
+    </details>
+    <details>
+      <summary>Почему модели столько, а пользуюсь я одной?</summary>
+      <div class="body">Так и должно быть. У каждой сильная сторона: одна лучше пишет, другая точнее в коде, третья разбирает длинные документы. Со временем у тебя останется три-четыре любимых.</div>
+    </details>
+    <details>
+      <summary>Что выбрать, если вообще не разбираюсь?</summary>
+      <div class="body">Режим Direct и модель Max. Работаешь как с обычным чатом, а «автомат» сам подбирает модель под запрос.</div>
+    </details>
+    <details>
+      <summary>Ссылка открывается долго или не открывается</summary>
+      <div class="body">Смени сеть или браузер, попробуй без встроенного блокировщика. Не помогло — напиши в чат, помогу с конкретным устройством.</div>
+    </details>
+    <details>
+      <summary>Сколько это работает по времени?</summary>
+      <div class="body">Доступ остаётся у тебя, срок не ограничен. Подписку оплачивать не нужно.</div>
+    </details>
+    <details>
+      <summary>А если на телефоне неудобно?</summary>
+      <div class="body">На компьютере удобнее для длинных задач: больше экран, проще копировать. На телефоне быстрее для коротких вопросов на ходу.</div>
+    </details>
+  </section>
+
+  <div class="shop">
+    <div class="crown">✦ ✦ ✦</div>
+    <h3>Nagibatorz</h3>
+    <div class="tag">ПРЕМИУМ ВЫБОР</div>
+    <p>Ещё товары, гайды и рабочие связки — всё в одном профиле на Playerok.</p>
+    <a href="https://playerok.com/profile/Nagibatorz/products">Открыть магазин</a>
   </div>
 
-  <div class="toc">
-    <div class="toc-title">Содержание</div>
-    <a href="#n1"><span class="ico">🔗</span> Открываем площадку</a>
-    <a href="#n2"><span class="ico">💬</span> Режим Direct Chat</a>
-    <a href="#n3"><span class="ico">⚙️</span> Кнопка Max</a>
-    <a href="#n4"><span class="ico">🤖</span> Выбор модели</a>
-    <a href="#n5"><span class="ico">🎯</span> Как писать запросы</a>
-    <a href="#n6"><span class="ico">📋</span> Что можно делать</a>
-    <a href="#n7"><span class="ico">🔁</span> Сравнение моделей</a>
-    <a href="#n8"><span class="ico">🛡️</span> Ограничения и честность</a>
-    <a href="#n9"><span class="ico">🧯</span> Если что-то не работает</a>
-    <a href="#n10"><span class="ico">✅</span> Чек-лист</a>
-  </div>
+</main>
 
-  <h2 class="part"><span>Подключение</span></h2>
-
-  <div class="step" id="n1">
-    <h3><span class="num">1</span> Открываем площадку</h3>
-    <p>Перейди по ссылке с любого устройства — телефон, планшет, компьютер. Работает в браузере, ничего устанавливать не нужно.</p>
-    <div class="path">https://arena.ai/text/direct</div>
-    <p>Если площадка попросит войти — авторизуйся удобным способом. Это бесплатно.</p>
-    <div class="tip">Сразу добавь страницу в закладки браузера, чтобы не искать ссылку каждый раз.</div>
-  </div>
-
-  <div class="step" id="n2">
-    <h3><span class="num">2</span> Находим Direct Chat</h3>
-    <p>В <b>левом верхнем углу</b> есть переключатель режимов. Нажми на него и выбери <b>Direct Chat</b>.</p>
-    <p>Именно в этом режиме ты общаешься с одной выбранной моделью — как в обычном чате. В других режимах запрос уходит сразу в несколько моделей и сравнивает ответы.</p>
-  </div>
-
-  <div class="step" id="n3">
-    <h3><span class="num">3</span> Нажимаем Max</h3>
-    <p>Рядом с переключателем есть кнопка <b>Max</b> — нажми её. Она открывает полный список доступных моделей, а не только те, что показаны по умолчанию.</p>
-    <div class="warn">⚠️ Если кнопки Max не видно — обнови страницу. На маленьких экранах часть интерфейса иногда прячется за краем.</div>
-  </div>
-
-  <div class="step" id="n4">
-    <h3><span class="num">4</span> Выбираем нужную нейросеть</h3>
-    <p>Из списка выбери модель под свою задачу. Ориентируйся так:</p>
-    <table class="tbl">
-      <tr><th>Задача</th><th>На что смотреть</th></tr>
-      <tr><td>Текст, статьи, письма</td><td>Любая топовая модель</td></tr>
-      <tr><td>Код и сайты</td><td>Модели с уклоном в программирование</td></tr>
-      <tr><td>Логика и математика</td><td>Модели с «reasoning» в названии</td></tr>
-      <tr><td>Быстрый короткий ответ</td><td>Лёгкие и быстрые модели</td></tr>
-      <tr><td>Творчество и идеи</td><td>Любая, но лучше две разные</td></tr>
-    </table>
-    <p style="margin-top:12px">Названия моделей на площадке обновляются постоянно — это нормально. Если модель пропала из списка, выбери другую того же уровня.</p>
-  </div>
-
-  <h2 class="part"><span>Как выжимать результат</span></h2>
-
-  <div class="step" id="n5">
-    <h3><span class="num">5</span> Как писать запросы, чтобы получать нормальный ответ</h3>
-    <p>90% плохих ответов — это плохо сформулированный запрос. Правило простое: <b>чем больше контекста, тем лучше результат</b>.</p>
-    <p><b>Формула хорошего запроса:</b></p>
-    <ul>
-      <li><b>Роль</b> — «Ты опытный редактор»</li>
-      <li><b>Задача</b> — «Напиши описание товара»</li>
-      <li><b>Вводные</b> — что за товар, для кого, где будет размещён</li>
-      <li><b>Формат</b> — «Списком, до 100 слов, без воды»</li>
-      <li><b>Ограничения</b> — «Не используй слово «уникальный»»</li>
-    </ul>
-    <p style="margin-top:12px"><b>Плохо:</b> «напиши текст про телефон»<br><b>Хорошо:</b> «Ты копирайтер. Напиши описание смартфона Infinix для объявления на маркетплейсе: 4 абзаца, без эмодзи, упор на батарею и экран»</p>
-    <div class="tip">Не нравится ответ — не начинай заново, а уточняй: «Короче», «Проще, для школьника», «Перепиши в другом тоне». Модель доработает то, что уже есть.</div>
-  </div>
-
-  <div class="step" id="n6">
-    <h3><span class="num">6</span> Что реально можно делать</h3>
-    <table class="tbl">
-      <tr><th>Задача</th><th>Пример запроса</th></tr>
-      <tr><td>Тексты</td><td>Описания товаров, посты, письма</td></tr>
-      <tr><td>Учёба</td><td>Объясни тему простыми словами</td></tr>
-      <tr><td>Код</td><td>Напиши функцию на Python</td></tr>
-      <tr><td>Переводы</td><td>Переведи и сохрани стиль</td></tr>
-      <tr><td>Работа с текстом</td><td>Сократи, перепиши, проверь ошибки</td></tr>
-      <tr><td>Идеи</td><td>10 вариантов названия для товара</td></tr>
-      <tr><td>Разбор</td><td>Что не так с этим объявлением</td></tr>
-    </table>
-  </div>
-
-  <div class="step" id="n7">
-    <h3><span class="num">7</span> Сравнение моделей — главная фишка</h3>
-    <p>Один и тот же запрос можно отправить двум разным моделям и сравнить ответы. Это бесплатно и экономит время: не нужно гадать, какая модель лучше — видно сразу.</p>
-    <ol>
-      <li>Задай вопрос первой модели</li>
-      <li>Скопируй запрос</li>
-      <li>Переключи модель через Max</li>
-      <li>Задай тот же вопрос</li>
-      <li>Возьми лучшие куски из двух ответов</li>
-    </ol>
-    <div class="tip">Для важных задач всегда так и делай — две модели ошибаются реже, чем одна.</div>
-  </div>
-
-  <h2 class="part"><span>Важно знать</span></h2>
-
-  <div class="step" id="n8">
-    <h3><span class="num">8</span> Ограничения — честно</h3>
-    <p>Чтобы не было сюрпризов:</p>
-    <ul>
-      <li><b>Это не подписка ChatGPT Plus или Claude Pro.</b> Ты получаешь доступ к моделям на площадке-агрегаторе, а не аккаунт с оплаченным тарифом.</li>
-      <li><b>Набор моделей и лимиты меняются.</b> Площадка добавляет и убирает модели, иногда ограничивает число запросов в день.</li>
-      <li><b>История чатов живёт на площадке.</b> Важные ответы копируй себе в заметки.</li>
-      <li><b>Не отправляй туда пароли, документы и личные данные.</b> Никогда и ни в какую нейросеть.</li>
-    </ul>
-    <div class="warn">⚠️ <b>Нейросеть может ошибаться.</b> Проверяй факты, даты, цены и цифры — особенно если ответ пойдёт клиенту или в документ.</div>
-  </div>
-
-  <div class="step" id="n9">
-    <h3><span class="num">9</span> Если что-то не работает</h3>
-    <p><b>Страница не грузится:</b></p>
-    <ul>
-      <li>Проверь интернет и обнови страницу</li>
-      <li>Попробуй другой браузер</li>
-      <li>Отключи VPN, если он включён</li>
-    </ul>
-    <p style="margin-top:12px"><b>Модель не отвечает или пишет про лимит:</b></p>
-    <ul>
-      <li>Подожди пару минут и повтори</li>
-      <li>Переключись на другую модель через Max</li>
-      <li>Начни новый чат — старый мог переполниться</li>
-    </ul>
-    <p style="margin-top:12px"><b>Ответ обрывается:</b> напиши «продолжи» — модель допишет с того места.</p>
-  </div>
-
-  <div class="step" id="n10">
-    <h3><span class="num">10</span> Чек-лист</h3>
-    <ul>
-      <li>☐ Открыл ссылку и авторизовался</li>
-      <li>☐ Включил режим Direct Chat</li>
-      <li>☐ Нажал Max и увидел список моделей</li>
-      <li>☐ Выбрал модель под свою задачу</li>
-      <li>☐ Написал запрос по формуле: роль, задача, формат</li>
-      <li>☐ Сравнил ответ двух моделей на важном вопросе</li>
-      <li>☐ Сохранил нужные ответы себе</li>
-      <li>☐ Не отправил в чат личные данные</li>
-    </ul>
-  </div>
-
-  <div class="bonus" id="bonus">
-    <h2>🎁 Твой подарок</h2>
-    <p>Пакет из 100 гайдов по играм и цифровым фишкам: раскладки, фарм, настройки, промокоды.</p>
-    <a class="btn" href="https://docs.google.com/document/d/1vDAskewGByROOXIj_5hnlRs30KuFhJDB92eHwzkWA_k/edit?usp=sharing">Забрать бонус</a>
-  </div>
-
-  <footer>
-    <b>Nagibatorz</b> · Playerok<br>
-    Не заработало или появилась ошибка — напиши в чат, помогу разобраться.
-  </footer>
-
-</div>
-
-<button class="top" id="toTop" aria-label="Наверх">↑</button>
+<footer>НЕЙРО ПАК · гайд для покупателя · Nagibatorz на Playerok</footer>
 
 <script>
-  var btn = document.getElementById('toTop');
-  window.addEventListener('scroll', function(){
-    if (window.scrollY > 500) btn.classList.add('show');
-    else btn.classList.remove('show');
-  });
-  btn.addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
+(function(){
+  var bar=document.getElementById('bar');
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    var p=max>0?(h.scrollTop||document.body.scrollTop)/max:0;
+    bar.style.width=(p*100)+'%';
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  var scene=document.getElementById('scene');
+  var btn=document.getElementById('tbtn');
+  btn.addEventListener('click',function(){
+    scene.classList.toggle('on');
+    btn.innerHTML='<b></b>'+(scene.classList.contains('on')?'3D: вкл':'3D: выкл');
   });
 
-  var q = document.getElementById('q');
-  q.addEventListener('input', function(){
-    var v = this.value.trim().toLowerCase();
-    var items = document.querySelectorAll('.step');
-    if (!v) {
-      items.forEach(function(el){ el.classList.remove('hide'); });
-      document.querySelector('.toc').style.display = '';
-      document.querySelectorAll('.part').forEach(function(el){ el.style.display = ''; });
-      return;
-    }
-    document.querySelector('.toc').style.display = 'none';
-    items.forEach(function(el){
-      if (el.textContent.toLowerCase().indexOf(v) !== -1) el.classList.remove('hide');
-      else el.classList.add('hide');
-    });
-    document.querySelectorAll('.part').forEach(function(part){
-      var next = part.nextElementSibling, has = false;
-      while (next && !next.classList.contains('part')) {
-        if (next.classList.contains('step') && !next.classList.contains('hide')) has = true;
-        if (next.classList.contains('bonus')) break;
-        next = next.nextElementSibling;
-      }
-      part.style.display = has ? '' : 'none';
+  var saved=[];
+  try{ saved=JSON.parse(localStorage.getItem('np_check')||'[]'); }catch(e){ saved=[]; }
+  var boxes=document.querySelectorAll('.check input');
+  boxes.forEach(function(b,i){
+    b.checked=!!saved[i];
+    b.addEventListener('change',function(){
+      var arr=[];
+      boxes.forEach(function(x){arr.push(x.checked)});
+      try{ localStorage.setItem('np_check',JSON.stringify(arr)); }catch(e){}
     });
   });
+})();
 </script>
 </body>
 </html>
