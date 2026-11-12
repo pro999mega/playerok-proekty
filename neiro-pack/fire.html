@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>НЕЙРО ПАК — все нейросети в одном окне</title>
+<style>
+:root{
+  --bg:#0d0b0a; --bg2:#161110; --bg3:#1e1614;
+  --fire:#ff7a1a; --fire2:#ffb347; --gold:#f5c869; --gold2:#d9a84e;
+  --ink:#fff6ee; --ink2:#e6d8ca; --mut:#a2938a;
+  --line:rgba(255,180,110,.16); --line2:rgba(255,180,110,.30);
+  --panel:rgba(30,23,20,.72);
+  --panel-brd:rgba(255,190,120,.20);
+  --sh:0 24px 48px -22px rgba(0,0,0,.85);
+  --glow:0 0 32px rgba(255,122,26,.35);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 520px at 50% -10%,rgba(255,122,26,.16),transparent 62%),
+    radial-gradient(700px 460px at 100% 8%,rgba(255,170,60,.10),transparent 60%),
+    radial-gradient(800px 500px at 0% 100%,rgba(255,90,20,.12),transparent 62%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 55%,var(--bg3) 100%);
+  background-attachment:fixed;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+#pb{position:fixed;top:0;left:0;height:3px;width:0;
+  background:linear-gradient(90deg,var(--fire),var(--gold));z-index:99;
+  box-shadow:0 0 12px rgba(255,122,26,.8)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 64px}
+
+header{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(13,11,10,.72);
+  border-bottom:1px solid var(--line);
+}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.ava{width:34px;height:34px;border-radius:50%;background:#000;flex:0 0 auto;
+  border:1px solid rgba(255,190,120,.40);display:grid;place-items:center}
+.ava svg{width:20px;height:20px;display:block}
+.hd b{font-size:15px;letter-spacing:.2px}
+.hd small{display:block;font-size:11px;color:var(--mut);letter-spacing:.4px;margin-top:-2px}
+.pill{margin-left:auto;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+  padding:6px 12px;border-radius:999px;color:var(--gold);
+  border:1px solid rgba(245,200,105,.35);background:rgba(245,200,105,.08);white-space:nowrap}
+
+.hero{text-align:center;padding:34px 0 8px}
+.hero h1{
+  margin:0;font-size:clamp(38px,11vw,64px);line-height:.95;letter-spacing:1px;font-weight:900;
+  background:linear-gradient(180deg,#fff3df 0%,#ffc06a 38%,#ff7a1a 66%,#b8480a 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 34px rgba(255,122,26,.45);
+  filter:drop-shadow(0 6px 0 rgba(120,40,0,.55)) drop-shadow(0 14px 22px rgba(0,0,0,.7));
+}
+.sub{
+  margin:14px auto 0;max-width:520px;font-size:clamp(12px,3.6vw,15px);
+  letter-spacing:3px;text-transform:uppercase;color:var(--fire2);font-weight:700;
+}
+.caps{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0 0}
+.cap{
+  font-size:11px;letter-spacing:1.4px;padding:7px 14px;border-radius:999px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,200,140,.28);
+  color:var(--ink2);backdrop-filter:blur(10px);
+}
+.btn3d{
+  margin:20px auto 0;display:inline-flex;align-items:center;gap:9px;
+  padding:11px 20px;border-radius:999px;cursor:pointer;user-select:none;
+  font-size:13px;letter-spacing:.6px;font-weight:600;
+  background:linear-gradient(180deg,rgba(255,140,50,.22),rgba(255,90,20,.10));
+  border:1px solid rgba(255,160,80,.45);color:var(--ink);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.btn3d:active{transform:scale(.97)}
+.btn3d .dot{width:8px;height:8px;border-radius:50%;background:#6b625c;transition:.2s}
+.btn3d.on .dot{background:#4ade80;box-shadow:0 0 10px #4ade80}
+.btn3d.on{box-shadow:var(--glow)}
+
+.scene{
+  position:relative;height:250px;margin:26px 0 6px;
+  display:grid;place-items:center;perspective:1100px;touch-action:none;
+}
+.scene .in{transform-style:preserve-3d;transition:transform .5s ease;position:relative}
+.scene.on .in{transform:rotateX(12deg) rotateY(-16deg)}
+.phone{
+  width:120px;height:238px;border-radius:22px;position:relative;
+  background:linear-gradient(160deg,#2a2320,#100d0c);
+  border:1px solid rgba(255,170,90,.35);
+  box-shadow:0 0 0 1px rgba(0,0,0,.6),0 18px 40px -12px rgba(0,0,0,.9),0 0 46px rgba(255,110,20,.35);
+  animation:float 6s ease-in-out infinite;
+}
+.phone:before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:42px;height:7px;border-radius:6px;background:#050403}
+.scr{position:absolute;inset:6px;border-radius:17px;display:grid;place-items:center;text-align:center;
+  background:radial-gradient(120px 160px at 50% 30%,rgba(255,122,26,.28),transparent 70%),
+             linear-gradient(180deg,#1b1512,#0b0908);
+  border:1px solid rgba(255,160,80,.18);overflow:hidden}
+.scr .st{font-size:16px;color:var(--gold);text-shadow:0 0 14px rgba(245,200,105,.8)}
+.scr .nm{font-size:13px;font-weight:800;letter-spacing:1px;margin-top:6px;color:#fff3e3}
+.scr .ln{font-size:6.5px;letter-spacing:1.2px;color:var(--mut);margin-top:5px;text-transform:uppercase}
+.scr .ct{margin-top:12px;font-size:8px;letter-spacing:1.4px;padding:5px 12px;border-radius:99px;
+  color:#20140c;font-weight:800;background:linear-gradient(180deg,#ffcf8a,#e2952f)}
+.cube{
+  position:absolute;right:-6px;top:6px;width:64px;height:64px;transform-style:preserve-3d;
+  animation:spin 16s linear infinite;
+}
+.cube div{
+  position:absolute;width:64px;height:64px;border:1px solid rgba(255,190,120,.35);
+  background:linear-gradient(150deg,rgba(255,150,70,.16),rgba(255,90,20,.05));
+  backdrop-filter:blur(2px);backface-visibility:hidden;
+}
+.cube .f{transform:translateZ(32px)} .cube .b{transform:rotateY(180deg) translateZ(32px)}
+.cube .r{transform:rotateY(90deg) translateZ(32px)} .cube .l{transform:rotateY(-90deg) translateZ(32px)}
+.cube .t{transform:rotateX(90deg) translateZ(32px)} .cube .bo{transform:rotateX(-90deg) translateZ(32px)}
+.pedestal{
+  position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:190px;height:26px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 30%,#3a2f28,#171211 70%);
+  border:1px solid rgba(255,170,90,.22);
+  box-shadow:0 20px 40px -14px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,190,120,.25);
+}
+.spark{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--fire2);
+  box-shadow:0 0 10px var(--fire);animation:rise 5s linear infinite;opacity:.8}
+@keyframes float{50%{transform:translateY(-9px)}}
+@keyframes spin{to{transform:rotateX(360deg) rotateY(360deg)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}30%{opacity:.9}100%{transform:translateY(-120px);opacity:0}}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 0}
+.stat{padding:14px 10px;text-align:center;border-radius:16px;
+  background:var(--panel);border:1px solid var(--panel-brd);backdrop-filter:blur(14px)}
+.stat b{display:block;font-size:20px;color:var(--gold);letter-spacing:.4px}
+.stat span{font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--mut)}
+
+.toc{margin:26px 0 0;padding:16px;border-radius:18px;background:var(--panel);
+  border:1px solid var(--panel-brd);backdrop-filter:blur(14px)}
+.toc h4{margin:0 0 10px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mut)}
+.toc a{display:flex;align-items:center;gap:10px;padding:9px 0;color:var(--ink2);
+  text-decoration:none;font-size:14px;border-bottom:1px solid var(--line)}
+.toc a:last-child{border-bottom:0}
+.toc i{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;flex:0 0 auto;
+  font-style:normal;font-size:11px;font-weight:700;color:#1a120c;
+  background:linear-gradient(180deg,#ffcf8a,#e2952f)}
+
+section{margin:34px 0 0}
+section>h2{font-size:clamp(21px,5.6vw,26px);margin:0 0 6px;letter-spacing:.4px}
+section>h2 span{color:var(--fire)}
+.lead{color:var(--mut);font-size:14px;margin:0 0 16px}
+
+.card{padding:18px;border-radius:20px;background:var(--panel);
+  border:1px solid var(--panel-brd);box-shadow:var(--sh);backdrop-filter:blur(16px);
+  transition:transform .5s ease}
+.scene.on ~ .wrap .card{transform:none}
+.step{display:flex;gap:14px;padding:18px;margin-bottom:12px;border-radius:18px;
+  background:var(--panel);border:1px solid var(--panel-brd);backdrop-filter:blur(14px);
+  transition:transform .35s ease,border-color .35s ease}
+.step:hover{border-color:var(--line2)}
+.num{width:32px;height:32px;flex:0 0 auto;border-radius:9px;display:grid;place-items:center;
+  font-weight:800;font-size:13px;color:#1a120c;
+  background:linear-gradient(180deg,#ffd79b,#e2952f);box-shadow:0 0 18px rgba(255,150,60,.35)}
+.step h3{margin:2px 0 4px;font-size:16px}
+.step p{margin:0;font-size:14px;color:var(--ink2)}
+.step p+p{margin-top:8px}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{padding:11px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);font-weight:700}
+td:first-child{color:var(--gold);white-space:nowrap;font-weight:600}
+td:last-child{color:var(--ink2)}
+
+.code{margin-top:10px;padding:16px;border-radius:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:13px;line-height:1.65;color:#ffe4c8;background:rgba(255,120,30,.06);
+  border:1px dashed rgba(255,160,80,.35);white-space:pre-wrap}
+
+.check{list-style:none;padding:0;margin:10px 0 0}
+.check li{position:relative;padding:10px 0 10px 30px;font-size:14px;color:var(--ink2);
+  border-bottom:1px solid var(--line)}
+.check li:last-child{border-bottom:0}
+.check li:before{content:"";position:absolute;left:2px;top:15px;width:14px;height:14px;border-radius:4px;
+  border:1px solid rgba(255,170,90,.5);background:rgba(255,120,30,.10)}
+
+.note,.warn,.tip{padding:14px 16px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.note{background:rgba(255,150,60,.09);border-left:3px solid var(--fire)}
+.warn{background:rgba(220,70,50,.10);border-left:3px solid #d4483a}
+.tip{background:rgba(80,190,120,.09);border-left:3px solid #3fae72}
+
+details{padding:14px 16px;margin-bottom:10px;border-radius:16px;background:var(--panel);
+  border:1px solid var(--panel-brd);backdrop-filter:blur(12px)}
+details summary{cursor:pointer;font-size:14.5px;font-weight:600;list-style:none;position:relative;padding-right:26px}
+details summary::-webkit-details-marker{display:none}
+details summary:after{content:"+";position:absolute;right:0;top:-2px;color:var(--fire);font-size:20px;font-weight:400}
+details[open] summary:after{content:"–"}
+details p{margin:10px 0 0;font-size:13.5px;color:var(--ink2)}
+
+.shop{
+  margin-top:38px;padding:26px 20px;border-radius:24px;text-align:center;position:relative;overflow:hidden;
+  background:radial-gradient(420px 220px at 50% 0%,rgba(255,140,50,.20),transparent 70%),
+             linear-gradient(180deg,#221a16,#0b0908);
+  border:1px solid rgba(245,200,105,.35);
+  box-shadow:0 30px 60px -30px rgba(255,120,30,.45),inset 0 0 0 1px rgba(245,200,105,.10);
+}
+.shop .crown{font-size:22px;color:var(--gold);letter-spacing:6px}
+.shop h3{margin:10px 0 6px;font-size:22px;letter-spacing:.5px}
+.shop p{margin:0 auto 18px;max-width:420px;font-size:13.5px;color:var(--mut)}
+.shop a{
+  display:inline-block;padding:14px 30px;border-radius:999px;text-decoration:none;
+  font-weight:800;font-size:14.5px;letter-spacing:.4px;color:#1a120c;
+  background:linear-gradient(180deg,#ffd79b,#e2952f);
+  box-shadow:0 12px 26px -10px rgba(255,150,60,.8);
+  transition:transform .18s ease}
+.shop a:active{transform:scale(.97)}
+.badge{display:inline-block;margin-top:14px;font-size:10px;letter-spacing:1.6px;
+  text-transform:uppercase;color:var(--gold);opacity:.85}
+
+footer{margin-top:34px;text-align:center;font-size:12px;color:#6f6259;line-height:1.7}
+
+@media(max-width:360px){
+  .stats{grid-template-columns:1fr}
+  .phone{width:104px;height:206px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+
+<header>
+  <div class="hd">
+    <div class="ava">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <g fill="#fff">
+          <ellipse cx="12" cy="6.2" rx="2.6" ry="4.2"/>
+          <ellipse cx="12" cy="17.8" rx="2.6" ry="4.2"/>
+          <ellipse cx="6.2" cy="12" rx="4.2" ry="2.6"/>
+          <ellipse cx="17.8" cy="12" rx="4.2" ry="2.6"/>
+        </g>
+        <circle cx="12" cy="12" r="2.1" fill="#000"/>
+      </svg>
+    </div>
+    <div>
+      <b>Nagibatorz</b>
+      <small>на Playerok</small>
+    </div>
+    <div class="pill">Нейро пак</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>НЕЙРО ПАК</h1>
+    <div class="sub">50+ нейросетей в одном окне</div>
+    <div class="caps">
+      <div class="cap">Авто-выдача</div>
+      <div class="cap">Онлайн 24/7</div>
+      <div class="cap">Телефон и ПК</div>
+    </div>
+    <div class="btn3d" id="b3d"><span class="dot"></span>3D: вкл</div>
+  </div>
+
+  <div class="scene" id="scene">
+    <div class="spark" style="left:18%;bottom:30%"></div>
+    <div class="spark" style="left:72%;bottom:26%;animation-delay:1.2s"></div>
+    <div class="spark" style="left:48%;bottom:18%;animation-delay:2.4s"></div>
+    <div class="spark" style="left:84%;bottom:38%;animation-delay:3.1s"></div>
+    <div class="pedestal"></div>
+    <div class="in">
+      <div class="phone">
+        <div class="scr">
+          <div>
+            <div class="st">✦</div>
+            <div class="nm">НЕЙРО ПАК</div>
+            <div class="ln">все модели в одном</div>
+            <div class="ct">НАЧАТЬ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cube">
+      <div class="f"></div><div class="b"></div><div class="r"></div>
+      <div class="l"></div><div class="t"></div><div class="bo"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>50+</b><span>моделей</span></div>
+    <div class="stat"><b>0 ₽</b><span>подписка</span></div>
+    <div class="stat"><b>2</b><span>устройства</span></div>
+  </div>
+
+  <div class="toc">
+    <h4>Что внутри гайда</h4>
+    <a href="#s1"><i>01</i> Подключение за 4 шага</a>
+    <a href="#s2"><i>02</i> Модель под задачу</a>
+    <a href="#s3"><i>03</i> Формула запроса</a>
+    <a href="#s4"><i>04</i> Чек-лист перед работой</a>
+  </div>
+
+  <section id="s1">
+    <h2>Подключение за <span>4 шага</span></h2>
+    <p class="lead">Без установки, без регистраций. Открыл браузер — и работаешь.</p>
+
+    <div class="step">
+      <div class="num">01</div>
+      <div>
+        <h3>Открой окно с моделями</h3>
+        <p>Ссылку ты получил вместе с покупкой. Работает и с телефона, и с компьютера — интерфейс один и тот же.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">02</div>
+      <div>
+        <h3>Выбери модель под задачу</h3>
+        <p>Не нужно угадывать, какая «лучше». Ниже таблица: задача → подходящий тип модели. Начни с неё, а не с названий.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">03</div>
+      <div>
+        <h3>Сформулируй запрос по формуле</h3>
+        <p>Одна и та же модель на хорошем запросе и на «напиши текст» выдаёт совершенно разные результаты. Формула — в разделе 03.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">04</div>
+      <div>
+        <h3>Сохрани рабочие варианты</h3>
+        <p>Как только получил нужный результат — сохраняй сам запрос, а не только ответ. Через день он сэкономит тебе полчаса.</p>
+      </div>
+    </div>
+
+    <div class="note">Если на каком-то шаге непонятно — напиши в чат. Разбираемся вручную, без «перечитайте инструкцию».</div>
+  </section>
+
+  <section id="s2">
+    <h2>Модель <span>под задачу</span></h2>
+    <p class="lead">Не гоняйся за самой дорогой моделью. Выбирай по типу работы.</p>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Задача</th><th>Что выбрать</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Текст</td><td>Модели с длинным контекстом — они лучше держат структуру и стиль</td></tr>
+          <tr><td>Код</td><td>Модели, заточенные под программирование: точнее в синтаксисе и отладке</td></tr>
+          <tr><td>Картинки</td><td>Генераторы изображений: сначала стиль, потом детали</td></tr>
+          <tr><td>Документы</td><td>Модели с большим контекстом: PDF, таблицы, длинные тексты</td></tr>
+          <tr><td>Быстрый вопрос</td><td>Лёгкие и быстрые модели — не трать тяжёлую на пустяки</td></tr>
+          <tr><td>Сложный разбор</td><td>Модели с рассуждением: медленнее, но глубже</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn">Не смешивай в одном окне пять задач подряд. Новая тема — новый чат: так модель не тянет за собой старый контекст и не путается.</div>
+  </section>
+
+  <section id="s3">
+    <h2>Формула <span>запроса</span></h2>
+    <p class="lead">Пять частей. Чем конкретнее, тем меньше мусора на выходе.</p>
+
+    <div class="card">
+      <div class="code">РОЛЬ · ЗАДАЧА · КОНТЕКСТ · ФОРМАТ · ОГРАНИЧЕНИЯ
+
+Ты редактор. (роль)
+Перепиши мой текст короче на треть. (задача)
+Текст ниже, аудитория — новички. (контекст)
+Три абзаца, без списков. (формат)
+Не добавляй факты, которых нет в тексте. (ограничения)
+
+[текст]</div>
+      <div class="tip">Работает наоборот: если ответ не тот — не переписывай запрос целиком, а добавляй по одной части. Быстрее найдёшь, что именно не хватало.</div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Плохо</th><th>Хорошо</th></tr></thead>
+        <tbody>
+          <tr><td>Напиши пост</td><td>Напиши пост для канала о телефонах, 600 знаков, без эмодзи, с одной мыслью</td></tr>
+          <tr><td>Сделай красиво</td><td>Сделай 5 вариантов заголовка до 40 знаков, спокойный тон</td></tr>
+          <tr><td>Объясни</td><td>Объясни за 3 предложения, как будто мне 15</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s4">
+    <h2>Чек-лист <span>перед работой</span></h2>
+    <p class="lead">Тридцать секунд, которые экономят нервы.</p>
+
+    <div class="card">
+      <ul class="check">
+        <li>Открылось с телефона и с компьютера</li>
+        <li>Понятно, какая модель для какой задачи</li>
+        <li>Запрос собран по формуле, а не в одну строку</li>
+        <li>Новая тема — новый чат</li>
+        <li>Результат сохранён вместе с запросом</li>
+        <li>Проверил факты из ответа вручную</li>
+      </ul>
+    </div>
+
+    <div class="warn">Нейросеть может уверенно написать неправду. Цифры, даты, названия и цитаты проверяй сам — это не подстраховка, это норма работы.</div>
+  </section>
+
+  <section>
+    <h2>Частые <span>вопросы</span></h2>
+
+    <details>
+      <summary>Нужно что-то устанавливать?</summary>
+      <p>Нет. Всё работает в браузере: телефон, планшет, компьютер. Приложение не требуется.</p>
+    </details>
+
+    <details>
+      <summary>Это подписка?</summary>
+      <p>Нет. Оплата разовая, за доступ к гайду. Ничего не списывается повторно.</p>
+    </details>
+
+    <details>
+      <summary>Сколько времени занимает подключение?</summary>
+      <p>Обычно пять-десять минут, если делать по шагам и не пропускать раздел с моделями.</p>
+    </details>
+
+    <details>
+      <summary>У меня слабый телефон. Пойдёт?</summary>
+      <p>Да. Вся нагрузка не на телефоне — он только открывает окно в браузере.</p>
+    </details>
+
+    <details>
+      <summary>Не получается на каком-то шаге</summary>
+      <p>Напиши в чат, что именно не выходит и на каком шаге. Поможем разобраться вручную.</p>
+    </details>
+
+    <details>
+      <summary>Можно пользоваться с двух устройств?</summary>
+      <p>Да. Один и тот же вход работает и на телефоне, и на компьютере.</p>
+    </details>
+  </section>
+
+  <div class="shop">
+    <div class="crown">✦ ✦ ✦</div>
+    <h3>Магазин Nagibatorz</h3>
+    <p>Гайды по фарму, трейду, раскладкам и не только. Всё с авто-выдачей и поддержкой на связи.</p>
+    <a href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">Открыть магазин</a>
+    <div class="badge">Авто-выдача · Онлайн 24/7</div>
+  </div>
+
+  <footer>
+    НЕЙРО ПАК · гайд для покупателей<br>
+    Nagibatorz на Playerok · 2026
+  </footer>
+</div>
+
+<script>
+(function(){
+  var pb = document.getElementById('pb');
+  function upd(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+    pb.style.width = (p * 100) + '%';
+  }
+  window.addEventListener('scroll', upd, {passive:true});
+  upd();
+
+  var b = document.getElementById('b3d');
+  var scene = document.getElementById('scene');
+  b.addEventListener('click', function(){
+    var on = scene.classList.toggle('on');
+    b.classList.toggle('on', on);
+    b.lastChild.nodeValue = on ? '3D: выкл' : '3D: вкл';
+  });
+})();
+</script>
+</body>
+</html>
