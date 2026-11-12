@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3ece1">
+<title>Nagibatorz — доступ к гайдам</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg1:#f8f3ec; --bg2:#e7dece;
+    --ink:#241f1a; --ink2:#57504a; --mut:#948b7c;
+    --gold:#c19a52; --gold-l:#e8d2a4; --gold-d:#a07826;
+    --line:rgba(36,31,26,.09);
+    --glass:rgba(255,255,255,.66);
+    --lineTop:rgba(255,255,255,.92);
+    --shadow:0 34px 74px -42px rgba(74,60,40,.6);
+    --shadowSm:0 16px 36px -26px rgba(74,60,40,.55);
+    --r:26px;
+    --font:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;padding:0;font-family:var(--font);color:var(--ink);
+    background:
+      radial-gradient(1150px 640px at 50% -12%, #fffdf9 0%, rgba(255,253,249,0) 62%),
+      radial-gradient(820px 520px at 92% 6%, rgba(232,210,164,.38), transparent 66%),
+      radial-gradient(700px 480px at 4% 32%, rgba(232,210,164,.22), transparent 70%),
+      linear-gradient(180deg,var(--bg1) 0%, #f1e9dc 44%, var(--bg2) 100%);
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.035'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* ───── прогресс чтения ───── */
+  #prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:60;
+    background:linear-gradient(90deg,var(--gold-l),var(--gold),var(--gold-d));
+    box-shadow:0 0 14px rgba(193,154,82,.7);transition:width .12s linear}
+
+  /* ───── шапка ───── */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(20px) saturate(150%);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);
+    background:linear-gradient(180deg,rgba(248,243,236,.92),rgba(248,243,236,.72));
+    border-bottom:1px solid rgba(36,31,26,.07)}
+  .bar{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:13px}
+  .ava{width:42px;height:42px;border-radius:50%;flex:0 0 auto;overflow:hidden;
+    background:#111;box-shadow:0 0 0 1px rgba(193,154,82,.55),0 8px 18px -10px rgba(0,0,0,.6)}
+  .ava img{width:100%;height:100%;object-fit:cover;display:block}
+  .who{display:flex;flex-direction:column;line-height:1.18;min-width:0}
+  .who b{font-size:15px;letter-spacing:-.01em}
+  .who span{font-size:11px;color:var(--mut);letter-spacing:.04em}
+  .pill{margin-left:auto;font-size:10px;letter-spacing:.2em;font-weight:700;color:var(--gold-d);
+    padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.72);
+    border:1px solid rgba(193,154,82,.38);white-space:nowrap}
+
+  /* ───── первый экран ───── */
+  .hero{padding:56px 0 8px;text-align:center}
+  .eyebrow{display:inline-block;font-size:10.5px;letter-spacing:.34em;font-weight:700;color:var(--gold-d);
+    padding:8px 16px;border-radius:999px;border:1px solid rgba(193,154,82,.34);
+    background:rgba(255,255,255,.6);margin-bottom:24px}
+  h1{margin:0;font-size:clamp(42px,12.5vw,86px);line-height:.92;letter-spacing:-.035em;font-weight:800;
+    background:linear-gradient(180deg,#3a322a 0%,#241f1a 55%,#413730 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 12px 26px rgba(74,60,40,.22))}
+  .sub{margin:14px 0 0;font-size:11.5px;letter-spacing:.42em;font-weight:700;color:var(--gold-d);text-transform:uppercase}
+  .lead{max-width:520px;margin:20px auto 0;font-size:15px;line-height:1.65;color:var(--ink2)}
+  .caps{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:26px 0 0}
+  .cap{font-size:10px;letter-spacing:.17em;font-weight:700;color:var(--ink2);
+    padding:11px 18px;border-radius:999px;background:rgba(255,255,255,.78);
+    border:1px solid var(--lineTop);box-shadow:var(--shadowSm)}
+
+  /* ───── плитки ───── */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:38px 0 0}
+  .stat{background:var(--glass);border:1px solid var(--lineTop);border-radius:20px;
+    padding:20px 10px;text-align:center;box-shadow:var(--shadowSm);backdrop-filter:blur(14px)}
+  .stat b{display:block;font-size:26px;letter-spacing:-.02em;line-height:1}
+  .stat span{display:block;margin-top:8px;font-size:9.5px;letter-spacing:.2em;font-weight:700;color:var(--mut)}
+
+  /* ───── каталог ───── */
+  .sec{margin:64px 0 0}
+  .sec-head{text-align:center;margin-bottom:26px}
+  .sec-head h2{margin:0;font-size:clamp(24px,6vw,34px);letter-spacing:-.028em;font-weight:800}
+  .sec-head p{margin:9px 0 0;font-size:13px;color:var(--mut)}
+  .grid{display:grid;gap:14px}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  .card{position:relative;overflow:hidden;text-align:left;cursor:pointer;width:100%;
+    font-family:inherit;color:inherit;background:var(--glass);backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid var(--lineTop);border-radius:var(--r);padding:24px 22px 22px;
+    box-shadow:var(--shadow);transition:transform .38s cubic-bezier(.2,.8,.25,1),box-shadow .38s,border-color .3s;
+    opacity:0;transform:translateY(22px)}
+  .card.in{opacity:1;transform:none}
+  .card:hover{transform:translateY(-3px);box-shadow:0 44px 84px -46px rgba(74,60,40,.7);border-color:rgba(193,154,82,.5)}
+  .card:active{transform:translateY(-1px) scale(.995)}
+  .card::before{content:"";position:absolute;top:0;left:22px;right:22px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(193,154,82,.55),transparent)}
+  .card.openGlow{border-color:rgba(193,154,82,.62);background:rgba(255,253,248,.82)}
+  .card-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .num{flex:0 0 auto;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+    font-size:12.5px;font-weight:800;letter-spacing:.02em;color:#fff;
+    background:linear-gradient(160deg,#dcbb7c,#c19a52 45%,#a07826 100%);
+    box-shadow:0 10px 20px -12px rgba(160,120,38,.9),inset 0 1px 0 rgba(255,255,255,.55)}
+  .card h3{margin:0;font-size:16.5px;letter-spacing:-.015em;line-height:1.25;font-weight:750}
+  .card .tag{display:block;margin-top:3px;font-size:9.5px;letter-spacing:.19em;color:var(--mut);font-weight:700}
+  .card p{margin:0 0 18px;font-size:13px;line-height:1.6;color:var(--ink2)}
+  .card-foot{display:flex;align-items:center;gap:10px}
+  .state{font-size:9.5px;letter-spacing:.18em;font-weight:800;padding:7px 13px;border-radius:999px;
+    border:1px solid var(--line);color:var(--mut);background:rgba(255,255,255,.6)}
+  .state.on{color:#2f6b46;border-color:rgba(47,107,70,.3);background:rgba(47,107,70,.07)}
+  .go{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em;
+    font-weight:800;color:var(--gold-d)}
+  .go svg{transition:transform .3s}
+  .card:hover .go svg{transform:translateX(4px)}
+
+  /* ───── модалка ───── */
+  .ovl{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;
+    background:rgba(36,31,26,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:0}
+  .ovl.on{display:flex}
+  @media(min-width:700px){.ovl{align-items:center;padding:24px}}
+  .sheet{width:100%;max-width:620px;max-height:92vh;overflow-y:auto;overscroll-behavior:contain;
+    background:linear-gradient(180deg,#fffdf9,#f8f3ec);border:1px solid rgba(255,255,255,.9);
+    border-radius:28px 28px 0 0;padding:26px 22px calc(28px + env(safe-area-inset-bottom));
+    box-shadow:0 -30px 80px -30px rgba(36,31,26,.5);
+    animation:up .42s cubic-bezier(.2,.85,.25,1)}
+  @media(min-width:700px){.sheet{border-radius:28px;animation:pop .34s cubic-bezier(.2,.85,.25,1)}}
+  @keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+  .sheet-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+  .sheet h3{margin:0;font-size:21px;letter-spacing:-.025em;line-height:1.2;font-weight:800}
+  .sheet .st{display:block;margin-top:5px;font-size:9.5px;letter-spacing:.2em;font-weight:800;color:var(--gold-d)}
+  .x{margin-left:auto;flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+    background:rgba(255,255,255,.8);display:grid;place-items:center;cursor:pointer;color:var(--ink2);font-size:17px;line-height:1}
+  .x:hover{background:#fff}
+  .sheet .desc{font-size:13.5px;line-height:1.65;color:var(--ink2);margin:12px 0 20px}
+  .lockbox{background:rgba(255,255,255,.75);border:1px solid var(--lineTop);border-radius:20px;padding:20px 18px;
+    box-shadow:var(--shadowSm)}
+  .lockbox .lb{display:flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.2em;font-weight:800;color:var(--gold-d);margin-bottom:13px}
+  input.code{width:100%;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:.22em;text-align:center;
+    text-transform:uppercase;padding:15px 12px;border-radius:14px;border:1px solid rgba(36,31,26,.14);
+    background:#fffdf9;color:var(--ink);outline:none;transition:border-color .25s,box-shadow .25s}
+  input.code::placeholder{letter-spacing:.14em;font-weight:600;color:#b9b1a2}
+  input.code:focus{border-color:rgba(193,154,82,.75);box-shadow:0 0 0 4px rgba(193,154,82,.14)}
+  .btn{margin-top:12px;width:100%;font-family:inherit;font-size:13px;font-weight:800;letter-spacing:.12em;
+    color:#2a2418;padding:16px;border:none;border-radius:14px;cursor:pointer;
+    background:linear-gradient(160deg,#edd9ac,#d3ad67 42%,#b98f42 100%);
+    box-shadow:0 18px 34px -20px rgba(160,120,38,.95),inset 0 1px 0 rgba(255,255,255,.6);
+    transition:transform .2s,box-shadow .25s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 22px 40px -20px rgba(160,120,38,1)}
+  .btn:active{transform:translateY(0) scale(.994)}
+  .err{margin:11px 0 0;font-size:12.5px;color:#a33a2c;min-height:16px}
+  .shake{animation:sh .4s}
+  @keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+  .hint{margin:12px 0 0;font-size:11px;line-height:1.55;color:var(--mut)}
+
+  /* ───── гайд внутри ───── */
+  .guide{margin-top:4px}
+  .guide h4{margin:24px 0 8px;font-size:15px;letter-spacing:-.01em;font-weight:800;display:flex;align-items:center;gap:9px}
+  .guide h4::before{content:"";width:16px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-d))}
+  .guide h4:first-child{margin-top:0}
+  .guide p{margin:0 0 10px;font-size:13.5px;line-height:1.68;color:var(--ink2)}
+  .guide ul{margin:0 0 12px;padding:0;list-style:none}
+  .guide li{position:relative;padding:0 0 9px 20px;font-size:13.5px;line-height:1.62;color:var(--ink2)}
+  .guide li::before{content:"▸";position:absolute;left:0;top:0;color:var(--gold);font-size:13px}
+  .guide .note{margin:14px 0;padding:14px 16px;border-radius:16px;font-size:12.5px;line-height:1.6;
+    color:#6b5320;background:rgba(232,210,164,.28);border:1px solid rgba(193,154,82,.28)}
+  .guide a{color:var(--gold-d);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(193,154,82,.45);word-break:break-all}
+  .linkbox{margin:12px 0;padding:14px;border-radius:14px;background:#fffdf9;border:1px dashed rgba(193,154,82,.55);
+    font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--gold-d);word-break:break-all;text-align:center}
+  .done{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+  .done span{font-size:11px;color:var(--mut);line-height:1.5}
+
+  /* ───── финальная карточка ───── */
+  .final{margin:64px 0 0;position:relative;overflow:hidden;border-radius:30px;padding:38px 24px;text-align:center;
+    background:radial-gradient(120% 120% at 50% 0%,#3a3128 0%,#221d18 55%,#14100d 100%);
+    border:1px solid rgba(193,154,82,.4);box-shadow:0 50px 90px -50px rgba(20,16,13,.95)}
+  .final::before{content:"";position:absolute;inset:9px;border:1px solid rgba(193,154,82,.22);border-radius:22px;pointer-events:none}
+  .final .crown{font-size:22px;color:var(--gold-l);line-height:1;margin-bottom:12px}
+  .final h3{margin:0;font-size:21px;letter-spacing:.02em;color:#f6ecda;font-weight:800}
+  .final p{margin:11px auto 0;max-width:340px;font-size:12.5px;line-height:1.65;color:rgba(246,236,218,.62)}
+  .final a{display:inline-block;margin-top:22px;padding:15px 30px;border-radius:999px;text-decoration:none;
+    font-size:11.5px;font-weight:800;letter-spacing:.16em;color:#2a2418;
+    background:linear-gradient(160deg,#f2e0b6,#d6b170 45%,#bb9146 100%);
+    box-shadow:0 20px 40px -22px rgba(193,154,82,.95),inset 0 1px 0 rgba(255,255,255,.65)}
+
+  footer{margin:44px 0 0;padding:0 0 56px;text-align:center}
+  footer p{margin:0 0 8px;font-size:11px;color:var(--mut);line-height:1.6}
+  footer button{background:none;border:none;font-family:inherit;font-size:10.5px;letter-spacing:.12em;
+    color:var(--mut);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
+  footer button:hover{color:var(--ink2)}
+  .fx{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.25,1)}
+  .fx.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .card,.fx{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="bar">
+    <div class="ava"><img src="../neiro-pack/img/Pin_Image%28Original%29.jpg" alt="Аватар Nagibatorz"></div>
+    <div class="who"><b>Nagibatorz</b><span>на Playerok</span></div>
+    <div class="pill">ДОСТУП</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">PLAYEROK · ГАЙДЫ</div>
+    <h1>ТВОЙ<br>ДОСТУП</h1>
+    <p class="sub">пять гайдов в одном окне</p>
+    <p class="lead">Выбери товар, который купил, введи код из сообщения — и откроется гайд целиком. Код запомнится, второй раз спрашивать не будет.</p>
+    <div class="caps">
+      <div class="cap">КОД ДОСТУПА</div>
+      <div class="cap">ОНЛАЙН 24/7</div>
+      <div class="cap">БЕЗ УСТАНОВКИ</div>
+    </div>
+  </section>
+
+  <section class="stats fx">
+    <div class="stat"><b>5</b><span>ГАЙДОВ</span></div>
+    <div class="stat"><b>1</b><span>КОД</span></div>
+    <div class="stat"><b>∞</b><span>УСТРОЙСТВ</span></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head fx">
+      <h2>Выбери товар</h2>
+      <p>Открыто то, к чему уже есть доступ</p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="final fx">
+    <div class="crown">♛</div>
+    <h3>NAGIBATORZ</h3>
+    <p>Магазин на Playerok: фарм, нейросети, трейд, графика, прицел. Коды доступа приходят в сообщении после покупки.</p>
+    <a href="https://playerok.com/profile/Nagibatorz/products" target="_blank" rel="noopener">МАГАЗИН НА PLAYEROK</a>
+  </section>
+
+  <footer>
+    <p>Доступ хранится в этом браузере. Открывая страницу на другом устройстве, введи код заново.</p>
+    <button type="button" id="reset">сбросить доступы на этом устройстве</button>
+  </footer>
+</main>
+
+<div class="ovl" id="ovl">
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var PRODUCTS = [
+    {
+      id:"farm",
+      num:"01",
+      title:"Фарм серебра + бонус",
+      tag:"STANDOFF 2",
+      short:"Откуда брать серебро стабильно: напарники, задания, ежедневный бонус и куда не стоит тратиться.",
+      code:"FARM2026",
+      desc:"Гайд по серебру: как закрывать задания напарников, какие брать первыми, как не терять награду и какой бонус забирать каждый день.",
+      guide:'<h4>С чего начать</h4>'
+        +'<p>Серебро в Standoff 2 капает из трёх мест: матчи, задания напарников и ежедневные бонусы. Первые два требуют времени, третий — только входа в игру. Начинай с третьего, он бесплатный.</p>'
+        +'<ul>'
+        +'<li>Заходи каждый день и забирай ежедневный бонус, даже если играть не собираешься — серия входов даёт больше, чем отдельные заходы.</li>'
+        +'<li>Проверяй раздел заданий перед каждым матчем: часть закрывается сама по ходу обычной игры.</li>'
+        +'</ul>'
+        +'<h4>Задания напарников</h4>'
+        +'<ul>'
+        +'<li>Ставь задания, где награда — серебро, а не только опыт. Смотри на иконку награды до старта, а не после.</li>'
+        +'<li>Бери несколько заданий за один заход: они часто пересекаются по условиям, и один матч закрывает сразу два.</li>'
+        +'<li>Не выходи из матча досрочно — награда за задание сгорает, а время уже потрачено.</li>'
+        +'</ul>'
+        +'<h4>Как не слить заработок</h4>'
+        +'<ul>'
+        +'<li>Не трать серебро на всё подряд в первые дни. Реши заранее, что покупаешь, и держи цель.</li>'
+        +'<li>Скинь на время крупной закупки то, что не нужно: часть трат всегда лишняя.</li>'
+        +'<li>Считай в час, а не за вечер: так видно, какие задания реально выгодные, а какие съедают время.</li>'
+        +'</ul>'
+        +'<div class="note">Бонус сверху: если играешь сериями по несколько дней — заходи хотя бы на один матч в день. Серия входов даёт больше, чем редкие длинные заходы.</div>'
+        +'<h4>Итог</h4>'
+        +'<p>Ежедневный бонус + задания напарников + аккуратная трата. Всё остальное — вопрос дисциплины, а не скилла.</p>'
+    },
+    {
+      id:"neiro",
+      num:"02",
+      title:"НЕЙРО ПАК",
+      tag:"НЕЙРОСЕТИ",
+      short:"Все модели в одном окне через браузер: регистрация, режимы, выбор модели и формула запроса.",
+      code:"NEIRO2026",
+      desc:"Гайд по доступу к нейросетям в одном окне: ссылка, регистрация, четыре режима работы, выбор модели под задачу и формула запроса.",
+      guide:'<h4>Шаг 1 — открываешь сайт</h4>'
+        +'<p>Переходишь по ссылке и сразу попадаешь в чат.</p>'
+        +'<div class="linkbox">https://arena.ai/text/direct?model_a=max</div>'
+        +'<p>Регистрация: вводишь почту или входишь через аккаунт Google, придумываешь пароль. Всё, ты в чате. Минута делов.</p>'
+        +'<h4>Шаг 2 — выбираешь режим</h4>'
+        +'<ul>'
+        +'<li><b>Direct</b> — один на один с моделью. Для большинства задач хватает его.</li>'
+        +'<li><b>Side by Side</b> — две модели отвечают рядом на один запрос, сравниваешь и оставляешь лучшую.</li>'
+        +'<li><b>Battle Mode</b> — два ответа без названий моделей, выбираешь вслепую, потом видишь победителя.</li>'
+        +'<li><b>Agent Mode</b> — модель делает несколько шагов подряд, для задач посложнее.</li>'
+        +'</ul>'
+        +'<h4>Шаг 3 — выбираешь модель</h4>'
+        +'<p>В панели есть поиск и фильтры: текст, код, картинки, поиск в интернете. Не хочется разбираться — оставь <b>Max</b>: это автомат, который сам подбирает модель под запрос. Для конкретной задачи лучше выбрать руками.</p>'
+        +'<h4>Шаг 4 — формула запроса</h4>'
+        +'<p>Хороший запрос состоит из четырёх частей: <b>роль → задача → контекст → формат ответа</b>.</p>'
+        +'<div class="note">Плохо: «сделай текст про телефон».<br>Хорошо: «Ты копирайтер. Напиши описание товара для Playerok про нейросети: 4 абзаца, обращение на ты, без выдуманных цен. Формат — готовый текст без пояснений».</div>'
+        +'<h4>Чек-лист</h4>'
+        +'<ul>'
+        +'<li>Открыл сайт и зарегистрировался</li>'
+        +'<li>Выбрал Direct для первой задачи</li>'
+        +'<li>Написал запрос по формуле из четырёх частей</li>'
+        +'<li>Сохранил удачные запросы, чтобы не собирать заново</li>'
+        +'</ul>'
+        +'<p>Дальше — вопрос практики. Первые два-три запроса уйдут на привычку, к пятому формулировки станут короче и точнее.</p>'
+    },
+    {
+      id:"treid",
+      num:"03",
+      title:"7 способов трейда",
+      tag:"ОБМЕН",
+      short:"Семь схем обмена: как меняться так, чтобы не остаться в минусе и не нарваться на подмену.",
+      code:"TREID2026",
+      desc:"Семь способов обмена игровыми предметами: что дают, где подвох и как проверять сделку перед передачей.",
+      guide:'<h4>Семь способов</h4>'
+        +'<ul>'
+        +'<li><b>1. Прямой обмен 1:1</b> — равный предмет за равный. Самый простой и самый частый. Оценивай по рынку, а не по словам второй стороны.</li>'
+        +'<li><b>2. Обмен с доплатой</b> — один предмет + доплата за более дорогой. Фиксируй цену доплаты до трейда, а не после.</li>'
+        +'<li><b>3. Набор за набор</b> — несколько предметов с одной стороны против одного дорогого. Считай сумму целиком, не по одному предмету.</li>'
+        +'<li><b>4. Обмен через посредника</b> — когда обе стороны не доверяют друг другу. Посредник держит предмет, пока оба не подтвердили.</li>'
+        +'<li><b>5. Обмен «предмет на предмет с доплатой»</b> — смешанный вариант: частично вещами, частично деньгами или серебром.</li>'
+        +'<li><b>6. Обмен с отложенной передачей</b> — когда предмет на удержании. Договор фиксируй текстом в чате, чтобы остались следы.</li>'
+        +'<li><b>7. Обмен через обменник</b> — быстрый сброс одного предмета на другой через сторонние сервисы. Удобно, но теряешь в цене — за скорость платишь.</li>'
+        +'</ul>'
+        +'<h4>Правила, которые спасают</h4>'
+        +'<ul>'
+        +'<li>Всегда смотри на предмет глазами в момент трейда, а не по скриншоту из чата.</li>'
+        +'<li>Скриншоты подделывают. Настоящее подтверждение — предмет в окне обмена.</li>'
+        +'<li>Не меняйся второпях: «беру быстрее, пока дают» — главная причина потерь.</li>'
+        +'<li>Договорённость фиксируй сообщением до сделки. Переписка — твоя страховка.</li>'
+        +'</ul>'
+        +'<div class="note">Если сумма крупная — не рискуй в одиночку. Посредник или разбиение сделки на части лучше, чем потерять всё сразу.</div>'
+        +'<h4>Итог</h4>'
+        +'<p>Способов семь, но выигрывает не тот, кто знает все, а тот, кто проверяет предмет в окне обмена.</p>'
+    },
+    {
+      id:"graf",
+      num:"04",
+      title:"Графика",
+      tag:"ОФОРМЛЕНИЕ",
+      short:"Аватар, баннер и карточка товара: пропорции, палитра, шрифт и как не убить качество при сохранении.",
+      code:"GRAF2026",
+      desc:"Гайд по оформлению профиля и товаров: размеры, палитра, шрифты и типичные ошибки, из-за которых картинка выглядит дешёвой.",
+      guide:'<h4>Размеры, которые нужны</h4>'
+        +'<ul>'
+        +'<li><b>Аватар</b> — квадрат 1:1, не меньше 512×512. В круг аватар обрезается по центру, поэтому важное держи в середине.</li>'
+        +'<li><b>Баннер профиля</b> — ширина 16:9. Текст ставь не у краёв: часть обрезается на телефоне.</li>'
+        +'<li><b>Карточка товара</b> — вертикаль 4:5. Это пропорция превью в лентах, в ней помещается больше всего.</li>'
+        +'<li><b>Обложка поста</b> — 1:1 или 4:5, чтобы превью не прыгало по высоте.</li>'
+        +'</ul>'
+        +'<h4>Палитра</h4>'
+        +'<p>Два цвета плюс нейтральный. Например тёмный фон, один яркий акцент и белый текст. Как только цветов становится пять, картинка превращается в рекламу из девяностых.</p>'
+        +'<ul>'
+        +'<li>Фон — тёмный или светлый, но однородный. Пёстрый фон съедает текст.</li>'
+        +'<li>Акцент — один на всю серию карточек, чтобы узнавали по цвету.</li>'
+        +'<li>Контраст текста и фона проверяй на телефоне в яркий день, не на компе вечером.</li>'
+        +'</ul>'
+        +'<h4>Шрифт</h4>'
+        +'<ul>'
+        +'<li>Один шрифт на заголовки, один на текст, максимум два. Толщина — не больше двух вариантов.</li>'
+        +'<li>Заголовок — короткий, 2–4 слова. Всё остальное не прочтут в мелком превью.</li>'
+        +'<li>Не растягивай текст под ширину: масштабируй целиком, иначе буквы поедут.</li>'
+        +'</ul>'
+        +'<h4>Качество при сохранении</h4>'
+        +'<ul>'
+        +'<li>Собирай картинку в размере больше итогового, потом уменьшай. Наоборот — мыло.</li>'
+        +'<li>Не пережимай в JPG по кругу: каждый проход оставляет артефакты. Держи исходник.</li>'
+        +'<li>Мелкий текст на картинке не читается вообще. Если что-то нельзя прочитать на превью размером с ноготь — убирай.</li>'
+        +'</ul>'
+        +'<div class="note">Правило серии: у всех карточек один фон, один акцент и одна сетка. Даже средний дизайн, повторённый пять раз, выглядит дорого. Хороший, но разный каждый раз — как случайные картинки.</div>'
+    },
+    {
+      id:"aim",
+      num:"05",
+      title:"Прицел M40 / AWM",
+      tag:"СТРЕЛЬБА",
+      short:"Настройка прицела и чувствительности под снайперку: что крутить, что не трогать и как тренировать.",
+      code:"AIM2026",
+      desc:"Гайд по снайперскому прицелу: чувствительность, точка прицеливания, тренировка в полигоне и привычки, которые мешают попадать.",
+      guide:'<h4>С чего начать настройку</h4>'
+        +'<p>Сначала выставь чувствительность, потом трогай прицел. С непривычной чувствительностью любая сетка кажется неудобной.</p>'
+        +'<ul>'
+        +'<li>Чувствительность прицеливания (в режиме оптики) — отдельно от обычной, и обычно ниже.</li>'
+        +'<li>Меняй по одному пункту за заход. Поменял три параметра сразу — не поймёшь, что помогло.</li>'
+        +'<li>Записывай значения, к которым вернулся. Спустя неделю будешь рад, что сохранил.</li>'
+        +'</ul>'
+        +'<h4>Сетка прицела</h4>'
+        +'<ul>'
+        +'<li>Тонкая сетка с точкой в центре читается лучше, чем толстая с перекрестием.</li>'
+        +'<li>Яркий цвет точки помогает на тёмных картах, но слепит на светлых. Проверь на двух-трёх локациях.</li>'
+        +'<li>Не ставь декоративные прицелы с обвесами: они закрывают цель.</li>'
+        +'</ul>'
+        +'<h4>Тренировка</h4>'
+        +'<ul>'
+        +'<li>Полигон — по 10 минут в день, а не час раз в неделю. Короткие подходы дают привычку.</li>'
+        +'<li>Тренируй не только попадание, но и выход на цель: подъём прицела, остановка, выстрел.</li>'
+        +'<li>Считай попадания в голову отдельно от корпуса — это разные навыки.</li>'
+        +'</ul>'
+        +'<h4>Привычки, которые мешают</h4>'
+        +'<ul>'
+        +'<li>Стрельба на движении: остановись на долю секунды перед выстрелом.</li>'
+        +'<li>Постоянная смена настроек после каждой неудачной игры. Настройки не виноваты.</li>'
+        +'<li>Долгие сессии без перерыва: на третьем часу рука устаёт, и ты просто закрепляешь ошибки.</li>'
+        +'</ul>'
+        +'<div class="note">Снайперка — про терпение. Один точный выстрел стоит пяти поспешных, и это не фигура речи, а то, как считается результат.</div>'
+    }
+  ];
+
+  var KEY = "ngz_access_v1";
+  var grid = document.getElementById("grid");
+  var ovl = document.getElementById("ovl");
+  var sheet = document.getElementById("sheet");
+
+  function norm(s){ return String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); }
+
+  function readAccess(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
+  function hasAccess(id){ return readAccess().indexOf(id) !== -1; }
+  function grantAccess(id){
+    var arr = readAccess();
+    if(arr.indexOf(id) === -1){ arr.push(id); }
+    try{ localStorage.setItem(KEY, JSON.stringify(arr)); }catch(e){}
+  }
+  function clearAccess(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+
+  function cardHTML(p){
+    var on = hasAccess(p.id);
+    return '<button class="card' + (on ? ' openGlow' : '') + '" type="button" data-id="' + p.id + '">'
+      + '<div class="card-top">'
+      +   '<div class="num">' + p.num + '</div>'
+      +   '<div><h3>' + p.title + '</h3><span class="tag">' + p.tag + '</span></div>'
+      + '</div>'
+      + '<p>' + p.short + '</p>'
+      + '<div class="card-foot">'
+      +   '<span class="state' + (on ? ' on' : '') + '">' + (on ? 'ОТКРЫТО' : 'ЗАКРЫТО') + '</span>'
+      +   '<span class="go">' + (on ? 'ЧИТАТЬ' : 'ВВЕСТИ КОД')
+      +     ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+      +   '</span>'
+      + '</div>'
+      + '</button>';
+  }
+
+  function render(){
+    grid.innerHTML = PRODUCTS.map(cardHTML).join("");
+    var cards = grid.querySelectorAll(".card");
+    for(var i = 0; i < cards.length; i++){
+      cards[i].addEventListener("click", onClickCard);
+      if("IntersectionObserver" in window){
+        (function(el, idx){
+          var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(en){
+              if(en.isIntersecting){
+                setTimeout(function(){ el.classList.add("in"); }, idx * 70);
+                io.unobserve(el);
+              }
+            });
+          }, {threshold:.15});
+          io.observe(el);
+        })(cards[i], i);
+      } else {
+        cards[i].classList.add("in");
+      }
+    }
+  }
+
+  function findProduct(id){
+    for(var i = 0; i < PRODUCTS.length; i++){ if(PRODUCTS[i].id === id) return PRODUCTS[i]; }
+    return null;
+  }
+
+  function onClickCard(e){
+    var id = e.currentTarget.getAttribute("data-id");
+    openSheet(id);
+  }
+
+  function openSheet(id){
+    var p = findProduct(id);
+    if(!p) return;
+    var opened = hasAccess(p.id);
+
+    if(opened){
+      sheet.innerHTML = '<div class="sheet-top">'
+        + '<div><h3 id="shTitle">' + p.title + '</h3><span class="st">' + p.tag + ' · ДОСТУП ОТКРЫТ</span></div>'
+        + '<button class="x" type="button" data-close aria-label="Закрыть">✕</button>'
+        + '</div>'
+        + '<p class="desc">' + p.desc + '</p>'
+        + '<div class="guide">' + p.guide + '</div>'
+        + '<div class="done"><span>Гайд открыт на этом устройстве. Код больше спрашивать не будет.</span></div>';
+    } else {
+      sheet.innerHTML = '<div class="sheet-top">'
+        + '<div><h3 id="shTitle">' + p.title + '</h3><span class="st">' + p.tag + ' · ЗАКРЫТО</span></div>'
+        + '<button class="x" type="button" data-close aria-label="Закрыть">✕</button>'
+        + '</div>'
+        + '<p class="desc">' + p.desc + '</p>'
+        + '<div class="lockbox">'
+        +   '<div class="lb">✦ ВВЕДИ КОД ДОСТУПА</div>'
+        +   '<input class="code" id="codeInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="КОД ИЗ СООБЩЕНИЯ">'
+        +   '<button class="btn" type="button" id="codeBtn">ОТКРЫТЬ ДОСТУП</button>'
+        +   '<p class="err" id="codeErr"></p>'
+        +   '<p class="hint">Код приходит в сообщении на Playerok сразу после покупки. Регистр и дефисы не важны.</p>'
+        + '</div>';
+    }
+
+    ovl.classList.add("on");
+    document.body.style.overflow = "hidden";
+
+    var closeBtn = sheet.querySelector("[data-close]");
+    if(closeBtn) closeBtn.addEventListener("click", closeSheet);
+
+    if(!opened){
+      var input = document.getElementById("codeInput");
+      var btn = document.getElementById("codeBtn");
+      var err = document.getElementById("codeErr");
+
+      function tryCode(){
+        var val = norm(input.value);
+        if(!val){
+          err.textContent = "Введи код — поле пустое.";
+          input.classList.remove("shake");
+          void input.offsetWidth;
+          input.classList.add("shake");
+          return;
+        }
+        if(val === p.code){
+          grantAccess(p.id);
+          render();
+          openSheet(p.id);
+          return;
+        }
+        err.textContent = "Код не подошёл. Проверь и попробуй снова.";
+        input.classList.remove("shake");
+        void input.offsetWidth;
+        input.classList.add("shake");
+        input.select();
+      }
+
+      btn.addEventListener("click", tryCode);
+      input.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); tryCode(); }
+      });
+      setTimeout(function(){ try{ input.focus(); }catch(e){} }, 320);
+    }
+  }
+
+  function closeSheet(){
+    ovl.classList.remove("on");
+    sheet.innerHTML = "";
+    document.body.style.overflow = "";
+  }
+
+  ovl.addEventListener("click", function(e){ if(e.target === ovl) closeSheet(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ovl.classList.contains("on")) closeSheet(); });
+
+  document.getElementById("reset").addEventListener("click", function(){
+    clearAccess();
+    render();
+    this.textContent = "доступы сброшены";
+  });
+
+  render();
+
+  // появление блоков
+  var fxs = document.querySelectorAll(".fx");
+  if("IntersectionObserver" in window){
+    var io2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); io2.unobserve(en.target); } });
+    }, {threshold:.12});
+    for(var k = 0; k < fxs.length; k++){ io2.observe(fxs[k]); }
+  } else {
+    for(var m = 0; m < fxs.length; m++){ fxs[m].classList.add("in"); }
+  }
+
+  // прогресс
+  var prog = document.getElementById("prog");
+  function onScroll(){
+    var h = document.documentElement;
+    var max = (h.scrollHeight - h.clientHeight);
+    prog.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
