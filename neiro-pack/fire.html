@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>НЕЙРО ПАК — все нейросети в одном окне</title>
-<meta name="description" content="Гайд по НЕЙРО ПАК: как зайти, выбрать режим, подобрать модель под задачу и формулировать запросы так, чтобы получать результат.">
+<title>НЕЙРО ПАК — все модели в одном окне</title>
+<meta name="description" content="Гайд по НЕЙРО ПАК: как открыть сайт, выбрать режим, подобрать модель под задачу и формулировать запросы так, чтобы получать результат.">
 <style>
 :root{
   --bg:#0b0907; --bg2:#140f0b;
-  --txt:#f0e7dc; --mut:#a2938
-
-6; --dim:#7d7167;
+  --txt:#f0e7dc; --mut:#a29386; --dim:#7d7167;
   --gold:#f5b544; --org:#ff7a2f; --org2:#e25a18;
   --panel:rgba(30,23,18,.72);
   --brd:rgba(255,163,80,.16);
@@ -31,7 +29,6 @@ body{
   background-attachment:fixed;
   overflow-x:hidden;
 }
-/* УГЛИ */
 .embers{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .embers i{
   position:absolute;bottom:-10px;border-radius:50%;
@@ -44,10 +41,8 @@ body{
   70%{opacity:.5}
   100%{transform:translateY(-108vh) translateX(30px) scale(.2);opacity:0}
 }
-/* ПРОГРЕСС */
 #prog{position:fixed;top:0;left:0;height:2.5px;width:0;z-index:60;
   background:linear-gradient(90deg,#ffd08a,#ff7a2f);box-shadow:0 0 12px rgba(255,122,47,.8)}
-/* ШАПКА */
 header{
   position:sticky;top:0;z-index:50;
   display:flex;align-items:center;gap:10px;
@@ -65,7 +60,6 @@ header{
   padding:7px 13px;border-radius:999px;color:var(--gold);
   border:1px solid var(--brd2);background:rgba(255,150,60,.07);white-space:nowrap}
 main{position:relative;z-index:2;max-width:620px;margin:0 auto;padding:0 16px 64px}
-/* HERO */
 .hero{padding:24px 0 4px;text-align:center}
 .kicker{font-size:11px;letter-spacing:3px;color:var(--gold);font-weight:700;margin-bottom:10px}
 h1{
@@ -84,7 +78,6 @@ h1{
   color:#f7e7d3;border:1px solid rgba(255,200,140,.35);
   background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
-/* СЦЕНА */
 .stage-wrap{position:relative;margin:22px 0 8px;display:flex;justify-content:center}
 .stage{position:relative;width:230px;height:330px;perspective:1100px}
 .scene{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s ease}
@@ -132,27 +125,20 @@ h1{
 .tbtn .dot{width:7px;height:7px;border-radius:50%;background:#6b5b4d;transition:.3s}
 .tbtn.on .dot{background:#5fce7e;box-shadow:0 0 10px #5fce7e}
 .tbtn.on{color:#fff;border-color:rgba(95,206,126,.5)}
-/* СТАТИСТИКА */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:26px 0 0}
 .stat{padding:16px 8px;border-radius:18px;text-align:center;
   background:var(--panel);border:1px solid var(--brd);backdrop-filter:blur(12px)}
 .stat b{display:block;font-size:24px;font-weight:900;color:var(--gold);line-height:1;
   text-shadow:0 0 20px rgba(255,170,70,.4)}
 .stat span{display:block;margin-top:7px;font-size:9.5px;letter-spacing:1.4px;color:var(--dim);text-transform:uppercase}
-/* БЛОКИ */
 section{margin-top:38px}
 h2{font-size:clamp(21px,6.2vw,27px);font-weight:900;letter-spacing:-.3px;margin:0 0 6px;line-height:1.15}
 h2 em{font-style:normal;color:var(--org)}
 .lead{color:var(--mut);font-size:14.5px;margin:0 0 18px}
 .panel{padding:20px 18px;border-radius:22px;background:var(--panel);
   border:1px solid var(--brd);box-shadow:var(--sh);backdrop-filter:blur(14px)}
-.panel + .panel{margin-top:12px}
-.tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1.6px;color:var(--gold);
-  padding:5px 11px;border-radius:999px;border:1px solid var(--brd2);background:rgba(255,150,60,.08);margin-bottom:12px}
-ul.clean{list-style:none;padding:0;margin:0}
-ul.clean li{position:relative;padding-left:24px;margin:9px 0;color:#ded2c6;font-size:14.5px}
-ul.clean li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--org);font-weight:900}
-/* СПИСОК ГАЙДА */
+.note{padding:14px 15px;border-radius:15px;font-size:13.5px;margin-top:14px;
+  background:rgba(255,150,60,.08);border-left:3px solid var(--org);color:#f0dcc6}
 .toc{display:grid;gap:9px}
 .toc a{display:flex;align-items:center;gap:13px;text-decoration:none;color:var(--txt);
   padding:13px 15px;border-radius:16px;background:rgba(255,255,255,.035);
@@ -162,7 +148,6 @@ ul.clean li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--o
   font-size:12px;font-weight:900;color:#2a1200;background:linear-gradient(180deg,#ffd08a,#ef8f2e)}
 .toc .t{font-size:14px;font-weight:600}
 .toc .a{margin-left:auto;color:var(--dim);font-size:16px}
-/* ШАГИ */
 .step{margin-top:16px;padding:20px 18px;border-radius:22px;
   background:linear-gradient(180deg,rgba(38,28,21,.82),rgba(22,16,12,.82));
   border:1px solid var(--brd);box-shadow:var(--sh)}
@@ -176,7 +161,6 @@ ul.clean li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--o
   border:1px solid var(--brd2);box-shadow:0 18px 36px -18px #000;background:#000}
 .shot img{display:block;width:100%;height:auto}
 .shot-cap{font-size:11px;color:var(--dim);letter-spacing:.6px;text-align:center;margin:8px 0 0}
-/* МИНИ-ТАБЛИЦА */
 .mini{display:grid;gap:8px;margin-top:12px}
 .mini-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;
   padding:11px 13px;border-radius:13px;background:rgba(255,255,255,.035);
@@ -185,18 +169,13 @@ ul.clean li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--o
 .mini-row span{color:var(--mut);font-size:12.5px}
 .mini-row em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:1px;
   color:var(--gold);border:1px solid var(--brd2);padding:4px 9px;border-radius:999px;white-space:nowrap}
-/* ФОРМУЛА */
 .formula{padding:16px;border-radius:16px;background:rgba(255,150,60,.08);
-  border:1px dashed rgba(255,163,80,.4);font-size:14px;color:#ffe2bd;line-height:1.7}
+  border:1px dashed rgba(255,163,80,.4);font-size:14px;color:#ffe2bd;line-height:1.9}
 .formula b{color:#fff}
 .bad,.good{padding:13px 14px;border-radius:14px;font-size:13.5px;margin-top:9px;line-height:1.55}
 .bad{background:rgba(200,60,40,.1);border:1px solid rgba(220,90,60,.28);color:#f0c4b9}
 .good{background:rgba(60,140,90,.1);border:1px solid rgba(90,190,130,.28);color:#c4e8d0}
 .bad b,.good b{display:block;font-size:10.5px;letter-spacing:1.4px;margin-bottom:5px;opacity:.85}
-/* ЗАМЕТКА */
-.note{padding:14px 15px;border-radius:15px;font-size:13.5px;margin-top:14px;
-  background:rgba(255,150,60,.08);border-left:3px solid var(--org);color:#f0dcc6}
-/* ЧЕК-ЛИСТ */
 .check{display:grid;gap:9px;margin-top:6px}
 .check label{display:flex;gap:11px;align-items:flex-start;font-size:14px;color:#e2d6ca;cursor:pointer}
 .check input{appearance:none;flex:none;width:21px;height:21px;border-radius:7px;margin-top:1px;
@@ -205,14 +184,12 @@ ul.clean li::before{content:"▸";position:absolute;left:4px;top:0;color:var(--o
 .check input:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
   border:solid #2a1200;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
 .check input:checked + span{color:var(--dim);text-decoration:line-through}
-/* FAQ */
 details{margin-top:10px;border-radius:16px;background:var(--panel);border:1px solid var(--brd);overflow:hidden}
 summary{padding:15px 17px;font-size:14.5px;font-weight:700;cursor:pointer;list-style:none;position:relative;padding-right:40px}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"+";position:absolute;right:16px;top:12px;color:var(--org);font-size:20px;font-weight:700;transition:.25s}
 details[open] summary::after{transform:rotate(45deg)}
 details p{margin:0;padding:0 17px 16px;font-size:14px;color:var(--mut)}
-/* МАГАЗИН */
 .shop{margin-top:34px;padding:26px 20px;border-radius:24px;text-align:center;
   background:linear-gradient(165deg,#241a14,#0d0907 70%);
   border:1px solid rgba(220,175,105,.34);box-shadow:0 30px 60px -30px #000,inset 0 1px 0 rgba(255,220,160,.12)}
@@ -295,7 +272,7 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
 
   <section>
     <h2>Что внутри <em>гайда</em></h2>
-    <p class="lead">Четыре шага от «открыл ссылку» до «получил результат». Ниже — скрины с реального экрана, чтобы ты не гадал, куда нажимать.</p>
+    <p class="lead">Четыре шага от «открыл ссылку» до «получил результат». Ниже — скрины с реального экрана, чтобы не гадать, куда нажимать.</p>
     <div class="toc">
       <a href="#s1"><span class="n">01</span><span class="t">Заходишь на сайт</span><span class="a">→</span></a>
       <a href="#s2"><span class="n">02</span><span class="t">Выбираешь режим работы</span><span class="a">→</span></a>
@@ -307,24 +284,24 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
   <a class="anchor" id="s1"></a>
   <section>
     <h2>Шаг <em>01</em> — заходишь на сайт</h2>
-    <p class="lead">Всё, что нужно, — браузер. Ничего скачивать не надо.</p>
+    <p class="lead">Всё, что нужно, — браузер. Скачивать ничего не надо.</p>
 
     <div class="step">
       <div class="step-h"><div class="step-n">01</div><h3>Открываешь ссылку</h3></div>
-      <p>Ссылку ты получил вместе с покупкой. Открываешь её в любом браузере — Chrome, Safari, с телефона или с компьютера. Интерфейс один и тот же, разница только в размере экрана.</p>
-      <p>Первое, что ты видишь: большое поле «Ask anything…» по центру и строка режимов. Это стартовый экран — здесь ничего настраивать не нужно, просто дальше по шагам.</p>
+      <p>Ссылку ты получил вместе с покупкой. Открываешь в любом браузере — Chrome, Safari, с телефона или с компьютера. Интерфейс один и тот же, разница только в размере экрана.</p>
+      <p>Первое, что видишь: поле «Ask anything…» по центру и строка режимов под ним. Это стартовый экран — настраивать здесь ничего не нужно.</p>
       <a class="shot" href="img/Screenshot_20261031-004721.jpg" target="_blank" rel="noopener">
         <img src="img/Screenshot_20261031-004721.jpg" alt="Стартовый экран: поле ввода и режимы работы" loading="lazy">
       </a>
       <div class="shot-cap">Стартовый экран — поле запроса по центру</div>
-      <div class="note">Если открыл и не понял, куда нажимать — ты не сломал. Просто листай вниз, всё разложено по шагам.</div>
+      <div class="note">Открыл и не понял, куда нажимать — ты ничего не сломал. Просто листай дальше, всё разложено по шагам.</div>
     </div>
   </section>
 
   <a class="anchor" id="s2"></a>
   <section>
     <h2>Шаг <em>02</em> — выбираешь режим</h2>
-    <p class="lead">Четыре кнопки над полем ввода. Каждая — под свой случай, и это первое, что путает новичков.</p>
+    <p class="lead">Четыре кнопки над полем ввода. Каждая под свой случай — и это первое, что путает новичков.</p>
 
     <div class="step">
       <div class="step-h"><div class="step-n">02</div><h3>Что какой режим значит</h3></div>
@@ -335,11 +312,11 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
 
       <div class="mini">
         <div class="mini-row">
-          <div><b>Direct</b><span>Один чат с одной моделью. Обычный режим — для 90% задач.</span></div>
+          <div><b>Direct</b><span>Один чат с одной моделью. Обычный режим — для девяти задач из десяти.</span></div>
           <em>СТАРТ</em>
         </div>
         <div class="mini-row">
-          <div><b>Side by Side</b><span>Две модели отвечают рядом, ты сравниваешь и выбираешь, чей ответ лучше.</span></div>
+          <div><b>Side by Side</b><span>Две модели отвечают рядом. Сравниваешь и забираешь ответ, который сильнее.</span></div>
           <em>СРАВНИТЬ</em>
         </div>
         <div class="mini-row">
@@ -347,12 +324,12 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
           <em>СЛЕПО</em>
         </div>
         <div class="mini-row">
-          <div><b>Agent Mode</b><span>Для сложных многошаговых задач: разобрать проект, собрать план, пройтись по файлам.</span></div>
+          <div><b>Agent Mode</b><span>Для многошаговых задач: разобрать проект, собрать план, пройтись по файлам.</span></div>
           <em>СЛОЖНОЕ</em>
         </div>
       </div>
 
-      <div class="note">Начинай с <b>Direct</b>. Переключайся, только когда понятно зачем: сравнивать ответы — на Side by Side, искать сильную модель вслепую — в Battle.</div>
+      <div class="note">Начинай с <b>Direct</b>. Переключайся, только когда понятно зачем: сравнить ответы — Side by Side, найти сильную модель вслепую — Battle.</div>
     </div>
   </section>
 
@@ -370,14 +347,14 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
       <div class="shot-cap">Панель выбора модели: поиск и фильтры сверху</div>
 
       <div class="mini">
-        <div class="mini-row"><div><b>Max / Router</b><span>Не хочешь выбирать сам — система подберёт модель по запросу автоматически.</span></div><em>ЛЕНЬ</em></div>
-        <div class="mini-row"><div><b>Текст и письма</b><span>Бери модели с коротким, «разговорным» названием без приставок reasoning.</span></div><em>ТЕКСТ</em></div>
-        <div class="mini-row"><div><b>Код</b><span>Включай фильтр кода — останутся те, кто реально пишет рабочий код, а не псевдокод.</span></div><em>КОД</em></div>
-        <div class="mini-row"><div><b>Логика и разбор</b><span>Названия с пометкой reasoning — думают дольше, но ошибаются меньше.</span></div><em>ЛОГИКА</em></div>
+        <div class="mini-row"><div><b>Max / Router</b><span>Не хочешь выбирать сам — система подберёт модель под запрос автоматически.</span></div><em>АВТО</em></div>
+        <div class="mini-row"><div><b>Текст и письма</b><span>Бери модели с коротким названием, без приставки reasoning.</span></div><em>ТЕКСТ</em></div>
+        <div class="mini-row"><div><b>Код</b><span>Включи фильтр кода — останутся те, кто пишет рабочий код, а не псевдокод.</span></div><em>КОД</em></div>
+        <div class="mini-row"><div><b>Логика и разбор</b><span>Пометка reasoning: думает дольше, ошибается меньше.</span></div><em>ЛОГИКА</em></div>
         <div class="mini-row"><div><b>Картинки</b><span>Фильтр изображений: генерация и разбор фото.</span></div><em>ФОТО</em></div>
       </div>
 
-      <div class="note">Названия моделей обновляются каждую неделю — не запоминай их. Запоминай принцип: <b>фильтр по задаче → пробуешь две модели → оставляешь ту, что зашла</b>.</div>
+      <div class="note">Названия моделей обновляются чуть ли не каждую неделю — не запоминай их. Запоминай принцип: <b>фильтр по задаче → пробуешь две → оставляешь ту, что зашла</b>.</div>
     </div>
   </section>
 
@@ -396,9 +373,9 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
       </div>
 
       <div class="bad"><b>ТАК НЕ НАДО</b>Напиши пост про мой товар.</div>
-      <div class="good"><b>ТАК НАДО</b>Ты — копирайтер, который пишет для маркетплейса. Нужно описание товара «нейропак» для Playerok: покупатели 16–25, читают с телефона, не любят воду. Цель — дожать до покупки. Формат: заголовок и пять коротких пунктов с эмодзи, без восклицательных знаков.</div>
+      <div class="good"><b>ТАК НАДО</b>Ты — копирайтер, который пишет для маркетплейса. Нужно описание товара для Playerok: покупатели 16–25, читают с телефона, не любят воду, цель — дожать до покупки. Формат: заголовок и пять коротких пунктов, без восклицательных знаков.</div>
 
-      <div class="note">Ещё три приёма, которые работают сразу:<br>▸ Дай пример «как надо» — модель скопирует тон.<br>▸ Проси переписать свой же ответ короче — второй вариант почти всегда лучше.<br>▸ Если ответ поверхностный, добавь: «покажи, какие данные нужны, чтобы ответить точнее».</div>
+      <div class="note">Три приёма, которые работают сразу:<br>▸ Дай пример «как надо» — модель скопирует тон.<br>▸ Попроси переписать свой же ответ короче — второй вариант почти всегда лучше.<br>▸ Если ответ поверхностный, добавь: «скажи, какие данные нужны, чтобы ответить точнее».</div>
     </div>
   </section>
 
@@ -408,9 +385,9 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
       <div class="check">
         <label><input type="checkbox"><span>Ссылка открылась в браузере на телефоне или ПК</span></label>
         <label><input type="checkbox"><span>Стоит режим Direct — остальные позже</span></label>
-        <label><input type="checkbox"><span>Модель выбрана под задачу, а не «первая в списке»</span></label>
+        <label><input type="checkbox"><span>Модель выбрана под задачу, а не первая в списке</span></label>
         <label><input type="checkbox"><span>В запросе есть роль, задача, контекст и формат</span></label>
-        <label><input type="checkbox"><span>Удачные запросы сохранены отдельно — они ещё пригодятся</span></label>
+        <label><input type="checkbox"><span>Удачные запросы сохранены отдельно — ещё пригодятся</span></label>
       </div>
     </div>
   </section>
@@ -420,27 +397,27 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
 
     <details>
       <summary>Нужно ли что-то устанавливать?</summary>
-      <p>Нет. Всё работает в браузере — и на телефоне, и на компьютере. Из приложений нужно только само приложение браузера.</p>
+      <p>Нет. Всё работает в браузере — и на телефоне, и на компьютере. Из приложений нужен только сам браузер.</p>
     </details>
 
     <details>
       <summary>Почему у меня и у друга ответы разные?</summary>
-      <p>Моделей много, и у каждой свой характер. Плюс формулировка запроса меняет результат сильнее, чем сама модель. Это не баг, это и есть смысл пака: подобрать связку «модель + запрос» под себя.</p>
+      <p>Моделей много, и у каждой свой характер. Плюс формулировка запроса меняет результат сильнее, чем сама модель. Это не баг — это и есть смысл пака: подобрать связку «модель + запрос» под себя.</p>
     </details>
 
     <details>
-      <summary>Какую модель выбрать, если я вообще не разбираюсь?</summary>
+      <summary>Какую модель выбрать, если вообще не разбираюсь?</summary>
       <p>Включи Max — он подбирает сам. Когда поймёшь, чего не хватает, уходи в конкретную модель через фильтр.</p>
     </details>
 
     <details>
-      <summary>Ответы на русском нормальные?</summary>
-      <p>Да, ведущие модели пишут по-русски свободно. Если нужен деловой тон или специфический стиль — это уже работа запроса, а не модели.</p>
+      <summary>На русском отвечает нормально?</summary>
+      <p>Да, ведущие модели пишут по-русски свободно. Нужен деловой тон или свой стиль — это уже работа запроса, а не модели.</p>
     </details>
 
     <details>
       <summary>Можно пользоваться с двух устройств?</summary>
-      <p>Да. Телефон и ПК работают одновременно, ссылка одна и та же.</p>
+      <p>Да. Телефон и компьютер работают одновременно, ссылка одна и та же.</p>
     </details>
 
     <details>
@@ -463,7 +440,6 @@ a.anchor{display:block;position:relative;top:-70px;visibility:hidden}
 </main>
 
 <script>
-/* прогресс чтения */
 var prog = document.getElementById('prog');
 function onScroll(){
   var h = document.documentElement;
@@ -473,12 +449,10 @@ function onScroll(){
 window.addEventListener('scroll', onScroll, {passive:true});
 onScroll();
 
-/* угли */
 (function(){
   var box = document.getElementById('embers');
   if(!box) return;
-  var n = 22;
-  for(var i=0;i<n;i++){
+  for(var i=0;i<22;i++){
     var e = document.createElement('i');
     var size = 2 + Math.random()*4;
     e.style.width = size + 'px';
@@ -490,7 +464,6 @@ onScroll();
   }
 })();
 
-/* 3D */
 var tbtn = document.getElementById('tbtn');
 var scene = document.getElementById('scene');
 if(tbtn && scene){
